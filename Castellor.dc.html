@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/nocturne-2e02886b-1e44-4a41-b221-80854cfe6292/styles.css">
+<script src="_ds/nocturne-2e02886b-1e44-4a41-b221-80854cfe6292/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<script src="chateaux-data.js"></script>
+<script src="castellum-map.js"></script>
+<style>
+body{margin:0;background:#0f1119;color:var(--color-text);font-family:var(--font-body)}
+::-webkit-scrollbar{width:0;height:0}
+a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
+.leaflet-container{background:#101220;font-family:var(--font-body)}
+@keyframes castellum-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div style="display:flex;gap:44px;align-items:flex-start;padding:48px 56px;min-height:100vh">
+
+<div style="flex:none;width:430px;height:900px;position:relative;border-radius:34px;background:var(--color-bg);box-shadow:0 0 0 1px #3f424d,0 34px 90px rgba(0,0,0,.7);overflow:hidden;display:flex;flex-direction:column">
+
+<div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:9px 20px 3px;font-size:11px;letter-spacing:.02em;color:color-mix(in srgb,var(--color-text) 62%,transparent)">
+<span>9:41</span>
+<span style="display:flex;align-items:center;gap:7px">{{ netLabel }}<span style="width:6px;height:6px;border-radius:50%;background:{{ netDot }}"></span></span>
+</div>
+
+<div style="flex:none;padding:6px 16px 10px;display:flex;flex-direction:column;gap:9px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="font-family:var(--font-heading);font-weight:500;font-size:17px;letter-spacing:-.01em;margin-right:auto">Castellor</div>
+<button onClick="{{ toggleNet }}" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font:500 11px var(--font-heading);color:{{ netBtnFg }};background:{{ netBtnBg }};border:1px solid {{ netBtnBd }};border-radius:6px;padding:4px 9px">{{ netBtnLabel }}</button>
+<button onClick="{{ openSheet }}" style="position:relative;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font:500 11px var(--font-heading);color:{{ filterFg }};background:{{ filterBg }};border:1px solid {{ filterBd }};border-radius:6px;padding:4px 9px">Filtres {{ filterBadge }}</button>
+</div>
+<div style="position:relative">
+<input class="input" value="{{ q }}" onChange="{{ onQuery }}" placeholder="Commune, département, nom du château…" style="padding-left:32px;font-size:13px">
+<span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);width:11px;height:11px;border:1.5px solid color-mix(in srgb,var(--color-text) 45%,transparent);border-radius:50%"></span>
+</div>
+</div>
+
+<div style="flex:1;position:relative;overflow:hidden">
+
+<div ref="{{ mapWrapRef }}" style="position:absolute;inset:0;z-index:0;isolation:isolate;opacity:{{ mapOpacity }};pointer-events:{{ mapEvents }}">
+<x-import component-from-global-scope="castellum-map" from="./castellum-map.js" hint-size="100%,100%" style="position:absolute;inset:0"></x-import>
+
+<div style="position:absolute;top:10px;left:12px;right:12px;display:flex;gap:6px;align-items:flex-start;pointer-events:none">
+<div style="display:flex;flex-direction:column;gap:6px;pointer-events:auto">
+<div style="display:inline-flex;align-items:center;gap:8px;background:rgba(22,24,38,.86);border:1px solid var(--color-divider);border-radius:7px;padding:5px 10px;font-size:11px;backdrop-filter:blur(6px)">
+<span style="font-family:var(--font-heading);font-weight:500;color:var(--color-accent)">{{ count }}</span>
+<span style="color:color-mix(in srgb,var(--color-text) 60%,transparent)">/ {{ total }} recensés</span>
+</div>
+<sc-if value="{{ offlineBanner }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:250px;background:rgba(22,24,38,.86);border:1px solid var(--color-divider);border-left:2px solid var(--color-accent);border-radius:7px;padding:6px 9px;font-size:10.5px;line-height:1.45;color:color-mix(in srgb,var(--color-text) 72%,transparent);backdrop-filter:blur(6px)">Aucun cache de tuiles pour l'instant : le fond de carte n'affiche que ce que le navigateur a déjà chargé. Satellite indisponible hors-ligne.</div>
+</sc-if>
+</div>
+<div style="margin-left:auto;display:flex;flex-direction:column;gap:6px;pointer-events:auto">
+<button onClick="{{ toggleSat }}" style="cursor:pointer;font:500 10.5px var(--font-heading);letter-spacing:.02em;color:{{ satFg }};background:{{ satBg }};border:1px solid {{ satBd }};border-radius:7px;padding:6px 9px;backdrop-filter:blur(6px)">{{ satLabel }}</button>
+<button onClick="{{ locate }}" style="cursor:pointer;font:500 10.5px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.86);border:1px solid var(--color-divider);border-radius:7px;padding:6px 9px;backdrop-filter:blur(6px)">Autour de moi</button>
+<button onClick="{{ fitAll }}" style="cursor:pointer;font:500 10.5px var(--font-heading);color:color-mix(in srgb,var(--color-text) 70%,transparent);background:rgba(22,24,38,.86);border:1px solid var(--color-divider);border-radius:7px;padding:6px 9px;backdrop-filter:blur(6px)">France entière</button>
+</div>
+</div>
+
+<sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:12px;right:12px;bottom:12px;background:var(--color-surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden;animation:castellum-in .22s ease both">
+<div style="display:flex;gap:11px;padding:11px">
+<div style="flex:none;width:76px;height:76px;border-radius:var(--radius-md);background-color:#1b1d2b;background-image:{{ selBg }};background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px #3f424d;display:flex;align-items:flex-end;padding:6px;filter:{{ thumbFilter }}">
+<span style="font:500 8px var(--font-heading);letter-spacing:.06em;color:color-mix(in srgb,var(--color-text) 45%,transparent)">{{ photoChip }}</span>
+</div>
+<div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;align-items:baseline;gap:7px">
+<div style="font:500 15px/1.2 var(--font-heading);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ selName }}</div>
+</div>
+<div style="font-size:11px;color:color-mix(in srgb,var(--color-text) 58%,transparent)">{{ selMeta }}</div>
+<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:2px">
+<span class="tag tag-accent" style="font-size:10px">{{ selType }}</span>
+<span class="tag tag-neutral" style="font-size:10px">{{ selEtat }}</span>
+</div>
+</div>
+</div>
+<div style="display:flex;gap:8px;padding:0 11px 11px">
+<button class="btn btn-primary" onClick="{{ openDetail }}" style="flex:1;font-size:12.5px;padding:7px">Ouvrir la fiche</button>
+<button class="btn btn-secondary" onClick="{{ clearSelection }}" style="font-size:12.5px;padding:7px 12px">Fermer</button>
+</div>
+</div>
+</sc-if>
+</div>
+
+<div style="position:absolute;inset:0;z-index:10;background:var(--color-bg);overflow-y:auto;display:{{ listDisplay }}">
+<div style="padding:4px 16px 18px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:baseline;gap:8px;padding:6px 0 2px">
+<div style="font:500 12px var(--font-heading);color:color-mix(in srgb,var(--color-text) 70%,transparent)">{{ listHeading }}</div>
+<button onClick="{{ toggleSort }}" style="margin-left:auto;cursor:pointer;font:500 10.5px var(--font-heading);color:var(--color-accent);background:transparent;border:0;padding:2px 0">{{ sortLabel }}</button>
+</div>
+<sc-for list="{{ list }}" as="c" hint-placeholder-count="6">
+<div onClick="{{ c.open }}" style="display:flex;gap:11px;cursor:pointer;padding:9px;border-radius:var(--radius-md);background:var(--color-surface);box-shadow:var(--shadow-sm)">
+<div style="flex:none;width:104px;height:78px;border-radius:var(--radius-md);background-color:#1b1d2b;background-image:linear-gradient(to top,rgba(20,22,31,.55),transparent 55%),{{ c.bg }};background-size:cover,cover;background-position:center,center;box-shadow:inset 0 0 0 1px #3f424d;display:flex;align-items:flex-end;justify-content:flex-start;padding:5px;filter:{{ thumbFilter }}">
+<span style="font:500 7.5px var(--font-heading);letter-spacing:.06em;color:color-mix(in srgb,var(--color-text) 62%,transparent)">{{ photoChip }}</span>
+</div>
+<div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:3px">
+<div style="font:500 14px/1.25 var(--font-heading);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.n }}</div>
+<div style="font-size:11px;color:color-mix(in srgb,var(--color-text) 55%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.sub }}</div>
+<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:2px">
+<span class="tag tag-accent" style="font-size:9.5px;padding:2px 8px">{{ c.t }}</span>
+<span class="tag tag-neutral" style="font-size:9.5px;padding:2px 8px">{{ c.century }}</span>
+</div>
+</div>
+<div style="flex:none;align-self:center;font:500 10.5px var(--font-heading);color:color-mix(in srgb,var(--color-text) 45%,transparent)">{{ c.dist }}</div>
+</div>
+</sc-for>
+<sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+<div style="padding:34px 4px;text-align:center;font-size:12.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Aucun château ne correspond. <button onClick="{{ reset }}" style="cursor:pointer;background:transparent;border:0;color:var(--color-accent);font:inherit;padding:0">Réinitialiser les filtres</button></div>
+</sc-if>
+</div>
+</div>
+
+<div style="position:absolute;inset:0;z-index:10;background:var(--color-bg);overflow-y:auto;display:{{ settingsDisplay }}">
+<div style="padding:8px 16px 18px;display:flex;flex-direction:column;gap:14px">
+<div>
+<div style="font:500 13px var(--font-heading);margin-bottom:7px">Mode hors-ligne</div>
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:var(--radius-md);background:var(--color-surface)">
+<div><div style="font-size:12.5px">Base texte complète</div><div style="font-size:10.5px;color:color-mix(in srgb,var(--color-text) 52%,transparent)">{{ total }} fiches · {{ dataKo }} · livrée avec l'application</div></div>
+<span class="tag tag-accent" style="font-size:10px">intégrée</span>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:var(--radius-md);background:var(--color-surface)">
+<div><div style="font-size:12.5px">Vignettes basse résolution</div><div style="font-size:10.5px;color:color-mix(in srgb,var(--color-text) 52%,transparent)">400 px · servies par Wikimedia · {{ cachedPhotos }}</div></div>
+<span class="tag tag-neutral" style="font-size:10px">en ligne</span>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:var(--radius-md);background:var(--color-surface)">
+<div><div style="font-size:12.5px">Photos haute résolution</div><div style="font-size:10.5px;color:color-mix(in srgb,var(--color-text) 52%,transparent)">1280 px, chargées à la demande en ligne</div></div>
+<span class="tag tag-neutral" style="font-size:10px">en ligne</span>
+</div>
+</div>
+</div>
+<div>
+<div style="font:500 13px var(--font-heading);margin-bottom:7px">Sources de données</div>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;color:color-mix(in srgb,var(--color-text) 68%,transparent)">
+<div style="display:flex;justify-content:space-between;gap:10px"><span>Wikidata — identités, coordonnées</span><span style="color:var(--color-accent)">auto</span></div>
+<div style="display:flex;justify-content:space-between;gap:10px"><span>POP / Mérimée — statut patrimonial</span><span style="color:var(--color-accent)">auto</span></div>
+<div style="display:flex;justify-content:space-between;gap:10px"><span>Import CSV / JSON personnel</span><span style="color:var(--color-accent)">manuel</span></div>
+<div style="display:flex;justify-content:space-between;gap:10px"><span>Saisie dans l'app</span><span style="color:var(--color-accent)">{{ draftCount }}</span></div>
+</div>
+</div>
+<div>
+<div style="font:500 13px var(--font-heading);margin-bottom:7px">Contributions locales</div>
+<div style="padding:10px;border-radius:var(--radius-md);background:var(--color-surface);font-size:11.5px;color:color-mix(in srgb,var(--color-text) 68%,transparent);line-height:1.5">Les modifications restent sur cet appareil : aucune remontée vers un serveur n'existe à ce stade, et effacer les données du site les supprime. <span style="color:var(--color-text)">{{ draftCount }}</span> enregistrée(s).</div>
+</div>
+<button class="btn btn-secondary btn-block" onClick="{{ clearDrafts }}" style="font-size:12px">Effacer les contributions locales</button>
+</div>
+</div>
+
+<sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:30;background:color-mix(in srgb,#292b31 55%,transparent);display:flex;align-items:flex-end">
+<div onClick="{{ closeSheet }}" style="position:absolute;inset:0"></div>
+<div style="position:relative;width:100%;max-height:92%;overflow-y:auto;background:var(--color-surface);border-radius:var(--radius-lg) var(--radius-lg) 0 0;box-shadow:var(--shadow-lg);padding:14px 16px 18px;animation:castellum-in .2s ease both">
+<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
+<div style="font:500 16px var(--font-heading)">Filtrer la carte</div>
+<button onClick="{{ reset }}" style="margin-left:auto;cursor:pointer;background:transparent;border:0;color:var(--color-accent);font:500 11.5px var(--font-heading);padding:0">Tout réinitialiser</button>
+</div>
+<div style="display:flex;flex-direction:column;gap:13px">
+<sc-for list="{{ chipGroups }}" as="g" hint-placeholder-count="4">
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);margin-bottom:7px">{{ g.label }}</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ g.items }}" as="c" hint-placeholder-count="5">
+<button onClick="{{ c.on }}" style="cursor:pointer;font:400 11.5px var(--font-body);padding:4px 10px;border-radius:6px;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }}">{{ c.label }}</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+<button class="btn btn-primary btn-block" onClick="{{ closeSheet }}" style="margin-top:16px">Voir les {{ count }} résultats</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ detailOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;background:var(--color-bg);overflow-y:auto;animation:castellum-in .2s ease both">
+
+<div style="position:relative;height:296px;background-color:#1b1d2b;background-image:linear-gradient(158deg,rgba(52,56,80,.55),rgba(20,22,31,.85)),{{ heroBg }};background-size:cover,cover;background-position:center,center 42%;box-shadow:inset 0 -1px 0 #3f424d;filter:{{ heroFilter }}">
+<div style="position:absolute;inset:0;background:repeating-linear-gradient(122deg,rgba(233,233,237,.035) 0 1px,transparent 1px 13px)"></div>
+<div style="position:absolute;left:14px;top:14px;font:500 9.5px var(--font-heading);letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 40%,transparent);border:1px solid var(--color-divider);border-radius:5px;padding:3px 7px;white-space:nowrap">{{ heroPhotoLabel }}</div>
+<div style="position:absolute;inset:0;background:linear-gradient(to top,var(--color-bg) 2%,rgba(22,24,38,.7) 34%,transparent 66%)"></div>
+<div style="position:absolute;right:14px;bottom:104px;font-size:9.5px;letter-spacing:.02em;color:color-mix(in srgb,var(--color-text) 42%,transparent)">{{ photoCredit }}</div>
+</div>
+
+<div style="position:absolute;top:12px;right:12px;display:flex;gap:7px">
+<button onClick="{{ toggleEdit }}" style="cursor:pointer;font:500 11px var(--font-heading);color:{{ editFg }};background:{{ editBg }};border:1px solid {{ editBd }};border-radius:7px;padding:6px 10px;backdrop-filter:blur(6px)">{{ editLabel }}</button>
+<button onClick="{{ closeDetail }}" style="cursor:pointer;font:500 11px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.8);border:1px solid var(--color-divider);border-radius:7px;padding:6px 10px;backdrop-filter:blur(6px)">Retour</button>
+</div>
+
+<div style="position:relative;margin-top:-92px;padding:0 16px 20px;display:flex;flex-direction:column;gap:16px">
+
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="display:flex;flex-wrap:wrap;gap:5px">
+<span class="tag tag-outline" style="font-size:10px">{{ d.t }}</span>
+<span class="tag tag-neutral" style="font-size:10px">{{ d.century }}</span>
+<span class="tag tag-neutral" style="font-size:10px">{{ d.etat }}</span>
+</div>
+<sc-if value="{{ notEditing }}" hint-placeholder-val="{{ true }}">
+<h3 style="margin:0;font-size:26px;letter-spacing:-.02em;text-wrap:pretty">{{ d.n }}</h3>
+</sc-if>
+<sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+<div class="field"><label>Nom principal</label><input class="input" value="{{ d.n }}" onChange="{{ editName }}" style="font-size:16px"></div>
+</sc-if>
+<div style="font-size:12px;color:color-mix(in srgb,var(--color-text) 55%,transparent);line-height:1.5">{{ d.variantes }}</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--color-divider);border-radius:var(--radius-md);overflow:hidden">
+<div style="background:var(--color-bg);padding:10px 11px"><div style="font:500 9.5px var(--font-heading);letter-spacing:.09em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Période</div><div style="font-size:12.5px">{{ d.per }}</div></div>
+<div style="background:var(--color-bg);padding:10px 11px"><div style="font:500 9.5px var(--font-heading);letter-spacing:.09em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Siècles</div><div style="font-size:12.5px">{{ d.siecles }}</div></div>
+<div style="background:var(--color-bg);padding:10px 11px;grid-column:span 2"><div style="font:500 9.5px var(--font-heading);letter-spacing:.09em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Architecte / constructeur</div><div style="font-size:12.5px;text-wrap:pretty">{{ d.arch }}</div></div>
+</div>
+
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Localisation</div>
+<div style="display:flex;gap:10px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:5px;font-size:12.5px">
+<div style="display:flex;justify-content:space-between;gap:8px"><span style="color:color-mix(in srgb,var(--color-text) 55%,transparent)">Commune</span><span>{{ d.com }}</span></div>
+<div style="display:flex;justify-content:space-between;gap:8px"><span style="color:color-mix(in srgb,var(--color-text) 55%,transparent)">Département</span><span>{{ d.dep }}</span></div>
+<div style="display:flex;justify-content:space-between;gap:8px"><span style="color:color-mix(in srgb,var(--color-text) 55%,transparent)">Région hist.</span><span style="text-align:right">{{ d.reg }}</span></div>
+<div style="display:flex;justify-content:space-between;gap:8px"><span style="color:color-mix(in srgb,var(--color-text) 55%,transparent)">GPS</span><span style="font-variant-numeric:tabular-nums">{{ d.gps }}</span></div>
+</div>
+</div>
+<div style="display:flex;gap:7px;margin-top:10px">
+<button class="btn btn-secondary" onClick="{{ showOnMap }}" style="flex:1;font-size:12px;padding:6px">Voir sur la carte</button>
+<button class="btn btn-secondary" onClick="{{ copyGps }}" style="font-size:12px;padding:6px 11px">{{ copyLabel }}</button>
+</div>
+<div style="margin-top:9px;display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:var(--radius-md);background:var(--color-surface);font-size:11.5px;color:color-mix(in srgb,var(--color-text) 68%,transparent)">
+<span style="width:26px;height:26px;flex:none;border-radius:var(--radius-sm);border:1px solid var(--color-divider);background:repeating-linear-gradient(0deg,rgba(233,233,237,.12) 0 1px,transparent 1px 7px),repeating-linear-gradient(90deg,rgba(233,233,237,.12) 0 1px,transparent 1px 7px)"></span>
+{{ d.planLabel }}
+</div>
+</div>
+
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Propriétaires et familles</div>
+<div style="display:flex;flex-wrap:wrap;gap:5px">
+<sc-for list="{{ d.prop }}" as="p" hint-placeholder-count="3">
+<span class="tag tag-neutral" style="font-size:10.5px">{{ p }}</span>
+</sc-for>
+</div>
+</div>
+
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Événements historiques</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ d.ev }}" as="e" hint-placeholder-count="3">
+<div style="display:flex;gap:9px;font-size:12.5px;line-height:1.5;text-wrap:pretty"><span style="flex:none;margin-top:7px;width:14px;height:1px;background:var(--color-accent)"></span><span>{{ e }}</span></div>
+</sc-for>
+</div>
+<sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:7px;margin-top:9px">
+<input class="input" value="{{ newEvent }}" onChange="{{ onNewEvent }}" placeholder="Ajouter un événement daté…" style="font-size:12px">
+<button class="btn btn-primary" onClick="{{ addEvent }}" style="font-size:12px;padding:6px 11px">Ajouter</button>
+</div>
+</sc-if>
+</div>
+
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Description architecturale</div>
+<sc-if value="{{ notEditing }}" hint-placeholder-val="{{ true }}">
+<p style="font-size:13px;line-height:1.6;margin:0 0 9px;text-wrap:pretty">{{ d.desc }}</p>
+</sc-if>
+<sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+<textarea class="input" value="{{ d.desc }}" onChange="{{ editDesc }}" style="font-size:12.5px;margin-bottom:9px"></textarea>
+</sc-if>
+<div style="display:flex;flex-wrap:wrap;gap:5px">
+<sc-for list="{{ d.st }}" as="s" hint-placeholder-count="2">
+<span class="tag tag-accent-2" style="font-size:10.5px">{{ s }}</span>
+</sc-for>
+</div>
+<div style="margin-top:9px;font-size:12.5px"><span style="color:color-mix(in srgb,var(--color-text) 55%,transparent)">État actuel — </span>{{ d.etat }}</div>
+</div>
+
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Statut patrimonial</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<sc-for list="{{ d.stat }}" as="s" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="flex:none;width:5px;height:5px;border-radius:50%;background:var(--color-accent)"></span>{{ s }}</div>
+</sc-for>
+</div>
+<div style="margin-top:9px;font-size:12.5px"><span style="color:color-mix(in srgb,var(--color-text) 55%,transparent)">Accès — </span>{{ d.acc }}</div>
+<div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+<sc-for list="{{ d.liens }}" as="l" hint-placeholder-count="1">
+<a href="{{ l.url }}" target="_blank" style="font-size:12.5px">{{ l.label }} →</a>
+</sc-for>
+<sc-if value="{{ d.noLinks }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:11.5px;color:color-mix(in srgb,var(--color-text) 45%,transparent)">Aucun lien officiel renseigné — contribution bienvenue.</div>
+</sc-if>
+</div>
+</div>
+
+<sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:8px;padding-top:4px">
+<button class="btn btn-primary" onClick="{{ saveEdit }}" style="flex:1">Enregistrer sur l'appareil</button>
+<button class="btn btn-secondary" onClick="{{ cancelEdit }}">Annuler</button>
+</div>
+</sc-if>
+
+<div style="font-size:10.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 40%,transparent);text-wrap:pretty">{{ d.provenance }}</div>
+</div>
+</div>
+</sc-if>
+</div>
+
+<div style="flex:none;display:flex;border-top:1px solid var(--color-divider);background:var(--color-bg)">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+<button onClick="{{ t.on }}" style="flex:1;cursor:pointer;background:transparent;border:0;border-top:2px solid {{ t.bd }};padding:11px 0 13px;font:500 11.5px var(--font-heading);letter-spacing:.01em;color:{{ t.fg }}">{{ t.label }}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="flex:none;width:330px;display:flex;flex-direction:column;gap:20px;padding-top:12px">
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Prototype PWA — v1</div>
+<h4 style="margin:0 0 8px;font-size:19px;letter-spacing:-.01em">Castellor</h4>
+<p style="font-size:12.5px;line-height:1.6;color:color-mix(in srgb,var(--color-text) 70%,transparent);margin:0;text-wrap:pretty">Recensement des châteaux de France, pensé pour la voiture : la carte est l'écran d'accueil, la fiche s'ouvre sur sa photo, et tout le texte reste lisible sans réseau.</p>
+</div>
+<div>
+<div style="font:500 11px var(--font-heading);margin-bottom:7px">Ce qui marche déjà</div>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 65%,transparent)">
+<div>Carte Leaflet réelle, 35 châteaux géolocalisés, fond assombri + mode satellite.</div>
+<div>Filtres époque / type / état / accès appliqués en direct aux marqueurs et à la liste.</div>
+<div>Recherche par nom, variante historique, commune, département ou région.</div>
+<div>Bascule en ligne / hors-ligne : photos HD → vignettes BR, satellite coupé, fond de carte atténué.</div>
+<div>Édition du nom, de la description et des événements d'une fiche, enregistrée sur l'appareil.</div>
+</div>
+</div>
+<div>
+<div style="font:500 11px var(--font-heading);margin-bottom:7px">Hypothèses à valider</div>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 65%,transparent)">
+<div>Jeu de démonstration de 35 fiches saisies à la main ; l'import Wikidata + POP viendra remplir les 500.</div>
+<div>Photos tirées de Wikipédia / Wikimedia Commons et mises en cache : à valider licence par licence avant mise en production.</div>
+<div>Plan et cadastre sont annoncés mais pas encore affichés — visionneuse à concevoir.</div>
+</div>
+</div>
+<div>
+<div style="font:500 11px var(--font-heading);margin-bottom:7px">Prochaines étapes</div>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 65%,transparent)">
+<div>Manifest + service worker Netlify : installation Android, cache des tuiles et des vignettes.</div>
+<div>Visionneuse photo plein écran avec bascule BR / HD explicite.</div>
+<div>Écran d'itinéraire : « les 8 châteaux sur ma route ».</div>
+</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:880,&quot;height&quot;:1000}}">
+const F = () => (window.CASTELLUM_FILTERS || { epoque: [], type: [], etat: [], acces: [] });
+const DATA = () => (window.CASTELLUM || []);
+const ROMAN = { 10: "Xe", 11: "XIe", 12: "XIIe", 13: "XIIIe", 14: "XIVe", 15: "XVe", 16: "XVIe", 17: "XVIIe", 18: "XVIIIe", 19: "XIXe", 20: "XXe" };
+const DIV = "rgba(233,233,237,.16)";
+const ACC = "#9184d9";
+
+function centuryLabel(sc) {
+  if (!sc || !sc.length) return "—";
+  const a = ROMAN[sc[0]] || sc[0];
+  if (sc.length === 1) return a + " s.";
+  return a + " – " + (ROMAN[sc[sc.length - 1]] || sc[sc.length - 1]) + " s.";
+}
+function dist(a, b) {
+  const R = 6371, dLat = (b[0] - a[0]) * Math.PI / 180, dLng = (b[1] - a[1]) * Math.PI / 180;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a[0] * Math.PI / 180) * Math.cos(b[0] * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+class Component extends DCLogic {
+  state = {
+    tab: "carte", q: "", filters: { epoque: [], type: [], etat: [], acces: [] },
+    sheetOpen: false, selectedId: null, detailId: null, online: true, satellite: false,
+    editing: false, draft: null, newEvent: "", drafts: {}, userPos: null, sortByDist: false,
+    copied: false, ready: false, photos: {}
+  };
+
+  _loadPhotos() {
+    const W = window.CASTELLUM_WIKI || {};
+    let cache = {};
+    try { cache = JSON.parse(localStorage.getItem("castellor-photos-v2") || "{}"); } catch (e) { cache = {}; }
+    if (Object.keys(cache).length) this.setState({ photos: cache });
+    const ids = Object.keys(W).filter((id) => !cache[id]);
+    let i = 0;
+    const next = () => {
+      if (i >= ids.length) return;
+      const id = ids[i++];
+      fetch("https://fr.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(W[id]))
+        .then((r) => (r.ok ? r.json() : null))
+        .then((j) => {
+          const t = j && j.thumbnail && j.thumbnail.source;
+          /* upload.wikimedia.org est inaccessible : on passe par Special:FilePath,
+             qui sert le même fichier redimensionné depuis le wiki. */
+          const m = t && t.match(/\/([^\/]+\.(?:jpg|jpeg|png|webp))\/\d+px-/i);
+          if (m) {
+            const host = t.indexOf("/wikipedia/commons/") > -1 ? "https://commons.wikimedia.org" : "https://fr.wikipedia.org";
+            const base = host + "/wiki/Special:FilePath/" + m[1];
+            const rec = { thumb: base + "?width=400", hd: base + "?width=1280" };
+            this.setState((s) => {
+              const p = Object.assign({}, s.photos, { [id]: rec });
+              try { localStorage.setItem("castellor-photos-v2", JSON.stringify(p)); } catch (e) { /* ignore */ }
+              return { photos: p };
+            });
+          }
+          next();
+        })
+        .catch(() => next());
+    };
+    for (let k = 0; k < 4; k++) next();
+  }
+
+  photoBg(id, hd) {
+    const p = this.state.photos[id];
+    if (!p) return "none";
+    return "url('" + (hd && this.state.online ? p.hd : p.thumb) + "')";
+  }
+
+  componentDidMount() {
+    this.mapWrapRef = this.mapWrapRef || React.createRef();
+    try {
+      const saved = localStorage.getItem("castellum-drafts");
+      if (saved) this.setState({ drafts: JSON.parse(saved) });
+    } catch (e) { /* stockage indisponible */ }
+    if (!DATA().length) {
+      const t = setInterval(() => { if (DATA().length) { clearInterval(t); this.forceUpdate(); } }, 80);
+      setTimeout(() => clearInterval(t), 8000);
+    }
+    this._loadPhotos();
+    this._hook();
+  }
+
+  componentDidUpdate() { this._hook(); }
+
+  _hook() {
+    const wrap = this.mapWrapRef && this.mapWrapRef.current;
+    const el = wrap && wrap.querySelector("castellum-map");
+    if (!el) { if (!this._retry) { this._retry = setTimeout(() => { this._retry = null; this._hook(); }, 150); } return; }
+    if (!el._bound) {
+      el._bound = true;
+      el.onSelect = (id) => this.setState({ selectedId: id, tab: "carte" });
+    }
+    this._map = el;
+    el.setData(this.visible());
+    el.setSelected(this.state.selectedId);
+    el.setSatellite(this.state.satellite);
+    el.setOffline(!this.state.online);
+  }
+
+  record(c) {
+    const d = this.state.drafts[c.id];
+    return d ? Object.assign({}, c, d) : c;
+  }
+
+  visible() {
+    const { q, filters } = this.state;
+    const needle = q.trim().toLowerCase();
+    const ep = F().epoque.filter((e) => filters.epoque.includes(e.id));
+    return DATA().map((c) => this.record(c)).filter((c) => {
+      if (needle) {
+        const hay = [c.n, c.com, c.dep, c.reg].concat(c.v || []).join(" ").toLowerCase();
+        if (!hay.includes(needle)) return false;
+      }
+      if (filters.type.length && !filters.type.includes(c.t)) return false;
+      if (filters.etat.length && !filters.etat.includes(c.etat)) return false;
+      if (filters.acces.length && !filters.acces.includes(c.acc)) return false;
+      if (ep.length && !ep.some((e) => (c.sc || []).some((s) => s >= e.min && s <= e.max))) return false;
+      return true;
+    });
+  }
+
+  toggle(group, value) {
+    this.setState((s) => {
+      const cur = s.filters[group];
+      const next = cur.includes(value) ? cur.filter((v) => v !== value) : cur.concat([value]);
+      return { filters: Object.assign({}, s.filters, { [group]: next }) };
+    });
+  }
+
+  chipStyle(active) {
+    return active
+      ? { bg: "color-mix(in srgb, " + ACC + " 20%, transparent)", fg: "#d2cefd", bd: ACC }
+      : { bg: "transparent", fg: "rgba(233,233,237,.72)", bd: DIV };
+  }
+
+  saveDrafts(drafts) {
+    this.setState({ drafts });
+    try { localStorage.setItem("castellum-drafts", JSON.stringify(drafts)); } catch (e) { /* ignore */ }
+  }
+
+  renderVals() {
+    const s = this.state;
+    const online = s.online;
+    const list0 = this.visible();
+    const pos = s.userPos;
+    const byName = (a, b) => a.n.localeCompare(b.n, "fr", { sensitivity: "base" });
+    const list = (pos && s.sortByDist)
+      ? list0.slice().sort((a, b) => dist(pos, [a.lat, a.lng]) - dist(pos, [b.lat, b.lng]))
+      : list0.slice().sort(byName);
+    const sel = list0.find((c) => c.id === s.selectedId) || null;
+    const detailBase = DATA().find((c) => c.id === s.detailId);
+    const detailRec = detailBase ? this.record(detailBase) : null;
+    const d0 = s.editing && s.draft ? Object.assign({}, detailRec, s.draft) : detailRec;
+    const nFilters = s.filters.epoque.length + s.filters.type.length + s.filters.etat.length + s.filters.acces.length;
+    const draftCount = Object.keys(s.drafts).length;
+    const photoChip = online ? "HD 1280" : "BR 400";
+    /* Mesure du poids réel des fiches plutôt qu'une valeur en dur, qui dérive
+       dès que le jeu de données change. */
+    const dataKo = Math.round(JSON.stringify(DATA()).length / 1024);
+
+    const groups = [
+      { key: "epoque", label: "Époque", opts: F().epoque.map((e) => ({ id: e.id, label: e.label })) },
+      { key: "type", label: "Type", opts: F().type.map((t) => ({ id: t, label: t })) },
+      { key: "etat", label: "État actuel", opts: F().etat.map((t) => ({ id: t, label: t })) },
+      { key: "acces", label: "Accès", opts: F().acces.map((t) => ({ id: t, label: t })) }
+    ].map((g) => ({
+      label: g.label,
+      items: g.opts.map((o) => {
+        const active = s.filters[g.key].includes(o.id);
+        const st = this.chipStyle(active);
+        return { label: o.label, bg: st.bg, fg: st.fg, bd: st.bd, on: () => this.toggle(g.key, o.id) };
+      })
+    }));
+
+    const tabs = [
+      { key: "carte", label: "Carte" },
+      { key: "liste", label: "Liste" },
+      { key: "reglages", label: "Hors-ligne" }
+    ].map((t) => ({
+      label: t.label,
+      bd: s.tab === t.key ? ACC : "transparent",
+      fg: s.tab === t.key ? ACC : "rgba(233,233,237,.55)",
+      on: () => this.setState({ tab: t.key, detailId: null, editing: false })
+    }));
+
+    const d = d0 ? {
+      n: d0.n, t: d0.t, etat: d0.etat, per: d0.per, arch: d0.arch, desc: d0.desc,
+      com: d0.com, dep: d0.dep, reg: d0.reg, acc: d0.acc,
+      century: centuryLabel(d0.sc), siecles: (d0.sc || []).map((x) => ROMAN[x] || x).join(", ") + " s.",
+      variantes: (d0.v && d0.v.length) ? "Aussi appelé : " + d0.v.join(" · ") : "Aucune variante historique recensée",
+      gps: d0.lat.toFixed(4) + "  " + d0.lng.toFixed(4),
+      prop: d0.prop || [], ev: d0.ev || [], st: d0.st || [], stat: d0.stat || [], liens: d0.liens || [],
+      noLinks: !(d0.liens && d0.liens.length),
+      planLabel: d0.plan ? "Plan masse et cadastre référencés dans les sources — visionneuse à venir" : "Aucun plan ni cadastre référencé",
+      provenance: "Sources : Wikidata, base POP-Mérimée." + (this.state.drafts[d0.id] ? " Contient une contribution enregistrée sur cet appareil." : "")
+    } : {
+      n: "", t: "", etat: "", per: "", arch: "", desc: "", com: "", dep: "", reg: "", acc: "",
+      century: "", siecles: "", variantes: "", gps: "", prop: [], ev: [], st: [], stat: [], liens: [],
+      noLinks: false, planLabel: "", provenance: ""
+    };
+
+    return {
+      netLabel: online ? "En ligne" : "Hors-ligne",
+      netDot: online ? ACC : "#75798c",
+      netBtnLabel: online ? "En ligne" : "Hors-ligne",
+      netBtnBg: online ? "color-mix(in srgb, " + ACC + " 16%, transparent)" : "transparent",
+      netBtnFg: online ? "#d2cefd" : "rgba(233,233,237,.6)",
+      netBtnBd: online ? ACC : DIV,
+      toggleNet: () => this.setState({ online: !online }),
+
+      q: s.q,
+      onQuery: (e) => this.setState({ q: e.target.value }),
+
+      filterBadge: nFilters ? "· " + nFilters : "",
+      filterBg: nFilters ? "color-mix(in srgb, " + ACC + " 16%, transparent)" : "transparent",
+      filterFg: nFilters ? "#d2cefd" : "rgba(233,233,237,.72)",
+      filterBd: nFilters ? ACC : DIV,
+      openSheet: () => this.setState({ sheetOpen: true }),
+      closeSheet: () => this.setState({ sheetOpen: false }),
+      sheetOpen: s.sheetOpen,
+      reset: () => this.setState({ filters: { epoque: [], type: [], etat: [], acces: [] }, q: "" }),
+      chipGroups: groups,
+
+      count: list.length, total: DATA().length,
+      empty: list.length === 0,
+      offlineBanner: !online,
+
+      mapOpacity: s.tab === "carte" ? 1 : 0,
+      mapEvents: s.tab === "carte" ? "auto" : "none",
+      listDisplay: s.tab === "liste" ? "block" : "none",
+      settingsDisplay: s.tab === "reglages" ? "block" : "none",
+      tabs: tabs,
+
+      satLabel: !online ? "Satellite indispo." : (s.satellite ? "Satellite" : "Plan"),
+      satBg: s.satellite && online ? "color-mix(in srgb, " + ACC + " 20%, transparent)" : "rgba(22,24,38,.86)",
+      satFg: !online ? "rgba(233,233,237,.35)" : (s.satellite ? "#d2cefd" : "rgba(233,233,237,.8)"),
+      satBd: s.satellite && online ? ACC : DIV,
+      toggleSat: () => { if (online) this.setState({ satellite: !s.satellite }); },
+      fitAll: () => { if (this._map) this._map.fitAll(); },
+      locate: () => {
+        const apply = (lat, lng) => {
+          this.setState({ userPos: [lat, lng], sortByDist: true, tab: "carte" });
+          if (this._map) { this._map.setUserPos(lat, lng); this._map.flyTo(lat, lng, 8); }
+        };
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (p) => apply(p.coords.latitude, p.coords.longitude),
+            () => apply(47.3941, 0.6848)
+          );
+        } else apply(47.3941, 0.6848);
+      },
+
+      photoChip: photoChip,
+      thumbFilter: online ? "none" : "saturate(.6) contrast(.92) brightness(.95)",
+      heroFilter: online ? "none" : "saturate(.55) contrast(.9) blur(.6px)",
+      heroPhotoLabel: online ? "Photo HD · 1280 px · réseau" : "Vignette BR · 400 px · hors-ligne",
+      heroBg: d0 ? this.photoBg(d0.id, true) : "none",
+      selBg: sel ? this.photoBg(sel.id, false) : "none",
+      photoCredit: "Photos : Wikimedia Commons / Wikipédia",
+      cachedPhotos: Object.keys(s.photos).length + " adresses résolues",
+      dataKo: dataKo + " ko",
+
+      hasSelection: !!sel,
+      selName: sel ? sel.n : "",
+      selMeta: sel ? sel.com + " · " + sel.dep : "",
+      selType: sel ? sel.t : "",
+      selEtat: sel ? sel.etat : "",
+      clearSelection: () => this.setState({ selectedId: null }),
+      openDetail: () => this.setState({ detailId: s.selectedId, editing: false, draft: null }),
+
+      listHeading: (pos && s.sortByDist) ? "Autour de moi" : "Tous les châteaux filtrés",
+      sortLabel: (pos && s.sortByDist) ? "Trier A→Z" : "Trier par distance",
+      toggleSort: () => {
+        if (!pos) { this.renderVals().locate(); return; }
+        this.setState({ sortByDist: !s.sortByDist });
+      },
+      list: list.map((c) => ({
+        n: c.n, t: c.t, sub: c.com + " · " + c.dep,
+        bg: this.photoBg(c.id, false),
+        century: centuryLabel(c.sc),
+        dist: pos ? Math.round(dist(pos, [c.lat, c.lng])) + " km" : "",
+        open: () => this.setState({ detailId: c.id, selectedId: c.id, editing: false, draft: null })
+      })),
+
+      detailOpen: !!d0,
+      d: d,
+      closeDetail: () => this.setState({ detailId: null, editing: false, draft: null }),
+      showOnMap: () => {
+        this.setState({ tab: "carte", detailId: null, selectedId: s.detailId });
+        if (this._map && d0) this._map.flyTo(d0.lat, d0.lng, 13);
+      },
+      copyLabel: s.copied ? "Copié" : "Copier GPS",
+      copyGps: () => {
+        if (d0 && navigator.clipboard) navigator.clipboard.writeText(d0.lat + ", " + d0.lng).catch(() => {});
+        this.setState({ copied: true });
+        setTimeout(() => this.setState({ copied: false }), 1400);
+      },
+
+      editing: s.editing, notEditing: !s.editing,
+      editLabel: s.editing ? "Édition" : "Modifier",
+      editBg: s.editing ? "color-mix(in srgb, " + ACC + " 22%, transparent)" : "rgba(22,24,38,.8)",
+      editFg: s.editing ? "#d2cefd" : "rgba(233,233,237,.85)",
+      editBd: s.editing ? ACC : DIV,
+      toggleEdit: () => this.setState({ editing: !s.editing, draft: s.editing ? null : {} }),
+      editName: (e) => this.setState({ draft: Object.assign({}, s.draft, { n: e.target.value }) }),
+      editDesc: (e) => this.setState({ draft: Object.assign({}, s.draft, { desc: e.target.value }) }),
+      newEvent: s.newEvent,
+      onNewEvent: (e) => this.setState({ newEvent: e.target.value }),
+      addEvent: () => {
+        if (!s.newEvent.trim() || !d0) return;
+        this.setState({
+          draft: Object.assign({}, s.draft, { ev: (d0.ev || []).concat([s.newEvent.trim()]) }),
+          newEvent: ""
+        });
+      },
+      saveEdit: () => {
+        if (!d0) return;
+        const drafts = Object.assign({}, s.drafts);
+        drafts[d0.id] = Object.assign({}, drafts[d0.id], s.draft || {});
+        this.saveDrafts(drafts);
+        this.setState({ editing: false, draft: null });
+      },
+      cancelEdit: () => this.setState({ editing: false, draft: null }),
+
+      draftCount: draftCount + (draftCount === 1 ? " fiche" : " fiches"),
+      clearDrafts: () => this.saveDrafts({}),
+
+      mapWrapRef: (this.mapWrapRef = this.mapWrapRef || React.createRef())
+    };
+  }
+}
+</script>
+</body>
+</html>
