@@ -4,12 +4,19 @@
    onOpen(fn). Chaque élément de setData(list) peut porter un champ `photo`
    (URL de vignette) : au survol d'un point, une info-bulle affiche cette
    photo et le nom ; cliquer sur l'info-bulle appelle onOpen(id) pour ouvrir
-   la fiche directement, sans passer par la sélection sur la carte. */
+   la fiche directement, sans passer par la sélection sur la carte. Cliquer
+   un point rapproche aussi la vue (CLICK_ZOOM) si la carte est trop dézoomée
+   pour distinguer les points voisins. */
 (function () {
   const OSM = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   const SAT = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
   const ACCENT = '#9184d9';
   const RUIN = '#b2b6ca';
+  /* En zone dense (vallée de la Loire, Périgord…), plusieurs points se
+     chevauchent au même pixel à l'échelle France entière : un premier clic
+     rapproche la vue avant de sélectionner, pour permettre d'en distinguer
+     un second. Sans effet si on est déjà plus zoomé que ce niveau. */
+  const CLICK_ZOOM = 11;
 
   const isRuin = (c) => c.t === 'ruines' || c.etat === 'Ruines' || c.etat === 'Vestiges';
 
@@ -172,7 +179,10 @@
           fillColor: base,
           fillOpacity: ruin ? 0.25 : 0.75
         });
-        m.on('click', () => { if (this.onSelect) this.onSelect(c.id); });
+        m.on('click', () => {
+          if (this.map.getZoom() < CLICK_ZOOM) this.map.flyTo([c.lat, c.lng], CLICK_ZOOM, { duration: .6 });
+          if (this.onSelect) this.onSelect(c.id);
+        });
         m.on('mouseover', () => m.setStyle({ weight: 3 }));
         m.on('mouseout', () => m.setStyle({ weight: sel ? 2.5 : 1.5 }));
         const photo = c.photo
