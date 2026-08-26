@@ -201,6 +201,10 @@ et reconstruit deux URL via `Special:FilePath` :
 Les URL obtenues sont mises en cache dans le navigateur, donc les appels ne sont
 faits qu'une fois par appareil.
 
+Les 35 fichiers sont hébergés sur Wikimedia Commons et sous licence libre. Le
+détail — fichier, licence, auteur — est dans [PHOTOS.md](PHOTOS.md), avec le
+script qui permet de rejouer l'audit.
+
 ## Stockage local
 
 Tout est en `localStorage`, sur l'appareil, sans serveur :
@@ -276,8 +280,11 @@ uploads/            Capture d'écran de travail
 - Le tri **« A→Z »** porte sur le nom affiché tel quel : « Château royal
   d'Amboise » se classe à *royal*, et les six fiches qui ne commencent pas par
   « Château » se dispersent dans la liste.
-- Les licences des photos Wikipédia / Wikimedia Commons **n'ont pas été
-  vérifiées fiche par fiche**. À valider avant toute mise en production.
+- **Attribution des photos manquante.** Les 35 photographies sont sous licence
+  libre ([audit complet](PHOTOS.md)), mais 32 d'entre elles exigent de citer
+  leur auteur et leur licence. L'application n'affiche qu'un crédit global
+  « Photos : Wikimedia Commons / Wikipédia » : c'est insuffisant au regard des
+  licences CC BY et CC BY-SA. À corriger avant toute mise en production.
 - Les contributions locales ne quittent jamais l'appareil : **aucun mécanisme de
   remontée n'existe**, et l'interface le dit désormais explicitement.
 - L'heure « 9:41 » de la barre d'état est un décor de maquette.
@@ -286,7 +293,8 @@ uploads/            Capture d'écran de travail
 
 - Cartographie : **© OpenStreetMap contributors**
 - Imagerie satellite : **Esri, Maxar, Earthstar Geographics**
-- Photographies : **Wikimedia Commons / Wikipédia** — *licences à valider*
+- Photographies : **Wikimedia Commons** — CC BY-SA, CC BY et CC0,
+  [détail par fiche](PHOTOS.md)
 - Bibliothèque carte : **Leaflet 1.9.4** (BSD-2-Clause)
 - Interface : design system **Nocturne** (`_ds/`), typographie Inter
 - Contenu patrimonial : **Wikidata**, base **POP / Mérimée**
@@ -307,7 +315,7 @@ conditions propres :
 | Leaflet 1.9.4 | BSD-2-Clause |
 | Tuiles OpenStreetMap | ODbL, attribution obligatoire |
 | Imagerie satellite Esri | Conditions Esri |
-| Photographies Wikimedia | Licence propre à chaque fichier — **non vérifiées** |
+| Photographies Wikimedia | CC BY-SA, CC BY ou CC0 — [vérifiées fiche par fiche](PHOTOS.md) |
 | Contenu patrimonial (Wikidata, POP / Mérimée) | Licences propres aux bases |
 
 > **À vérifier** : aucune mention légale ni politique de confidentialité n'a été

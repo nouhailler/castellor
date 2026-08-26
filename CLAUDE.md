@@ -25,6 +25,7 @@ sont jamais définitifs sans validation humaine.
 | [README.md](README.md) | Ce que fait l'app : écrans, données, stockage, permissions, réseau |
 | [CONTEXT.md](CONTEXT.md) | Architecture, décisions et leur pourquoi, écarts, feuille de route |
 | [CHANGELOG.md](CHANGELOG.md) | Historique des versions |
+| [PHOTOS.md](PHOTOS.md) | Licences des 35 photographies, auteur par auteur |
 | `_ds/nocturne-*/readme.md` | Design system Nocturne |
 
 **Lire `CONTEXT.md` avant toute modification non triviale.**

@@ -161,9 +161,15 @@ Si on le fait, prévoir une migration de `castellum-drafts` vers la nouvelle cl�
 - **Passage par `Special:FilePath`** plutôt que par l'URL de vignette renvoyée
   par l'API : `upload.wikimedia.org` s'est révélé inaccessible depuis
   l'environnement d'exécution. Le nom de fichier est extrait par expression
-  régulière de l'URL de vignette, puis re-servi par le wiki d'origine
-  (Commons ou Wikipédia fr). **C'est fragile** : si le format d'URL change,
-  toutes les photos disparaissent silencieusement.
+  régulière de l'URL de vignette, puis re-servi par le wiki d'origine. Le code
+  gère Commons et Wikipédia fr ; en pratique, **les 35 fichiers sont sur
+  Commons**. **C'est fragile** : si le format d'URL change, toutes les photos
+  disparaissent silencieusement.
+- **Attribution photo non affichée** — les 35 clichés sont libres, mais 32
+  exigent de citer auteur et licence. Les métadonnées viennent de la même API
+  que les images (`prop=imageinfo&iiprop=extmetadata`) : le correctif consiste à
+  les récupérer avec les URL, dans `_loadPhotos()`. Audit et script :
+  [PHOTOS.md](PHOTOS.md), `tools/audit-licences-photos.py`.
 - **Bascule réseau manuelle** plutôt que `navigator.onLine` : on veut pouvoir
   démontrer le mode hors connexion à volonté, sans couper le Wi-Fi.
 - **Contributions en `localStorage`, jamais envoyées.** Pas de serveur, donc pas
@@ -225,7 +231,9 @@ les qualificatifs de tête — décision non prise à ce jour.
 4. Import **Wikidata** (identités, coordonnées) et **POP / Mérimée** (statut
    patrimonial) pour passer de 35 à ~500 fiches. La structure de données est
    déjà taillée pour ça.
-5. Vérification des licences photo, fiche par fiche.
+5. ~~Vérification des licences photo, fiche par fiche~~ — faite le 2026-08-26,
+   voir [PHOTOS.md](PHOTOS.md). **Reste à faire** : afficher l'auteur et la
+   licence de chaque cliché, exigés par 32 des 35 photographies.
 6. Renseigner `liens` — aucune fiche n'en a aujourd'hui.
 7. Visionneuse photo plein écran, avec bascule BR / HD explicite.
 

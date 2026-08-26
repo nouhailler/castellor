@@ -48,6 +48,11 @@ entrées suivantes devront être écrites au fil des modifications.
 
 ### Ajouté
 
+- **`PHOTOS.md`** — audit des licences des 35 photographies, avec
+  `tools/audit-licences-photos.py` pour le rejouer. Toutes sont libres
+  (CC BY-SA, CC BY, CC0), sans restriction d'usage. **32 exigent une
+  attribution que l'application n'affiche pas** : point de non-conformité
+  ouvert, à corriger avant mise en production.
 - **`LICENSE`** — le code passe sous licence MIT. La portée est précisée dans le
   README : elle couvre le code écrit pour ce projet, pas le runtime généré, le
   design system, les fonds de carte ni les photographies.
@@ -176,6 +181,7 @@ design system **Nocturne**.
   de 35.
 
 > Les écarts entre l'interface et le code listés ci-dessus ont été corrigés
-> après la publication de cette version — voir [Non publié](#non-publié). Les
-> limites de fond (pas de service worker, pas de plans, licences non vérifiées)
-> restent ouvertes.
+> après la publication de cette version, et les licences photo ont été
+> vérifiées — voir [Non publié](#non-publié). Restent ouvertes : l'absence de
+> service worker, les plans, les liens officiels, et **l'attribution des photos
+> que 32 des 35 licences exigent**.
