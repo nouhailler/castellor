@@ -1,7 +1,7 @@
 # CLAUDE.md — Castellor
 
-Recensement des châteaux de France pensé pour la voiture. **Prototype v1
-(0.1.0)** : un canvas Claude Design, pas encore une PWA installable.
+Recensement des châteaux de France pensé pour la voiture. **Version 0.2.0** :
+un canvas Claude Design dont on dérive une PWA installable sur Android.
 
 ## Documentation
 

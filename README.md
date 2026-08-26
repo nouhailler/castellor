@@ -4,8 +4,8 @@
 l'écran d'accueil, la fiche s'ouvre sur sa photo, et tout le texte reste
 lisible sans réseau.
 
-- **Version** : 0.1.0 — *Prototype v1*
-- **Statut** : PWA installable sur Android, déployable sur Netlify
+- **Version** : 0.2.0 — *PWA installable*
+- **Statut** : installable sur Android, déployable sur Netlify, fonctionne hors connexion
 - **Langue** : français
 - **Licence** : [MIT](LICENSE)
 - **Documentation** : suit `DOCUMENTATION_SPEC.md` (voir [CONTEXT.md](CONTEXT.md))
@@ -15,7 +15,7 @@ lisible sans réseau.
 ## Sommaire
 
 - [Ce que fait l'application](#ce-que-fait-lapplication)
-- [Lancer le prototype](#lancer-le-prototype)
+- [Lancer et déployer](#lancer-et-déployer)
 - [Les trois onglets](#les-trois-onglets)
 - [Fonctionnalités](#fonctionnalités)
 - [Données](#données)

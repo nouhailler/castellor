@@ -5,13 +5,26 @@ Toutes les évolutions notables de **Castellor** sont consignées ici.
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le
 versionnage suit [SemVer](https://semver.org/lang/fr/).
 
-Le projet n'est pas encore sous Git : cette première entrée décrit l'état du
-prototype tel qu'il existe au 26 août 2026, reconstitué à partir du code. Les
-entrées suivantes devront être écrites au fil des modifications.
+L'entrée `0.1.0` décrit l'état du prototype au moment de sa mise sous Git,
+reconstitué à partir du code. Le dépôt est publié sur
+[github.com/nouhailler/castellor](https://github.com/nouhailler/castellor).
 
 ---
 
 ## [Non publié]
+
+Rien pour l'instant. Les chantiers restants sont listés dans
+[CONTEXT.md §8](CONTEXT.md#8-feuille-de-route) : import Wikidata / POP pour
+passer à ~500 fiches, visionneuse photo plein écran, écran d'itinéraire,
+visionneuse de plans, remontée des contributions.
+
+---
+
+## [0.2.0] — 2026-08-26 — *PWA installable*
+
+Castellor n'était consultable que dans son outil de conception. Elle s'installe
+désormais sur Android depuis un déploiement Netlify, démarre réseau coupé, et
+crédite ses photographies comme leurs licences l'exigent.
 
 ### Corrigé
 
@@ -81,8 +94,8 @@ entrées suivantes devront être écrites au fil des modifications.
 - **`PHOTOS.md`** — audit des licences des 35 photographies, avec
   `tools/audit-licences-photos.py` pour le rejouer. Toutes sont libres
   (CC BY-SA, CC BY, CC0), sans restriction d'usage. **32 exigent une
-  attribution que l'application n'affiche pas** : point de non-conformité
-  ouvert, à corriger avant mise en production.
+  attribution que l'application n'affiche pas** — corrigé dans la même version,
+  voir « l'application devient une PWA installable » ci-dessus.
 - **`LICENSE`** — le code passe sous licence MIT. La portée est précisée dans le
   README : elle couvre le code écrit pour ce projet, pas le runtime généré, le
   design system, les fonds de carte ni les photographies.
@@ -210,8 +223,7 @@ design system **Nocturne**.
 - Le commentaire d'en-tête de `chateaux-data.js` mentionne 30 châteaux au lieu
   de 35.
 
-> Les écarts entre l'interface et le code listés ci-dessus ont été corrigés
-> après la publication de cette version, et les licences photo ont été
-> vérifiées — voir [Non publié](#non-publié). Restent ouvertes : l'absence de
-> service worker, les plans, les liens officiels, et **l'attribution des photos
-> que 32 des 35 licences exigent**.
+> Tout ce qui précède a été traité en **0.2.0** : les écarts entre l'interface
+> et le code, les licences photo et leur attribution, et l'absence de service
+> worker. Restent ouverts à ce jour les plans et cadastres, les liens officiels,
+> et le jeu de 35 fiches à étendre.

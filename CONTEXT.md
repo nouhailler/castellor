@@ -5,8 +5,8 @@ projet. Complète [README.md](README.md), qui décrit le produit ;
 [CHANGELOG.md](CHANGELOG.md) suit son évolution.
 
 - **Dernière mise à jour** : 2026-08-26
-- **Version applicative** : 0.1.0 — *Prototype v1*
-- **Version de la documentation** : 1.0.0
+- **Version applicative** : 0.2.0 — *PWA installable*
+- **Version de la documentation** : 1.1.0
 - **Dépôt Git** : https://github.com/nouhailler/castellor (public)
 - **Licence** : MIT
 
