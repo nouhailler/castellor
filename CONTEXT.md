@@ -5,7 +5,7 @@ projet. Complète [README.md](README.md), qui décrit le produit ;
 [CHANGELOG.md](CHANGELOG.md) suit son évolution.
 
 - **Dernière mise à jour** : 2026-08-26
-- **Version applicative** : 0.2.0 — *PWA installable*
+- **Version applicative** : 0.2.1 — *PWA installable*
 - **Version de la documentation** : 1.1.0
 - **Dépôt Git** : https://github.com/nouhailler/castellor (public)
 - **Licence** : MIT
@@ -188,6 +188,17 @@ Si on le fait, prévoir une migration de `castellum-drafts` vers la nouvelle cl�
   gère Commons et Wikipédia fr ; en pratique, **les 35 fichiers sont sur
   Commons**. **C'est fragile** : si le format d'URL change, toutes les photos
   disparaissent silencieusement.
+- **`connect-src` régit le service worker, pas `img-src`.** Une tuile ou une
+  photo demandée depuis le service worker passe par `fetch()`. Si son hôte —
+  **ou la cible de sa redirection** — manque de `connect-src`, la requête
+  échoue en `net::ERR_FAILED` et **aucune violation n'apparaît dans la console
+  de la page** : celles levées dans un service worker n'y remontent pas. C'est
+  ce qui a vidé toutes les photos du premier déploiement. Pour diagnostiquer,
+  rejouer la CSP de production en local (voir le README, Dépannage).
+- **Une écriture en cache ne doit jamais casser une réponse.** `cache.put()`
+  refuse une réponse issue d'une redirection ; le rejet remontait dans
+  `respondWith` et le navigateur ne recevait rien. `sw.js` écrit désormais à
+  côté de la réponse et avale les échecs.
 - **Attribution photo non affichée** — les 35 clichés sont libres, mais 32
   exigent de citer auteur et licence. Les métadonnées viennent de la même API
   que les images (`prop=imageinfo&iiprop=extmetadata`) : le correctif consiste à

@@ -74,6 +74,11 @@ sont jamais définitifs sans validation humaine.
   cache vient de `sw.js`, qui n'existe que sur le site servi — pas dans le
   canvas ouvert directement. Le bandeau s'adapte : ne pas y réintroduire de
   promesse fixe.
+- **Toucher à la CSP de `netlify.toml` demande de la relire en entier.**
+  `connect-src` doit lister ce que le **service worker** appelle — tuiles,
+  photos — et les **cibles de redirection** (`Special:FilePath` →
+  `upload.wikimedia.org`). `img-src` ne couvre que la page. Un hôte manquant
+  vide les images sans laisser d'erreur dans la console.
 - **`vendor/` n'est pas du confort.** React, Leaflet, Inter et la feuille
   Nocturne y sont copiés parce qu'une PWA ne peut pas dépendre d'un CDN hors
   ligne. Le runtime lit `window.__resources` pour y aller. Ne pas revenir à

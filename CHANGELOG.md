@@ -13,7 +13,35 @@ reconstitué à partir du code. Le dépôt est publié sur
 
 ## [Non publié]
 
-Rien pour l'instant. Les chantiers restants sont listés dans
+Rien pour l'instant.
+
+---
+
+## [0.2.1] — 2026-08-26
+
+### Corrigé
+
+- **Les photographies ne s'affichaient plus sur le site déployé.** La `CSP`
+  ne listait `upload.wikimedia.org` que dans `img-src`. Or les photos passent
+  par le service worker, donc par `fetch()`, donc par **`connect-src`** — et
+  `Special:FilePath` redirige toujours vers `upload.wikimedia.org`. Les 35
+  requêtes échouaient en `net::ERR_FAILED`, **sans aucune violation visible
+  dans la console de la page** : une violation levée dans un service worker ne
+  remonte pas au document. `connect-src` couvre désormais les cibles de
+  redirection et les hôtes de tuiles.
+- **Une écriture en cache ratée cassait l'affichage.** `cache.put()` refuse une
+  réponse issue d'une redirection ; le rejet remontait dans `respondWith`, et
+  le navigateur ne recevait rien. Les écritures se font maintenant à côté de la
+  réponse, leurs échecs sont avalés, et une réponse redirigée est recopiée dans
+  une réponse propre avant stockage. Une image ne peut plus disparaître parce
+  que son cache a échoué.
+- Version des caches portée à `v2` : les caches empoisonnés du déploiement
+  précédent sont supprimés à l'activation.
+
+### Documentation
+
+- Section **Dépannage** dans le README, et le piège consigné dans `CONTEXT.md`
+  et `CLAUDE.md`. Les chantiers restants sont listés dans
 [CONTEXT.md §8](CONTEXT.md#8-feuille-de-route) : import Wikidata / POP pour
 passer à ~500 fiches, visionneuse photo plein écran, écran d'itinéraire,
 visionneuse de plans, remontée des contributions.

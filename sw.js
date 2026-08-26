@@ -8,7 +8,7 @@
    Le satellite reste volontairement en ligne seulement : mettre en cache de
    l'imagerie haute résolution remplirait l'appareil sans bénéfice réel. */
 
-const VERSION = "v1";
+const VERSION = "v2";
 const SHELL   = "castellor-shell-" + VERSION;
 const TILES   = "castellor-tuiles-" + VERSION;
 const PHOTOS  = "castellor-photos-" + VERSION;
@@ -76,17 +76,42 @@ self.addEventListener("activate", (e) => {
   })());
 });
 
+/* Écriture en cache. Elle ne doit JAMAIS faire échouer la réponse : une
+   promesse rejetée dans respondWith se traduit par une image ou une tuile
+   vide, sans erreur lisible. On écrit donc à côté, et on avale les échecs.
+   Le cas particulier : cache.put() refuse une réponse issue d'une
+   redirection, et Special:FilePath redirige toujours vers
+   upload.wikimedia.org — on en recopie alors le corps dans une réponse
+   propre. */
+function ecrire(c, req, rep, nom) {
+  let copie;
+  try { copie = rep.clone(); } catch (e) { return; }
+  (async () => {
+    const aStocker = copie.redirected
+      ? new Response(await copie.blob(), {
+          status: copie.status, statusText: copie.statusText, headers: copie.headers
+        })
+      : copie;
+    await c.put(req, aStocker);
+    await limiter(nom);
+  })().catch(() => { /* cache plein, réponse non stockable : sans conséquence */ });
+}
+
 /* D'abord le cache : ce qui ne change pas, ou dont une version un peu ancienne
    vaut mieux qu'un écran vide. */
 async function cacheDabord(req, nom) {
   const c = await caches.open(nom);
   const hit = await c.match(req);
   if (hit) return hit;
-  const rep = await fetch(req);
-  if (rep && (rep.ok || rep.type === "opaque")) {
-    c.put(req, rep.clone());
-    limiter(nom);
+  let rep;
+  try {
+    rep = await fetch(req);
+  } catch (e) {
+    /* Réseau coupé et rien en cache : on laisse remonter, le navigateur
+       affichera son propre état d'échec plutôt qu'une page blanche. */
+    throw e;
   }
+  if (rep && (rep.ok || rep.type === "opaque")) ecrire(c, req, rep, nom);
   return rep;
 }
 
@@ -95,7 +120,7 @@ async function reseauDabord(req, nom) {
   const c = await caches.open(nom);
   try {
     const rep = await fetch(req);
-    if (rep && rep.ok) { c.put(req, rep.clone()); limiter(nom); }
+    if (rep && rep.ok) ecrire(c, req, rep, nom);
     return rep;
   } catch (e) {
     const hit = await c.match(req);

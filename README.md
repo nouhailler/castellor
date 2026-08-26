@@ -4,7 +4,7 @@
 l'écran d'accueil, la fiche s'ouvre sur sa photo, et tout le texte reste
 lisible sans réseau.
 
-- **Version** : 0.2.0 — *PWA installable*
+- **Version** : 0.2.1 — *PWA installable*
 - **Statut** : installable sur Android, déployable sur Netlify, fonctionne hors connexion
 - **Langue** : français
 - **Licence** : [MIT](LICENSE)
@@ -23,6 +23,7 @@ lisible sans réseau.
 - [Permissions](#permissions)
 - [Réseau et mode hors connexion](#réseau-et-mode-hors-connexion)
 - [Structure du projet](#structure-du-projet)
+- [Dépannage](#dépannage)
 - [Limites connues](#limites-connues)
 - [Crédits et licences](#crédits-et-licences)
 
@@ -332,6 +333,37 @@ _ds/nocturne-…/      Design system Nocturne (tokens, styles, composants)
 uploads/             Capture d'écran de travail
 .thumbnail           Vignette du canvas
 ```
+
+## Dépannage
+
+### Les photos ou les tuiles n'apparaissent pas sur le site déployé
+
+Regarder l'onglet **Réseau**, pas la console : une requête bloquée par la `CSP`
+depuis le **service worker** échoue en `net::ERR_FAILED` **sans** afficher de
+violation dans la console de la page.
+
+Dans un service worker, tuiles et photos passent par `fetch()`, donc par
+**`connect-src`** — et non par `img-src`, qui ne régit que les images chargées
+directement par la page. `connect-src` doit aussi couvrir les **cibles de
+redirection** : `Special:FilePath` renvoie systématiquement vers
+`upload.wikimedia.org`.
+
+### Une ancienne version reste affichée après un déploiement
+
+Le service worker sert sa copie en cache. Il se met à jour au chargement
+suivant, mais pour forcer : **Paramètres du site → Effacer les données**, ou
+désinstaller puis réinstaller l'application. La version des caches (`VERSION`
+dans `sw.js`) doit être incrémentée à chaque changement de leur contenu.
+
+### La carte est vide hors connexion
+
+Le cache se remplit **à l'usage** : une zone jamais consultée en ligne n'a
+aucune tuile. Il n'existe pas de téléchargement préalable d'une région.
+
+### Aucun crédit sous une photo
+
+Le crédit vient d'un second appel à l'API Commons. S'il a échoué, la photo
+s'affiche seule ; le crédit apparaît au chargement suivant.
 
 ## Limites connues
 
