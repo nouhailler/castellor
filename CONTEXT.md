@@ -25,6 +25,29 @@ voiture**. Trois partis pris structurent tout le reste :
 Le public visé est le voyageur qui repère un édifice depuis la route et veut
 savoir en dix secondes ce que c'est, de quand ça date, et si ça se visite.
 
+## 1 bis. Deux artefacts, une source
+
+Le dépôt produit **deux choses à partir d'un seul fichier** :
+
+| Artefact | Fichier | Pour qui |
+| --- | --- | --- |
+| Le canvas de conception | `Castellor.dc.html` | L'outil Claude Design |
+| L'application installable | `index.html` | Les navigateurs, Netlify |
+
+`index.html` est **généré** par `tools/build-pwa.py`. Ne jamais l'éditer :
+la prochaine génération écrase tout. On modifie le canvas, puis on régénère.
+
+Le script s'appuie sur quatre marqueurs posés dans le canvas — les déplacer ou
+les supprimer casse la génération, qui s'arrête alors avec un message explicite
+plutôt que de produire une page fausse :
+
+| Marqueur | Rôle |
+| --- | --- |
+| `data-canvas-frame` | L'enveloppe de la planche — devient un bloc plein écran |
+| `data-app-root` | Le cadre du téléphone — devient l'application, `100dvh` |
+| `data-canvas-only` | Ce qui ne part pas en production (barre d'état, annotations) |
+| `data-tabbar` | La barre d'onglets — reçoit la zone sûre Android |
+
 ## 2. Nature du dépôt
 
 Ce n'est **pas** une application web classique. C'est un **canvas Claude
@@ -220,9 +243,8 @@ les qualificatifs de tête — décision non prise à ce jour.
 
 **Court terme — rendre vraies les promesses de l'interface**
 
-1. `manifest.webmanifest` + service worker (installation Android, cache des
-   tuiles et des vignettes). C'est ce qui fait passer le projet de maquette à
-   PWA.
+1. ~~`manifest.webmanifest` + service worker~~ — fait le 2026-08-26. Le projet
+   est installable sur Android et déployable sur Netlify.
 2. ~~Corriger les écarts du §7~~ — fait le 2026-08-26.
 3. Message explicite en cas de refus de géolocalisation.
 
@@ -243,9 +265,9 @@ les qualificatifs de tête — décision non prise à ce jour.
 9. Visionneuse de plans et de cadastres.
 10. Mécanisme réel de remontée des contributions.
 
-**Chantiers transverses non ouverts** : tests, mentions légales et politique de
-confidentialité (contenus juridiques — **validation humaine obligatoire**),
-procédure de déploiement.
+**Chantiers transverses non ouverts** : tests automatisés, mentions légales et
+politique de confidentialité (contenus juridiques — **validation humaine
+obligatoire**).
 
 Le code est sous **licence MIT** depuis le 2026-08-26. Cette licence ne couvre
 que le code écrit pour ce projet : le runtime `support.js`, le design system

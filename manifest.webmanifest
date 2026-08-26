@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "Castellor — châteaux de France",
+  "short_name": "Castellor",
+  "description": "Recensement des châteaux de France, pensé pour la voiture : la carte est l'écran d'accueil, la fiche s'ouvre sur sa photo, et tout le texte reste lisible sans réseau.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#161826",
+  "theme_color": "#161826",
+  "categories": ["travel", "education", "navigation"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

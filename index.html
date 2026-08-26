@@ -1,18 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Castellor — châteaux de France</title>
+<meta name="description" content="Recensement des châteaux de France, pensé pour la voiture : la carte est l'écran d'accueil et les fiches restent lisibles sans réseau.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#161826">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Castellor">
+<link rel="stylesheet" href="vendor/leaflet.css">
+<style>
+html,body{margin:0;padding:0;height:100%;background:#161826;overscroll-behavior:none}
+body{-webkit-tap-highlight-color:transparent}
+[data-tabbar]{padding-bottom:env(safe-area-inset-bottom,0)}
+/* Cible tactile confortable sur les commandes de la carte. */
+.leaflet-control-zoom a{width:34px!important;height:34px!important;line-height:34px!important}
+</style>
+<script>
+/* Le runtime consulte window.__resources avant d'aller sur un CDN : on lui
+   sert React depuis le domaine, seule façon d'être installable hors ligne. */
+window.__resources = {
+  "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "vendor/react.production.min.js",
+  "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "vendor/react-dom.production.min.js"
+};
+</script>
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet data-dc-atomics>
 <meta name="design_doc_mode" content="canvas">
-<link rel="stylesheet" href="_ds/nocturne-2e02886b-1e44-4a41-b221-80854cfe6292/styles.css">
+<link rel="stylesheet" href="vendor/nocturne.css">
 <script src="_ds/nocturne-2e02886b-1e44-4a41-b221-80854cfe6292/_ds_bundle.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+
+<script src="vendor/leaflet.js"></script>
 <script src="chateaux-data.js"></script>
 <script src="castellum-map.js"></script>
 <style>
@@ -24,14 +50,11 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 </style>
 </helmet>
 
-<div data-canvas-frame style="display:flex;gap:44px;align-items:flex-start;padding:48px 56px;min-height:100vh">
+<div data-canvas-frame style="display:block;min-height:100dvh">
 
-<div data-app-root style="flex:none;width:430px;height:900px;position:relative;border-radius:34px;background:var(--color-bg);box-shadow:0 0 0 1px #3f424d,0 34px 90px rgba(0,0,0,.7);overflow:hidden;display:flex;flex-direction:column">
+<div data-app-root style="position:relative;width:100%;height:100dvh;background:var(--color-bg);overflow:hidden;display:flex;flex-direction:column">
 
-<div data-canvas-only style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:9px 20px 3px;font-size:11px;letter-spacing:.02em;color:color-mix(in srgb,var(--color-text) 62%,transparent)">
-<span>9:41</span>
-<span style="display:flex;align-items:center;gap:7px">{{ netLabel }}<span style="width:6px;height:6px;border-radius:50%;background:{{ netDot }}"></span></span>
-</div>
+
 
 <div style="flex:none;padding:6px 16px 10px;display:flex;flex-direction:column;gap:9px">
 <div style="display:flex;align-items:center;gap:10px">
@@ -338,39 +361,7 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 </div>
 </div>
 
-<div data-canvas-only style="flex:none;width:330px;display:flex;flex-direction:column;gap:20px;padding-top:12px">
-<div>
-<div style="font:500 10px var(--font-heading);letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Prototype PWA — v1</div>
-<h4 style="margin:0 0 8px;font-size:19px;letter-spacing:-.01em">Castellor</h4>
-<p style="font-size:12.5px;line-height:1.6;color:color-mix(in srgb,var(--color-text) 70%,transparent);margin:0;text-wrap:pretty">Recensement des châteaux de France, pensé pour la voiture : la carte est l'écran d'accueil, la fiche s'ouvre sur sa photo, et tout le texte reste lisible sans réseau.</p>
-</div>
-<div>
-<div style="font:500 11px var(--font-heading);margin-bottom:7px">Ce qui marche déjà</div>
-<div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 65%,transparent)">
-<div>Carte Leaflet réelle, 35 châteaux géolocalisés, fond assombri + mode satellite.</div>
-<div>Filtres époque / type / état / accès appliqués en direct aux marqueurs et à la liste.</div>
-<div>Recherche par nom, variante historique, commune, département ou région.</div>
-<div>Bascule en ligne / hors-ligne : photos HD → vignettes BR, satellite coupé, fond de carte atténué.</div>
-<div>Édition du nom, de la description et des événements d'une fiche, enregistrée sur l'appareil.</div>
-</div>
-</div>
-<div>
-<div style="font:500 11px var(--font-heading);margin-bottom:7px">Hypothèses à valider</div>
-<div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 65%,transparent)">
-<div>Jeu de démonstration de 35 fiches saisies à la main ; l'import Wikidata + POP viendra remplir les 500.</div>
-<div>Photos tirées de Wikipédia / Wikimedia Commons et mises en cache : à valider licence par licence avant mise en production.</div>
-<div>Plan et cadastre sont annoncés mais pas encore affichés — visionneuse à concevoir.</div>
-</div>
-</div>
-<div>
-<div style="font:500 11px var(--font-heading);margin-bottom:7px">Prochaines étapes</div>
-<div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 65%,transparent)">
-<div>Manifest + service worker Netlify : installation Android, cache des tuiles et des vignettes.</div>
-<div>Visionneuse photo plein écran avec bascule BR / HD explicite.</div>
-<div>Écran d'itinéraire : « les 8 châteaux sur ma route ».</div>
-</div>
-</div>
-</div>
+
 
 </div>
 </x-dc>
@@ -792,6 +783,15 @@ class Component extends DCLogic {
       mapWrapRef: (this.mapWrapRef = this.mapWrapRef || React.createRef())
     };
   }
+}
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function (e) {
+      console.warn("[castellor] service worker non enregistré :", e);
+    });
+  });
 }
 </script>
 </body>

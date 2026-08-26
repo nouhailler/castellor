@@ -32,6 +32,11 @@ sont jamais définitifs sans validation humaine.
 
 ## Ce qu'il faut savoir avant de toucher au code
 
+- **`Castellor.dc.html` est la source ; `index.html` est généré.** Après toute
+  modification du canvas, lancer `python3 tools/build-pwa.py`. Éditer
+  `index.html` à la main, c'est perdre son travail à la génération suivante.
+  Ne pas retirer les marqueurs `data-app-root`, `data-canvas-only`,
+  `data-canvas-frame`, `data-tabbar` : le script en dépend.
 - **Ce n'est pas une application web classique.** `Castellor.dc.html` est un
   canvas Claude Design : maquette et logique dans le même fichier, avec des
   balises de runtime (`<x-dc>`, `<sc-if>`, `<sc-for>`, `<x-import>`) et une
@@ -64,8 +69,15 @@ sont jamais définitifs sans validation humaine.
   `Special:FilePath` (`upload.wikimedia.org` est inaccessible). Le nom de
   fichier est extrait par expression régulière — si le format d'URL change,
   toutes les photos disparaissent silencieusement.
-- **Le mode hors connexion est simulé** par une bascule manuelle, pas par
-  `navigator.onLine`, et il n'y a ni manifeste ni service worker.
+- **Deux niveaux de hors connexion.** L'état réseau réel pilote l'affichage ;
+  le bouton de l'en-tête reste un forçage manuel pour la démonstration. Le vrai
+  cache vient de `sw.js`, qui n'existe que sur le site servi — pas dans le
+  canvas ouvert directement. Le bandeau s'adapte : ne pas y réintroduire de
+  promesse fixe.
+- **`vendor/` n'est pas du confort.** React, Leaflet, Inter et la feuille
+  Nocturne y sont copiés parce qu'une PWA ne peut pas dépendre d'un CDN hors
+  ligne. Le runtime lit `window.__resources` pour y aller. Ne pas revenir à
+  unpkg ni à Google Fonts.
 - **L'interface ne doit décrire que ce que le code fait réellement.** Une série
   de textes trop optimistes (cache de tuiles, plans hors-ligne, remontée des
   contributions) a été corrigée le 2026-08-26 — voir
@@ -83,6 +95,10 @@ https://github.com/nouhailler/castellor — public, sous licence **MIT**, branch
 `main`. La licence ne couvre que le code écrit pour ce projet : voir le tableau
 des éléments tiers dans le [README](README.md#licence).
 
-Pas de `package.json`, pas de tests, pas de build ni de procédure de
-déploiement. Le jeu de données compte **35 fiches** de démonstration saisies à
+Déploiement Netlify : **Base directory** vide, **Build command** vide,
+**Publish directory** `.` — `netlify.toml` porte le reste (en-têtes, CSP).
+La CSP exige `'unsafe-inline'` et `'unsafe-eval'` : le runtime compile la
+logique du canvas avec `new Function`. Les retirer casse l'application.
+
+Pas de `package.json`, pas de tests automatisés. Le jeu de données compte **35 fiches** de démonstration saisies à
 la main, taillées pour l'import Wikidata / POP-Mérimée à venir.

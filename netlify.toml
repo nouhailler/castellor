@@ -1,0 +1,59 @@
+# Déploiement de Castellor sur Netlify.
+# Le site est entièrement statique : aucune étape de compilation à l'arrivée.
+# index.html est dérivé de Castellor.dc.html par tools/build-pwa.py, exécuté
+# avant de pousser (voir README).
+
+# Base directory : vide (la racine du dépôt)
+# Build command   : vide — index.html est versionné, rien à compiler à l'arrivée
+# Publish directory : "." — les fichiers sont servis tels quels
+[build]
+  publish = "."
+
+# Le service worker ne doit jamais être servi depuis un cache : sans cela, une
+# nouvelle version du site peut rester invisible pendant des jours.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Service-Worker-Allowed = "/"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json; charset=utf-8"
+    Cache-Control = "public, max-age=3600"
+
+# Dépendances figées à une version : elles peuvent être mises en cache longtemps.
+[[headers]]
+  for = "/vendor/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/icons/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(self), camera=(), microphone=(), payment=()"
+    # 'unsafe-inline' : la maquette porte ses styles et ses gestionnaires en
+    # ligne. 'unsafe-eval' : le runtime Claude Design compile la logique du
+    # canvas avec `new Function`. Les deux sont exigés par la nature du canvas,
+    # pas par un choix de facilité — les retirer casse l'application.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://server.arcgisonline.com https://commons.wikimedia.org https://fr.wikipedia.org https://upload.wikimedia.org; connect-src 'self' https://fr.wikipedia.org https://commons.wikimedia.org; font-src 'self' data:; manifest-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+
+# Le canvas de conception n'est pas l'application : on évite qu'il soit indexé
+# ou ouvert par erreur à la place d'index.html.
+[[headers]]
+  for = "/Castellor.dc.html"
+  [headers.values]
+    X-Robots-Tag = "noindex"

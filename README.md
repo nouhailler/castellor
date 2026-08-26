@@ -5,8 +5,7 @@ l'écran d'accueil, la fiche s'ouvre sur sa photo, et tout le texte reste
 lisible sans réseau.
 
 - **Version** : 0.1.0 — *Prototype v1*
-- **Statut** : prototype interactif (maquette Claude Design), **pas encore une
-  PWA installable** — voir [Limites connues](#limites-connues)
+- **Statut** : PWA installable sur Android, déployable sur Netlify
 - **Langue** : français
 - **Licence** : [MIT](LICENSE)
 - **Documentation** : suit `DOCUMENTATION_SPEC.md` (voir [CONTEXT.md](CONTEXT.md))
@@ -40,20 +39,53 @@ L'application est conçue pour un usage en déplacement : elle bascule en mode
 hors connexion, où les fiches texte restent intégralement consultables et les
 photos passent en vignettes basse résolution mises en cache.
 
-## Lancer le prototype
+## Lancer et déployer
 
-Le prototype est un **canvas Claude Design** (`Castellor.dc.html`). Il ne se
-lance pas comme un site statique classique : il a besoin du moteur de rendu
-`.dc.html` pour interpréter les balises `<x-dc>`, `<sc-if>`, `<sc-for>` et le
-bloc `<script type="text/x-dc">`.
+### En local
 
-Ouvre `Castellor.dc.html` dans l'environnement Claude Design qui a servi à le
-créer. Une connexion réseau est nécessaire au premier affichage pour charger
-Leaflet et récupérer les photos (voir [Réseau](#réseau-et-mode-hors-connexion)).
+```sh
+python3 -m http.server 8000     # puis ouvrir http://localhost:8000/
+```
 
-> **À vérifier** : aucun script de build, `package.json`, serveur de
-> développement ni configuration de déploiement n'est présent dans le dépôt. La
-> procédure de mise en ligne reste à définir.
+Le service worker et l'installation exigent HTTPS, sauf sur `localhost` où le
+navigateur les autorise — le local suffit donc pour tout tester.
+
+### Régénérer l'application
+
+`index.html` est **dérivé** de `Castellor.dc.html` : ne jamais l'éditer à la
+main. Après toute modification du canvas :
+
+```sh
+python3 tools/build-pwa.py
+```
+
+Le script retire le décor de maquette (fausse barre d'état, colonne
+d'annotations), déplie l'artboard 430 × 900 sur tout l'écran, redirige les
+dépendances vers `vendor/` et branche manifeste et service worker.
+
+### Déployer sur Netlify
+
+`netlify.toml` porte déjà la configuration. Dans l'interface Netlify :
+
+| Réglage | Valeur |
+| --- | --- |
+| **Base directory** | *(vide)* |
+| **Build command** | *(vide)* |
+| **Publish directory** | `.` |
+
+Il n'y a rien à compiler à l'arrivée : `index.html` est versionné. Netlify sert
+le site en HTTPS, ce qui suffit à rendre l'application installable.
+
+### Installer sur Android
+
+Ouvrir le site dans Chrome, puis **⋮ → Ajouter à l'écran d'accueil**. Chrome
+propose aussi l'installation spontanément. L'application s'ouvre ensuite en
+plein écran, sans barre d'adresse.
+
+### Ouvrir le canvas de conception
+
+`Castellor.dc.html` reste la source : il s'ouvre dans l'environnement Claude
+Design, avec sa colonne d'annotations et son cadre de téléphone.
 
 ## Les trois onglets
 
@@ -64,7 +96,7 @@ fiche ouverte et sort du mode édition.
 | --- | --- |
 | **Carte** | Carte Leaflet plein écran, marqueurs, carte de sélection |
 | **Liste** | Les châteaux filtrés, en liste avec vignette |
-| **Hors-ligne** | État des données, sources, contributions locales |
+| **Hors-ligne** | État du cache, données, sources, crédits photo, contributions |
 
 ## Fonctionnalités
 
@@ -224,6 +256,9 @@ Si `localStorage` est indisponible (navigation privée stricte, stockage bloqué
 l'application continue de fonctionner : les échecs de lecture et d'écriture sont
 ignorés, mais les contributions et le cache photo sont perdus au rechargement.
 
+S'y ajoutent les caches du service worker, gérés par le navigateur et vidés
+avec les données du site.
+
 **Aucune donnée n'est envoyée à un serveur Castellor** — il n'y en a pas.
 
 ## Permissions
@@ -237,8 +272,10 @@ Aucune permission n'est demandée au lancement.
 
 ## Réseau et mode hors connexion
 
-Le bouton **En ligne / Hors-ligne** de l'en-tête simule la perte de réseau. Ce
-n'est **pas** une détection automatique : l'état du réseau réel n'est pas lu.
+L'application démarre dans l'**état réseau réel** de l'appareil et suit les
+événements `online` / `offline` du navigateur. Le bouton **En ligne /
+Hors-ligne** de l'en-tête reste un **forçage manuel**, utile pour montrer le
+mode dégradé sans couper quoi que ce soit.
 
 | | En ligne | Hors-ligne |
 | --- | --- | --- |
@@ -247,7 +284,25 @@ n'est **pas** une détection automatique : l'état du réseau réel n'est pas lu
 | Vignettes de liste | 400 px | 400 px, désaturées |
 | Satellite | disponible | **désactivé**, bouton grisé |
 | Fond de carte | normal | assombri, désaturé, opacité réduite |
-| Bandeau | — | « Aucun cache de tuiles pour l'instant… » |
+| Bandeau | — | Indique si le cache de l'application est actif |
+
+### Ce qui est mis en cache
+
+Une fois l'application installée, son service worker (`sw.js`) tient quatre
+caches distincts :
+
+| Cache | Contenu | Stratégie | Plafond |
+| --- | --- | --- | --- |
+| `castellor-shell` | Code, styles, polices, icônes, données | Cache d'abord | — |
+| `castellor-tuiles` | Tuiles OpenStreetMap déjà consultées | Cache d'abord | 900 |
+| `castellor-photos` | Photographies Wikimedia déjà vues | Cache d'abord | 250 |
+| `castellor-meta` | Résumés et crédits de licence | Réseau d'abord | 120 |
+
+L'**imagerie satellite n'est volontairement pas mise en cache** : la stocker
+remplirait l'appareil sans bénéfice réel, puisqu'elle est déjà indisponible
+hors connexion.
+
+Au-delà du plafond, les entrées les plus anciennes sont supprimées.
 
 ### Domaines contactés
 
@@ -262,21 +317,30 @@ n'est **pas** une détection automatique : l'état du réseau réel n'est pas lu
 ## Structure du projet
 
 ```
-Castellor.dc.html   Le canvas : maquette + logique de l'application
-castellum-map.js    <castellum-map>, la carte Leaflet
-chateaux-data.js    Les 35 fiches, les filtres, les titres Wikipédia
-support.js          Runtime Claude Design — GÉNÉRÉ, ne pas modifier
-_ds/nocturne-…/     Design system Nocturne (tokens, styles, composants)
-uploads/            Capture d'écran de travail
-.thumbnail          Vignette du canvas
+Castellor.dc.html    Le canvas : maquette + logique — LA SOURCE
+index.html           L'application installable — GÉNÉRÉ par tools/build-pwa.py
+manifest.webmanifest Manifeste PWA (nom, icônes, plein écran)
+sw.js                Service worker : coquille, tuiles, photos, métadonnées
+netlify.toml         Déploiement, en-têtes de cache et CSP
+castellum-map.js     <castellum-map>, la carte Leaflet
+chateaux-data.js     Les 35 fiches, les filtres, les titres Wikipédia
+support.js           Runtime Claude Design — GÉNÉRÉ, ne pas modifier
+vendor/              React, Leaflet, Inter, Nocturne — servis depuis le domaine
+icons/               Icônes PWA — GÉNÉRÉES par tools/make-icons.py
+tools/               build-pwa.py · make-icons.py · fetch-fonts.sh · audit licences
+_ds/nocturne-…/      Design system Nocturne (tokens, styles, composants)
+uploads/             Capture d'écran de travail
+.thumbnail           Vignette du canvas
 ```
 
 ## Limites connues
 
-- **Ce n'est pas encore une PWA.** Il n'y a ni `manifest.webmanifest` ni service
-  worker : l'application n'est pas installable, et le « mode hors connexion »
-  est une simulation d'interface, pas un vrai cache réseau. Les tuiles et les
-  photos annoncées « en cache » dépendent en réalité du cache du navigateur.
+- **Le cache se remplit à l'usage.** Un château jamais consulté n'a ni tuile ni
+  photo en cache : hors connexion, sa fiche s'affiche en texte, sans image, sur
+  un fond de carte vide. Il n'existe pas de téléchargement préalable d'une
+  région.
+- **Le canvas ouvert directement n'a pas de service worker** — seule
+  l'application servie par HTTP en a un. Le bandeau hors connexion le dit.
 - **35 fiches** de démonstration, pas les ~500 visées.
 - **Aucun lien officiel** n'est renseigné dans les données : toutes les fiches
   affichent « Aucun lien officiel renseigné — contribution bienvenue ».

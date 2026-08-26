@@ -46,6 +46,36 @@ entrées suivantes devront être écrites au fil des modifications.
   carte atténué », et « édition complète d'une fiche » précise les trois champs
   réellement modifiables.
 
+### Ajouté — l'application devient une PWA installable
+
+- **`manifest.webmanifest` et `sw.js`** — Castellor s'installe sur Android
+  (Chrome → Ajouter à l'écran d'accueil) et démarre réseau coupé. Le service
+  worker tient quatre caches : coquille de l'application, tuiles
+  OpenStreetMap (900), photographies Wikimedia (250) et métadonnées de licence
+  (120). L'imagerie satellite reste volontairement hors cache.
+- **`index.html`, généré par `tools/build-pwa.py`** — le canvas reste la source
+  unique. Le script retire le décor de maquette, déplie l'artboard 430 × 900
+  sur tout l'écran (`100dvh`, zone sûre Android sous la barre d'onglets), et
+  branche manifeste, service worker et dépendances locales.
+- **`vendor/`** — React 18.3.1, Leaflet 1.9.4, la fonte Inter (latin et
+  latin-ext) et la feuille Nocturne sont servis depuis le domaine. Sans cela,
+  rien n'est installable : le CDN et Google Fonts sont injoignables hors ligne.
+  Les empreintes SHA-384 de React correspondent aux constantes du runtime.
+- **`netlify.toml`** — publication à la racine sans compilation, en-têtes de
+  cache (service worker jamais mis en cache, `vendor/` et `icons/` immuables)
+  et CSP.
+- **`icons/`, générées par `tools/make-icons.py`** — un donjon crénelé aux
+  couleurs Nocturne, en versions normale et *maskable*.
+
+### Changé
+
+- **L'état réseau réel pilote l'affichage.** L'application démarre sur
+  `navigator.onLine` et suit les événements `online` / `offline`. Le bouton de
+  l'en-tête reste un forçage manuel pour la démonstration.
+- **Le bandeau hors connexion dit la vérité selon le contexte** : il annonce le
+  cache quand un service worker contrôle la page, et son absence quand le
+  canvas est ouvert directement. L'onglet Hors-ligne affiche l'état du cache.
+
 ### Ajouté
 
 - **`PHOTOS.md`** — audit des licences des 35 photographies, avec
