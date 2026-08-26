@@ -123,7 +123,7 @@ le DOM, et pose un drapeau `el._bound` pour ne brancher `onSelect` qu'une fois.
 
 **Attention** : c'est un pont à sens unique et non idempotent côté rendu —
 `render()` de la carte vide et reconstruit tous les marqueurs à chaque appel.
-Avec 35 points c'est indolore ; à 500 il faudra une mise à jour différentielle.
+Avec 50 points c'est indolore ; à 500 il faudra une mise à jour différentielle.
 
 ## 4. État de l'application
 
@@ -185,7 +185,7 @@ Si on le fait, prévoir une migration de `castellum-drafts` vers la nouvelle cl�
   par l'API : `upload.wikimedia.org` s'est révélé inaccessible depuis
   l'environnement d'exécution. Le nom de fichier est extrait par expression
   régulière de l'URL de vignette, puis re-servi par le wiki d'origine. Le code
-  gère Commons et Wikipédia fr ; en pratique, **les 35 fichiers sont sur
+  gère Commons et Wikipédia fr ; en pratique, **les 50 fichiers sont sur
   Commons**. **C'est fragile** : si le format d'URL change, toutes les photos
   disparaissent silencieusement.
 - **`connect-src` régit le service worker, pas `img-src`.** Une tuile ou une
@@ -199,7 +199,7 @@ Si on le fait, prévoir une migration de `castellum-drafts` vers la nouvelle cl�
   refuse une réponse issue d'une redirection ; le rejet remontait dans
   `respondWith` et le navigateur ne recevait rien. `sw.js` écrit désormais à
   côté de la réponse et avale les échecs.
-- **Attribution photo non affichée** — les 35 clichés sont libres, mais 32
+- **Attribution photo non affichée** — les 50 clichés sont libres, mais 47
   exigent de citer auteur et licence. Les métadonnées viennent de la même API
   que les images (`prop=imageinfo&iiprop=extmetadata`) : le correctif consiste à
   les récupérer avec les URL, dans `_loadPhotos()`. Audit et script :
@@ -244,9 +244,10 @@ la visionneuse de plans ou la remontée des contributions arriveront. Les mettre
 ### Note sur le tri alphabétique
 
 Le tri porte sur le nom affiché, tel quel. Conséquence : « Château royal
-d'Amboise » se classe à *royal* et non à *Amboise*, et les six fiches qui ne
+d'Amboise » se classe à *royal* et non à *Amboise*, et les neuf fiches qui ne
 commencent pas par « Château » (Cité de Carcassonne, Forteresse de Salses,
-Manoir d'Ango…) se dispersent dans la liste. C'est la lecture littérale de
+Manoir d'Ango, Forteresse royale de Chinon, Palais des papes d'Avignon…) se
+dispersent dans la liste. C'est la lecture littérale de
 « A→Z ». Si on veut classer sur la partie distinctive du nom, il faudra ignorer
 les qualificatifs de tête — décision non prise à ce jour.
 
@@ -262,11 +263,15 @@ les qualificatifs de tête — décision non prise à ce jour.
 **Moyen terme — le fond**
 
 4. Import **Wikidata** (identités, coordonnées) et **POP / Mérimée** (statut
-   patrimonial) pour passer de 35 à ~500 fiches. La structure de données est
-   déjà taillée pour ça.
+   patrimonial) pour passer de 35 à ~500 fiches. **35 → 50 fait à la main le
+   2026-08-26** (15 fiches saisies depuis Wikipédia fr, mêmes champs, aucun
+   connecteur automatisé écrit) ; l'écart avec les ~500 visées et le
+   branchement d'un vrai import Wikidata / POP restent à faire. La structure
+   de données est déjà taillée pour ça.
 5. ~~Vérification des licences photo, fiche par fiche~~ — faite le 2026-08-26,
-   voir [PHOTOS.md](PHOTOS.md). **Reste à faire** : afficher l'auteur et la
-   licence de chaque cliché, exigés par 32 des 35 photographies.
+   rejouée le même jour sur les 50 fiches, voir [PHOTOS.md](PHOTOS.md).
+   ~~Afficher l'auteur et la licence de chaque cliché~~ — fait le 2026-08-26,
+   voir README [§Photos](README.md#photos).
 6. Renseigner `liens` — aucune fiche n'en a aujourd'hui.
 7. Visionneuse photo plein écran, avec bascule BR / HD explicite.
 

@@ -1,5 +1,7 @@
-/* Jeu de données de démonstration — 35 châteaux réels, coordonnées approchées.
-   Structure identique à celle visée pour l'import Wikidata / POP-Mérimée. */
+/* Jeu de données de démonstration — 50 châteaux réels, coordonnées approchées.
+   Structure identique à celle visée pour l'import Wikidata / POP-Mérimée.
+   15 fiches ajoutées le 2026-08-26 (chinon → beaucaire), sourcées à la main
+   depuis Wikipédia fr / Wikidata ; voir CONTEXT.md §8 pour la suite. */
 window.CASTELLUM_FILTERS = {
   epoque: [
     { id: "e1", label: "Xe – XIIe s.", min: 10, max: 12 },
@@ -49,7 +51,22 @@ window.CASTELLUM_WIKI = {
   tournoel: "Château de Tournoël",
   blois: "Château de Blois",
   foix: "Château de Foix",
-  reignac: "Maison forte de Reignac"
+  reignac: "Maison forte de Reignac",
+  chinon: "Forteresse royale de Chinon",
+  saumur: "Château de Saumur",
+  sully: "Château de Sully-sur-Loire",
+  vauxlevicomte: "Château de Vaux-le-Vicomte",
+  sedan: "Château de Sedan",
+  falaise: "Château de Falaise",
+  josselin: "Château de Josselin",
+  kerjean: "Château de Kerjean",
+  lalatte: "Fort la Latte",
+  roquetaillade: "Château de Roquetaillade",
+  if: "Château d'If",
+  avignon: "Palais des papes d'Avignon",
+  val: "Château de Val",
+  bussyrabutin: "Château de Bussy-Rabutin",
+  beaucaire: "Château de Beaucaire"
 };
 
 /* Deux fichiers Commons n'exposent aucun auteur dans leurs métadonnées, alors
@@ -459,5 +476,183 @@ window.CASTELLUM = [
     stat: ["Monument historique classé", "Propriété départementale"], acc: "Ouvert au public",
     com: "Foix", dep: "Ariège (09)", reg: "Comté de Foix", lat: 42.9661, lng: 1.6053,
     plan: true, liens: []
+  },
+  {
+    id: "chinon", n: "Forteresse royale de Chinon", v: ["Château de Chinon", "Cité royale de Chinon"],
+    t: "forteresse", sc: [12, 13, 15], per: "XIIe – XVe s., fossés secs creusés dès 1205",
+    arch: "Chantier des Plantagenêt, extension de Philippe Auguste",
+    prop: ["Comtes de Blois", "Plantagenêt", "Couronne de France", "Département d'Indre-et-Loire"],
+    ev: ["Mort d'Henri II Plantagenêt en 1189", "Emprisonnement de dignitaires templiers en 1308", "Rencontre de Jeanne d'Arc et de Charles VII en 1429"],
+    desc: "Éperon rocheux dominant la Vienne, structuré en trois châteaux distincts séparés par des douves sèches : fort du Coudray, château du Milieu et fort Saint-Georges.",
+    st: ["Militaire médiéval", "Gothique"], etat: "Partiellement ruiné",
+    stat: ["Monument historique classé", "Propriété départementale"], acc: "Ouvert au public",
+    com: "Chinon", dep: "Indre-et-Loire (37)", reg: "Touraine", lat: 47.1681, lng: 0.2361,
+    plan: true, liens: []
+  },
+  {
+    id: "saumur", n: "Château de Saumur", v: ["Château des ducs d'Anjou"],
+    t: "château", sc: [10, 14, 15], per: "Xe s., reconstruction par Louis Ier d'Anjou 1367-1370",
+    arch: "Louis Ier d'Anjou, remaniements de René d'Anjou",
+    prop: ["Comtes de Blois", "Ducs d'Anjou", "Couronne de France", "Commune de Saumur"],
+    ev: ["Prise sur Jean sans Terre par Philippe Auguste en 1203", "Résidence de René d'Anjou au XVe s.", "Classement monument historique en 1862"],
+    desc: "Silhouette à tourelles sur la Loire popularisée par les Très Riches Heures du duc de Berry ; enceinte pentagonale et logis remaniés par les ducs d'Anjou.",
+    st: ["Gothique", "Renaissance angevine"], etat: "Bon état",
+    stat: ["Monument historique classé", "Propriété communale", "Patrimoine mondial UNESCO"], acc: "Ouvert au public",
+    com: "Saumur", dep: "Maine-et-Loire (49)", reg: "Anjou", lat: 47.2570, lng: -0.0724,
+    plan: true, liens: []
+  },
+  {
+    id: "sully", n: "Château de Sully-sur-Loire", v: ["Château de Sully"],
+    t: "château", sc: [12, 14, 17], per: "Mentionné en 1102, reconstruction 1396-1409",
+    arch: "Raymond du Temple, pour Gui VI de La Trémoille et Marie de Sully",
+    prop: ["Seigneurs de Sully", "Famille de La Trémoille", "Maximilien de Béthune, duc de Sully"],
+    ev: ["Reconstruction lancée par Gui VI de La Trémoille en 1396", "Acquisition par le ministre d'Henri IV en 1602", "Exil de Voltaire chez le duc de Sully en 1716"],
+    desc: "Donjon quadrangulaire cantonné de tours rondes posé au bord de la Loire, douves alimentées par la Sange et logis en retour d'équerre.",
+    st: ["Gothique militaire", "Renaissance"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété départementale"], acc: "Ouvert au public",
+    com: "Sully-sur-Loire", dep: "Loiret (45)", reg: "Orléanais", lat: 47.7677, lng: 2.3752,
+    plan: true, liens: []
+  },
+  {
+    id: "vauxlevicomte", n: "Château de Vaux-le-Vicomte", v: [],
+    t: "château", sc: [17], per: "1658 – 1661",
+    arch: "Louis Le Vau, Charles Le Brun (décors), André Le Nôtre (jardins)",
+    prop: ["Nicolas Fouquet", "Maréchal de Villars", "Famille Sommier", "Marquis de Vogüé"],
+    ev: ["Fête donnée à Louis XIV le 17 août 1661, suivie de l'arrestation de Fouquet", "Rachat et restauration par Alfred Sommier en 1875", "Modèle direct du chantier de Versailles"],
+    desc: "Chef-d'œuvre du classicisme réunissant pour la première fois Le Vau, Le Brun et Le Nôtre ; logis entouré de douves et jardins en perspective absolue.",
+    st: ["Classicisme français"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Château privé"], acc: "Ouvert au public",
+    com: "Maincy", dep: "Seine-et-Marne (77)", reg: "Île-de-France / Brie", lat: 48.5659, lng: 2.7141,
+    plan: true, liens: [{ label: "Site officiel", url: "https://www.vaux-le-vicomte.com" }]
+  },
+  {
+    id: "sedan", n: "Château de Sedan", v: ["Château-haut de Sedan"],
+    t: "forteresse", sc: [15, 16, 17], per: "1424 – 1690, agrandissements successifs",
+    arch: "Princes de la Marck, ducs de Bouillon",
+    prop: ["Princes de la Marck", "Ducs de Bouillon (La Tour d'Auvergne)", "Couronne de France", "Commune de Sedan"],
+    ev: ["Naissance de Turenne au château en 1611", "Intégration au pré carré fortifié de Louis XIV", "Classement monument historique en 1965"],
+    desc: "Plus grand château fort d'Europe par sa surface bâtie : éperon rocheux hérissé de bastions successifs dominant la Meuse.",
+    st: ["Militaire médiéval", "Fortification bastionnée"], etat: "Bon état",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Sedan", dep: "Ardennes (08)", reg: "Grand Est / Ardennes", lat: 49.7019, lng: 4.9494,
+    plan: true, liens: []
+  },
+  {
+    id: "falaise", n: "Château de Falaise", v: ["Château Guillaume-le-Conquérant"],
+    t: "château-fort", sc: [10, 12, 13], per: "Xe s., donjon d'Henri Ier Beauclerc vers 1123",
+    arch: "Ducs de Normandie",
+    prop: ["Ducs de Normandie", "Couronne de France", "Commune de Falaise"],
+    ev: ["Naissance de Guillaume le Conquérant vers 1027-1028", "Prise par Philippe Auguste en 1204", "Restauration contemporaine après les bombardements de 1944"],
+    desc: "Éperon schisteux dominant la ville : donjon roman d'Henri Ier Beauclerc, tour Talbot cylindrique du XIIIe siècle et courtines reliant les deux ouvrages.",
+    st: ["Roman", "Gothique militaire"], etat: "Bon état",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Falaise", dep: "Calvados (14)", reg: "Normandie", lat: 48.8932, lng: -0.2039,
+    plan: false, liens: []
+  },
+  {
+    id: "josselin", n: "Château de Josselin", v: [],
+    t: "château-fort", sc: [11, 15], per: "XIe s., façade sur cour 1490-1505",
+    arch: "Ducs de Rohan",
+    prop: ["Seigneurs de Josselin", "Maison de Rohan"],
+    ev: ["Combat des Trente livré à proximité en 1351", "Classement monument historique le 21 août 1928", "Résidence ininterrompue des Rohan depuis sa construction"],
+    desc: "Façade défensive à trois tours rondes côté rivière, contrastant avec une façade sur cour finement sculptée de style gothique flamboyant.",
+    st: ["Militaire médiéval breton", "Gothique flamboyant"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Château privé"], acc: "Ouvert au public",
+    com: "Josselin", dep: "Morbihan (56)", reg: "Bretagne", lat: 47.9522, lng: -2.5472,
+    plan: false, liens: []
+  },
+  {
+    id: "kerjean", n: "Château de Kerjean", v: ["Forteresse de Kerjean"],
+    t: "château", sc: [16], per: "1566 – 1595",
+    arch: "Louis Barbier, seigneur de Kerjean",
+    prop: ["Famille Barbier de Kerjean", "État français"],
+    ev: ["Vente comme bien national à la Révolution, mobilier dispersé", "Acquisition par l'État en 1911", "Classement monument historique le 29 avril 1911"],
+    desc: "Manoir fortifié du pays de Léon : enceinte bastionnée, colombier monumental et logis Renaissance à lucarnes sculptées.",
+    st: ["Renaissance bretonne"], etat: "Bon état",
+    stat: ["Monument historique classé", "Propriété de l'État"], acc: "Ouvert au public",
+    com: "Saint-Vougay", dep: "Finistère (29)", reg: "Bretagne", lat: 48.5806, lng: -4.1472,
+    plan: false, liens: []
+  },
+  {
+    id: "lalatte", n: "Fort la Latte", v: ["Château de la Roche Goyon"],
+    t: "château-fort", sc: [13, 17], per: "XIIIe s., refonte pour l'artillerie au XVIIe s.",
+    arch: "Seigneurs Goyon-Matignon",
+    prop: ["Famille Goyon-Matignon", "Propriétaire privé"],
+    ev: ["Classements monument historique en 1925 et 1934", "Décor de tournage pour plusieurs films dont Les Vikings en 1958"],
+    desc: "Deux enceintes successives sur un cap rocheux battu par la mer, reliées par un pont-levis double au-dessus d'une crevasse naturelle.",
+    st: ["Militaire médiéval", "Fortification côtière"], etat: "Bon état",
+    stat: ["Monument historique classé", "Château privé"], acc: "Ouvert au public",
+    com: "Plévenon", dep: "Côtes-d'Armor (22)", reg: "Bretagne", lat: 48.6683, lng: -2.2847,
+    plan: false, liens: []
+  },
+  {
+    id: "roquetaillade", n: "Château de Roquetaillade", v: ["Château neuf de Roquetaillade"],
+    t: "château-fort", sc: [12, 14, 19], per: "XIIe s., château neuf 1306, restauration 1867-1870",
+    arch: "Cardinal Gaillard de La Mothe (château neuf), Eugène Viollet-le-Duc (décors)",
+    prop: ["Famille de La Mothe", "Famille de Mauvezin de La Mothe"],
+    ev: ["Classement parmi la première liste des monuments historiques de 1840", "Décors intérieurs confiés à Viollet-le-Duc", "Ouverture au public en 1956"],
+    desc: "Deux châteaux dans une même enceinte fortifiée : le vieux château du XIIe siècle et le château neuf du XIVe, dont Viollet-le-Duc a orné les intérieurs.",
+    st: ["Militaire médiéval", "Restauration du XIXe s."], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Château privé"], acc: "Ouvert au public",
+    com: "Mazères", dep: "Gironde (33)", reg: "Gascogne / Bordelais", lat: 44.4925, lng: -0.2697,
+    plan: true, liens: []
+  },
+  {
+    id: "if", n: "Château d'If", v: ["Forteresse d'If"],
+    t: "forteresse", sc: [16], per: "1529 – 1531", arch: "Chantier de François Ier",
+    prop: ["François Ier", "Couronne de France", "État français"],
+    ev: ["Prison d'État pendant environ 400 ans", "Cadre du Comte de Monte-Cristo d'Alexandre Dumas", "Classement monument historique en 1926"],
+    desc: "Bloc carré de trois étages flanqué de tours d'angle casematées sur un îlot du Frioul, enceinte bastionnée dominant la rade de Marseille.",
+    st: ["Fortification bastionnée"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété de l'État", "Parc national des Calanques"], acc: "Ouvert au public",
+    com: "Marseille", dep: "Bouches-du-Rhône (13)", reg: "Provence", lat: 43.2797, lng: 5.3253,
+    plan: true, liens: []
+  },
+  {
+    id: "avignon", n: "Palais des papes d'Avignon", v: ["Palais des Papes"],
+    t: "palais", sc: [14], per: "1335 – 1370", arch: "Pierre Poisson, Jean de Louvres",
+    prop: ["Papauté", "État français", "Ville d'Avignon"],
+    ev: ["Six conclaves tenus entre 1334 et 1394", "Résidence de sept papes durant l'Avignon pontificale", "Caserne puis prison après la Révolution"],
+    desc: "Plus grand édifice gothique du Moyen Âge, imbrication du palais vieux fortifié de Benoît XII et du palais neuf fastueux de Clément VI.",
+    st: ["Gothique international"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété communale", "Patrimoine mondial UNESCO"], acc: "Ouvert au public",
+    com: "Avignon", dep: "Vaucluse (84)", reg: "Provence / Comtat Venaissin", lat: 43.9508, lng: 4.8075,
+    plan: true, liens: [{ label: "Site officiel", url: "https://www.palais-des-papes.com" }]
+  },
+  {
+    id: "val", n: "Château de Val", v: [],
+    t: "château-fort", sc: [13, 15], per: "Fondations XIIIe s., château actuel vers 1428-1450",
+    arch: "Guillaume IV d'Estaing",
+    prop: ["Famille de Pierrefort", "Famille d'Estaing", "Commune de Bort-les-Orgues"],
+    ev: ["Achat et reconstruction par Guillaume IV d'Estaing au XVe s.", "Mise en eau du lac de retenue du barrage de Bort en 1952"],
+    desc: "Six tours à poivrière groupées autour d'un logis, devenu presqu'île depuis la mise en eau du lac de retenue du barrage de Bort.",
+    st: ["Gothique militaire auvergnat"], etat: "Bon état",
+    stat: ["Monument historique inscrit", "Propriété communale"], acc: "Ouvert au public",
+    com: "Lanobre", dep: "Cantal (15)", reg: "Auvergne", lat: 45.4428, lng: 2.5053,
+    plan: false, liens: []
+  },
+  {
+    id: "bussyrabutin", n: "Château de Bussy-Rabutin", v: ["Château de Bussy-le-Grand"],
+    t: "château", sc: [12, 14, 17], per: "Fondations XIIe-XIVe s., décors 1660-1700",
+    arch: "Roger de Rabutin, comte de Bussy",
+    prop: ["Famille de Rabutin", "État français"],
+    ev: ["Exil du comte de Bussy à partir de 1666 après la publication de l'Histoire amoureuse des Gaules", "Décoration des galeries durant son exil", "Acquisition par l'État en 1929"],
+    desc: "Façade Renaissance sur cour dissimulant des galeries peintes que le comte de Bussy fit décorer de portraits satiriques durant son exil.",
+    st: ["Renaissance", "Décor classique"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété de l'État"], acc: "Ouvert au public",
+    com: "Bussy-le-Grand", dep: "Côte-d'Or (21)", reg: "Bourgogne", lat: 47.5614, lng: 4.5236,
+    plan: false, liens: []
+  },
+  {
+    id: "beaucaire", n: "Château de Beaucaire", v: [],
+    t: "ruines", sc: [11, 13], per: "XIe s., citadelle sous Saint Louis",
+    arch: "Comtes de Toulouse, chantier royal capétien",
+    prop: ["Comtes de Toulouse", "Couronne de France", "Commune de Beaucaire"],
+    ev: ["Siège de 1216 pendant la croisade albigeoise", "Traité de Beaucaire en 1251", "Démantèlement ordonné par Richelieu en 1632"],
+    desc: "Ruines d'une citadelle capétienne face à Tarascon sur l'autre rive du Rhône, tour polygonale à triangle caractéristique et éperon rocheux dominant la ville.",
+    st: ["Militaire médiéval", "Gothique"], etat: "Ruines",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Beaucaire", dep: "Gard (30)", reg: "Provence / Languedoc", lat: 43.8098, lng: 4.6451,
+    plan: false, liens: []
   }
 ];

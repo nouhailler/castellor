@@ -13,7 +13,27 @@ reconstitué à partir du code. Le dépôt est publié sur
 
 ## [Non publié]
 
-Rien pour l'instant.
+### Ajouté
+
+- **15 nouvelles fiches** (`chateaux-data.js`), portant le jeu de données de
+  35 à **50 châteaux** : Forteresse royale de Chinon, Château de Saumur,
+  Château de Sully-sur-Loire, Château de Vaux-le-Vicomte, Château de Sedan,
+  Château de Falaise, Château de Josselin, Château de Kerjean, Fort la Latte,
+  Château de Roquetaillade, Château d'If, Palais des papes d'Avignon, Château
+  de Val, Château de Bussy-Rabutin, Château de Beaucaire. Mêmes champs que les
+  35 fiches existantes, saisies à la main depuis Wikipédia fr (pas de
+  connecteur Wikidata / POP-Mérimée automatisé — voir
+  [CONTEXT.md §8](CONTEXT.md#8-feuille-de-route)).
+- Audit de licences photo ([PHOTOS.md](PHOTOS.md)) rejoué sur les 50 fiches :
+  50 fichiers résolus, tous sous licence libre, 47 exigent une attribution
+  (contre 32 sur 35 auparavant).
+
+### Documentation
+
+- README, CONTEXT.md et PHOTOS.md mis à jour pour les compteurs de fiches, de
+  photos et de licences (35 → 50), le nombre de fiches sans « Château » en
+  tête de nom (six → neuf) et le nombre de liens officiels renseignés (13 sur
+  50 désormais).
 
 ---
 
