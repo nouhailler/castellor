@@ -24,16 +24,41 @@ reconstitué à partir du code. Le dépôt est publié sur
   35 fiches existantes, saisies à la main depuis Wikipédia fr (pas de
   connecteur Wikidata / POP-Mérimée automatisé — voir
   [CONTEXT.md §8](CONTEXT.md#8-feuille-de-route)).
-- Audit de licences photo ([PHOTOS.md](PHOTOS.md)) rejoué sur les 50 fiches :
-  50 fichiers résolus, tous sous licence libre, 47 exigent une attribution
-  (contre 32 sur 35 auparavant).
+- **25 nouvelles fiches** (`chateaux-data.js`), portant le jeu de données de
+  50 à **75 châteaux** : Château des ducs de Bretagne (Nantes), Château de
+  Brissac, Château de Tiffauges, Château de Pau, Château de La Rochefoucauld,
+  Château d'Oiron, Château de Nérac, Château de Grignan, Château d'Annecy,
+  Château des ducs de Savoie (Chambéry), Citadelle de Sisteron, Château des
+  Baux-de-Provence, Citadelle de Bonifacio, Château de Lunéville, Château du
+  Haut-Barr, Château de Bazoches, Château de Cormatin, Château d'Ancy-le-Franc,
+  Citadelle de Besançon, Château de Rambures, Château d'Hardelot, Château de
+  Fère-en-Tardenois, Château de Carrouges, Château de Caen, Château de
+  Rambouillet. Choisies pour combler les régions historiques peu représentées
+  dans les 50 premières fiches (Savoie, Lorraine, Alsace, Franche-Comté,
+  Corse, Poitou, Béarn…). Mêmes champs, même méthode : saisie à la main depuis
+  Wikipédia fr, aucun connecteur Wikidata / POP-Mérimée automatisé (voir
+  [CONTEXT.md §8](CONTEXT.md#8-feuille-de-route)).
+- Audit de licences photo ([PHOTOS.md](PHOTOS.md)) rejoué sur les 75 fiches :
+  75 fichiers résolus, tous sous licence libre, 69 exigent une attribution
+  (contre 47 sur 50 auparavant). Trois nouveaux fichiers sont du domaine
+  public ; l'un d'eux (château du Haut-Barr) n'a pas d'auteur déclaré sur
+  Commons, sans que ce soit un problème de licence puisque l'attribution n'y
+  est pas exigée.
+
+### Corrigé
+
+- La colonne d'annotations du canvas (`Castellor.dc.html`, section « Ce qui
+  marche déjà / Hypothèses à valider / Prochaines étapes ») était restée à
+  « 35 fiches » lors du premier passage à 50 : trois mentions manquées, mises
+  à jour ici avec le reste (75 fiches, 69 attributions requises) et
+  régénérées dans `index.html` via `tools/build-pwa.py`.
 
 ### Documentation
 
 - README, CONTEXT.md et PHOTOS.md mis à jour pour les compteurs de fiches, de
-  photos et de licences (35 → 50), le nombre de fiches sans « Château » en
-  tête de nom (six → neuf) et le nombre de liens officiels renseignés (13 sur
-  50 désormais).
+  photos et de licences (35 → 50 → 75), le nombre de fiches sans « Château »
+  en tête de nom (six → neuf → douze), le nombre de fiches `plan: true`
+  (27 → 35 → 44) et le nombre de liens officiels renseignés (stable à 13).
 
 ---
 

@@ -4,9 +4,7 @@ Recensement des châteaux de France pensé pour la voiture. **Version 0.2.0** :
 un canvas Claude Design dont on dérive une PWA installable sur Android.
 
 ## Documentation
-
-> Documentation : suivre [`DOCUMENTATION_SPEC.md`](DOCUMENTATION_SPEC.md). Une
-> tâche n'est « done » que si la doc est à jour.
+> **Documentation : NE PAS documenter pendant l'implémentation. La doc se fait en fin de cycle, uniquement sur demande
 
 Concrètement, avant de clore toute modification fonctionnelle, vérifier dans le
 [README](README.md) : la fonctionnalité, ses paramètres, ses permissions, son

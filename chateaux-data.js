@@ -1,7 +1,8 @@
-/* Jeu de données de démonstration — 50 châteaux réels, coordonnées approchées.
+/* Jeu de données de démonstration — 75 châteaux réels, coordonnées approchées.
    Structure identique à celle visée pour l'import Wikidata / POP-Mérimée.
-   15 fiches ajoutées le 2026-08-26 (chinon → beaucaire), sourcées à la main
-   depuis Wikipédia fr / Wikidata ; voir CONTEXT.md §8 pour la suite. */
+   15 fiches ajoutées le 2026-08-26 (chinon → beaucaire), 25 de plus le même
+   jour (nantes → rambouillet), sourcées à la main depuis Wikipédia fr /
+   Wikidata ; voir CONTEXT.md §8 pour la suite. */
 window.CASTELLUM_FILTERS = {
   epoque: [
     { id: "e1", label: "Xe – XIIe s.", min: 10, max: 12 },
@@ -66,7 +67,32 @@ window.CASTELLUM_WIKI = {
   avignon: "Palais des papes d'Avignon",
   val: "Château de Val",
   bussyrabutin: "Château de Bussy-Rabutin",
-  beaucaire: "Château de Beaucaire"
+  beaucaire: "Château de Beaucaire",
+  nantes: "Château des ducs de Bretagne",
+  brissac: "Château de Brissac",
+  tiffauges: "Château de Tiffauges",
+  pau: "Château de Pau",
+  larochefoucauld: "Château de La Rochefoucauld",
+  oiron: "Château d'Oiron",
+  nerac: "Château de Nérac",
+  grignan: "Château de Grignan",
+  annecy: "Château d'Annecy",
+  chambery: "Château des ducs de Savoie",
+  sisteron: "Citadelle de Sisteron",
+  baux: "Château des Baux-de-Provence",
+  bonifacio: "Citadelle de Bonifacio",
+  luneville: "Château de Lunéville",
+  hautbarr: "Château du Haut-Barr",
+  bazoches: "Château de Bazoches",
+  cormatin: "Château de Cormatin",
+  ancyfranc: "Château d'Ancy-le-Franc",
+  besancon: "Citadelle de Besançon",
+  rambures: "Château de Rambures",
+  hardelot: "Château d'Hardelot",
+  fere: "Château de Fère-en-Tardenois",
+  carrouges: "Château de Carrouges",
+  caen: "Château de Caen",
+  rambouillet: "Château de Rambouillet"
 };
 
 /* Deux fichiers Commons n'exposent aucun auteur dans leurs métadonnées, alors
@@ -654,5 +680,302 @@ window.CASTELLUM = [
     stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
     com: "Beaucaire", dep: "Gard (30)", reg: "Provence / Languedoc", lat: 43.8098, lng: 4.6451,
     plan: false, liens: []
+  },
+  {
+    id: "nantes", n: "Château des ducs de Bretagne", v: ["Château de Nantes"],
+    t: "forteresse", sc: [14, 15, 18], per: "Principalement XVe s., éléments du XIVe au XVIIIe s.",
+    arch: "Duc François II, achevé par Anne de Bretagne",
+    prop: ["Ducs de Bretagne", "Couronne de France", "Commune de Nantes"],
+    ev: ["Naissance d'Anne de Bretagne au château vers 1477", "Rattachement du duché au domaine royal en 1532", "Cession à la ville de Nantes en 1915"],
+    desc: "Enceinte pentagonale de sept tours entourée de douves sèches en plein centre-ville, mêlant grand logis gothique et corps de bâtiment Renaissance.",
+    st: ["Gothique", "Renaissance"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Nantes", dep: "Loire-Atlantique (44)", reg: "Bretagne / Pays de la Loire", lat: 47.2156, lng: -1.5497,
+    plan: true, liens: []
+  },
+  {
+    id: "brissac", n: "Château de Brissac", v: ["Château de Brissac-Loire-Aubance"],
+    t: "château", sc: [11, 16, 17], per: "XIe s., surélévation par les Cossé-Brissac au XVIIe s.",
+    arch: "Familles de Brissac",
+    prop: ["Comtes d'Anjou", "Famille de Cossé-Brissac"],
+    ev: ["Rachat par Charles II de Cossé-Brissac en 1502", "Construction du corps de logis à sept étages au XVIIe s., resté inachevé", "Résidence ininterrompue des ducs de Brissac"],
+    desc: "Deux tourelles médiévales encadrant un corps de logis classique de sept étages, resté inachevé : le plus haut château de France.",
+    st: ["Militaire médiéval", "Classicisme français"], etat: "Intact / restauré",
+    stat: ["Monument historique inscrit", "Château privé"], acc: "Ouvert au public",
+    com: "Brissac Loire Aubance", dep: "Maine-et-Loire (49)", reg: "Anjou", lat: 47.3528, lng: -0.4498,
+    plan: false, liens: []
+  },
+  {
+    id: "tiffauges", n: "Château de Tiffauges", v: ["Château de Barbe-Bleue"],
+    t: "ruines", sc: [13, 15], per: "XIIIe s., résidence de Gilles de Rais 1420-1440",
+    arch: "Seigneurs de Tiffauges",
+    prop: ["Seigneurs de Tiffauges", "Gilles de Rais", "Commune de Tiffauges"],
+    ev: ["Résidence de Gilles de Rais, compagnon de Jeanne d'Arc, avant son procès de 1440", "Démantèlement partiel après la Révolution"],
+    desc: "Vastes ruines sur un éperon dominant la Sèvre nantaise : donjon, tour du vidame et logis attribués au surnom de « château de Barbe-Bleue ».",
+    st: ["Militaire médiéval"], etat: "Ruines",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Tiffauges", dep: "Vendée (85)", reg: "Pays de la Loire", lat: 47.0164, lng: -1.1147,
+    plan: false, liens: []
+  },
+  {
+    id: "pau", n: "Château de Pau", v: [],
+    t: "château", sc: [12, 14, 19], per: "XIIe – XIXe s., renforcement par Gaston Fébus fin XIVe s.",
+    arch: "Vicomtes de Béarn, Gaston Fébus",
+    prop: ["Vicomtes de Béarn", "Maison d'Albret", "Henri IV", "État français"],
+    ev: ["Naissance d'Henri IV au château en 1553", "Restauration pour Louis-Philippe au XIXe s.", "Ouverture du musée national en 1927"],
+    desc: "Château médiéval de brique et de galets renforcé par Gaston Fébus, agrandi et redécoré au XIXe siècle pour célébrer la naissance d'Henri IV.",
+    st: ["Militaire médiéval béarnais", "Restauration du XIXe s."], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété de l'État"], acc: "Ouvert au public",
+    com: "Pau", dep: "Pyrénées-Atlantiques (64)", reg: "Béarn", lat: 43.2947, lng: -0.3750,
+    plan: true, liens: []
+  },
+  {
+    id: "larochefoucauld", n: "Château de La Rochefoucauld", v: [],
+    t: "château", sc: [11, 16], per: "Forteresse du XIe s., reconstruction Renaissance vers 1520",
+    arch: "Famille de La Rochefoucauld",
+    prop: ["Famille de La Rochefoucauld"],
+    ev: ["Conservation des tours de la forteresse féodale dans la reconstruction Renaissance", "Classement monument historique en 1955", "Propriété ininterrompue de la même famille depuis sa fondation"],
+    desc: "Escalier Renaissance à cage ouverte de style italien greffé sur les tours d'une forteresse féodale du XIe siècle, autour d'une cour à galeries superposées.",
+    st: ["Militaire médiéval", "Renaissance"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Château privé"], acc: "Ouvert au public",
+    com: "La Rochefoucauld-en-Angoumois", dep: "Charente (16)", reg: "Angoumois", lat: 45.7466, lng: 0.3806,
+    plan: false, liens: []
+  },
+  {
+    id: "oiron", n: "Château d'Oiron", v: ["Château d'Oyron"],
+    t: "château", sc: [16, 17], per: "Chantier de la famille Gouffier, XVIe – XVIIe s.",
+    arch: "Famille Gouffier",
+    prop: ["Famille Gouffier", "État français"],
+    ev: ["Classement monument historique en 1923", "Acquisition par l'État en 1946", "Installation d'une collection d'art contemporain"],
+    desc: "Galerie peinte évoquant les exploits légendaires de la famille Gouffier, aile Renaissance et communs classiques autour d'une cour d'honneur.",
+    st: ["Renaissance", "Classicisme"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété de l'État"], acc: "Ouvert au public",
+    com: "Plaine-et-Vallées", dep: "Deux-Sèvres (79)", reg: "Poitou", lat: 46.9517, lng: -0.0775,
+    plan: false, liens: []
+  },
+  {
+    id: "nerac", n: "Château de Nérac", v: [],
+    t: "château", sc: [15, 16], per: "Style Louis XII, achevé sous Jeanne d'Albret",
+    arch: "Maison d'Albret",
+    prop: ["Maison d'Albret", "Couronne de France", "Commune de Nérac"],
+    ev: ["Cour de Jeanne d'Albret et d'Henri de Navarre", "Démantèlement à la Révolution", "Classement de l'aile subsistante en 1862"],
+    desc: "Seule aile subsistante d'un vaste château Renaissance sur la Baïse, galerie à arcades superposées de transition entre gothique et Première Renaissance.",
+    st: ["Gothique", "Première Renaissance"], etat: "Partiellement ruiné",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Nérac", dep: "Lot-et-Garonne (47)", reg: "Gascogne / Albret", lat: 44.1353, lng: 0.3400,
+    plan: false, liens: []
+  },
+  {
+    id: "grignan", n: "Château de Grignan", v: [],
+    t: "château", sc: [12, 13, 16], per: "XIIe s., forteresse XIIIe s., façade Renaissance XVIe s.",
+    arch: "Famille d'Adhémar de Monteil",
+    prop: ["Famille d'Adhémar", "Famille de Castellane", "Commune de Grignan"],
+    ev: ["Résidence de Madame de Sévigné lors de ses séjours chez sa fille dès 1670", "Destructions révolutionnaires puis incendie de 1936", "Restauration au XXe s."],
+    desc: "Piton rocheux dominant la Drôme provençale : façade Renaissance à loggia superposée sur un noyau féodal remanié en forteresse.",
+    st: ["Militaire médiéval", "Renaissance"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété départementale"], acc: "Ouvert au public",
+    com: "Grignan", dep: "Drôme (26)", reg: "Drôme provençale", lat: 44.4187, lng: 4.9092,
+    plan: false, liens: []
+  },
+  {
+    id: "annecy", n: "Château d'Annecy", v: [],
+    t: "château-fort", sc: [12, 15, 16], per: "XIIe s., remaniements 1430-1571",
+    arch: "Comtes de Genève, ducs de Savoie-Nemours",
+    prop: ["Comtes de Genève", "Ducs de Savoie-Nemours", "Commune d'Annecy"],
+    ev: ["Résidence des ducs de Genevois-Nemours au XVIe s.", "Acquisition par la ville en 1953", "Transformation en musée"],
+    desc: "Ensemble de logis successifs autour d'une cour, dominant la vieille ville et le lac d'Annecy depuis son éperon rocheux.",
+    st: ["Militaire médiéval savoyard", "Renaissance"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Annecy", dep: "Haute-Savoie (74)", reg: "Savoie", lat: 45.8975, lng: 6.1264,
+    plan: false, liens: []
+  },
+  {
+    id: "chambery", n: "Château des ducs de Savoie", v: ["Château de Chambéry"],
+    t: "château-fort", sc: [11, 13], per: "XIe s., agrandissements dès le XIIIe s.",
+    arch: "Comtes puis ducs de Savoie",
+    prop: ["Comtes de Savoie", "Ducs de Savoie", "Département de la Savoie"],
+    ev: ["Dépôt du Saint Suaire dans la chapelle de 1502 à 1578", "Classement monument historique en 1881", "Installation de la préfecture de la Savoie"],
+    desc: "Ancienne résidence des comtes puis ducs de Savoie autour d'une cour intérieure, sainte chapelle gothique et grand carillon de 70 cloches.",
+    st: ["Militaire médiéval", "Gothique"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété départementale"], acc: "Visite partielle",
+    com: "Chambéry", dep: "Savoie (73)", reg: "Savoie", lat: 45.5644, lng: 5.9178,
+    plan: false, liens: []
+  },
+  {
+    id: "sisteron", n: "Citadelle de Sisteron", v: [],
+    t: "forteresse", sc: [13, 16, 17], per: "Fortifications médiévales, refonte par Jean Errard puis Vauban",
+    arch: "Jean Errard, Vauban",
+    prop: ["Couronne de France", "Commune de Sisteron"],
+    ev: ["Renforcement par Jean Errard, ingénieur d'Henri IV", "Consolidation par Vauban à la fin du XVIIe s.", "Bombardements de 1944"],
+    desc: "Éperon rocheux verrouillant le passage entre Dauphiné et Provence, fortifications superposées de l'époque médiévale à Vauban dominant la Durance.",
+    st: ["Militaire médiéval", "Fortification bastionnée"], etat: "Bon état",
+    stat: ["Monument historique classé"], acc: "Ouvert au public",
+    com: "Sisteron", dep: "Alpes-de-Haute-Provence (04)", reg: "Provence", lat: 44.1989, lng: 5.9431,
+    plan: true, liens: []
+  },
+  {
+    id: "baux", n: "Château des Baux-de-Provence", v: ["Château des Baux"],
+    t: "ruines", sc: [11, 13], per: "XIe – XIIIe s., apogée sous les seigneurs des Baux",
+    arch: "Seigneurs des Baux",
+    prop: ["Seigneurs des Baux", "Comtes de Provence", "Couronne de France", "Commune des Baux-de-Provence"],
+    ev: ["Guerre des Baux (1424-1426) contre la maison d'Anjou", "Démantèlement ordonné par Richelieu en 1633", "Ouverture au public au XXe s."],
+    desc: "Château fort taillé dans le rocher des Alpilles, courtines et tour éventrée dominant un vaste panorama sur la plaine de la Crau.",
+    st: ["Militaire médiéval provençal"], etat: "Ruines",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Les Baux-de-Provence", dep: "Bouches-du-Rhône (13)", reg: "Provence / Alpilles", lat: 43.7443, lng: 4.7971,
+    plan: true, liens: []
+  },
+  {
+    id: "bonifacio", n: "Citadelle de Bonifacio", v: [],
+    t: "enceinte fortifiée", sc: [12, 16], per: "Fin XIIe s., fortification continue jusqu'au XVIe s.",
+    arch: "République de Gênes",
+    prop: ["République de Gênes", "Couronne de France", "Commune de Bonifacio"],
+    ev: ["Premier préside génois de Corse, fin du XIIe s.", "Sièges répétés dont celui d'Alphonse V d'Aragon en 1420", "Rattachement de la Corse à la France en 1768"],
+    desc: "Ville haute fortifiée sur un plateau calcaire dominant la mer de 60 mètres de haut, verrouillant les bouches de Bonifacio entre Corse et Sardaigne.",
+    st: ["Fortification génoise"], etat: "Bon état",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Bonifacio", dep: "Corse-du-Sud (2A)", reg: "Corse", lat: 41.3878, lng: 9.1595,
+    plan: false, liens: []
+  },
+  {
+    id: "luneville", n: "Château de Lunéville", v: ["Versailles lorrain"],
+    t: "palais", sc: [18], per: "1703 – 1720",
+    arch: "Germain Boffrand, Pierre Bourdict, Nicolas Dorbay",
+    prop: ["Ducs de Lorraine", "Stanislas Leszczyński", "Commune de Lunéville"],
+    ev: ["Résidence principale du duc Léopold Ier jusqu'à sa mort en 1729", "Mort accidentelle de Stanislas Leszczyński en 1766", "Incendie majeur en 2003, restauration depuis"],
+    desc: "Palais ducal inspiré de Versailles, aile unique restée dissymétrique faute de moyens, entouré de jardins à la française.",
+    st: ["Classicisme français"], etat: "Partiellement ruiné",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Visite partielle",
+    com: "Lunéville", dep: "Meurthe-et-Moselle (54)", reg: "Lorraine", lat: 48.5947, lng: 6.4917,
+    plan: true, liens: []
+  },
+  {
+    id: "hautbarr", n: "Château du Haut-Barr", v: ["L'Œil de l'Alsace"],
+    t: "ruines", sc: [12], per: "Fondation attribuée au XIIe s.",
+    arch: "Évêques de Strasbourg",
+    prop: ["Évêques de Strasbourg", "Commune de Saverne"],
+    ev: ["Résidence de repli des princes-évêques de Strasbourg", "Classement monument historique en 1874"],
+    desc: "Trois éperons rocheux reliés par des passerelles, dominant la plaine d'Alsace et le col de Saverne d'où son surnom d'« Œil de l'Alsace ».",
+    st: ["Militaire médiéval"], etat: "Ruines",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Saverne", dep: "Bas-Rhin (67)", reg: "Alsace", lat: 48.7250, lng: 7.3386,
+    plan: false, liens: []
+  },
+  {
+    id: "bazoches", n: "Château de Bazoches", v: [],
+    t: "château", sc: [12, 17], per: "XIIe s., aménagements par Vauban à la fin du XVIIe s.",
+    arch: "Sébastien Le Prestre de Vauban",
+    prop: ["Seigneurs de Bazoches", "Maréchal de Vauban", "Descendants de Vauban"],
+    ev: ["Acquisition par Vauban en 1675", "Vauban y prépare ses campagnes de siège", "Classement monument historique en 1994"],
+    desc: "Logis médiéval remanié par Vauban en demeure de maréchal, cabinet de travail et collections liées à ses campagnes conservés.",
+    st: ["Militaire médiéval", "Classicisme"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Château privé"], acc: "Ouvert au public",
+    com: "Bazoches", dep: "Nièvre (58)", reg: "Bourgogne / Morvan", lat: 47.3808, lng: 3.7950,
+    plan: false, liens: []
+  },
+  {
+    id: "cormatin", n: "Château de Cormatin", v: [],
+    t: "château", sc: [17], per: "Début du XVIIe s.",
+    arch: "Chantier pour Antoine du Blé d'Huxelles",
+    prop: ["Famille du Blé d'Huxelles", "Propriétaires privés successifs"],
+    ev: ["Décor intérieur Louis XIII conservé quasiment intact", "Ouverture au public parmi les châteaux de Bourgogne du Sud"],
+    desc: "Escalier « vide à la moderne » et cabinets peints Louis XIII exceptionnellement conservés, château posé sur une île de la Grosne.",
+    st: ["Classicisme Louis XIII"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Château privé"], acc: "Ouvert au public",
+    com: "Cormatin", dep: "Saône-et-Loire (71)", reg: "Bourgogne", lat: 46.5431, lng: 4.6843,
+    plan: false, liens: []
+  },
+  {
+    id: "ancyfranc", n: "Château d'Ancy-le-Franc", v: [],
+    t: "château", sc: [16], per: "1538 – 1546", arch: "Sebastiano Serlio",
+    prop: ["Antoine III de Clermont-Tonnerre", "Propriétaires privés successifs"],
+    ev: ["Une des premières réalisations de la Seconde Renaissance française", "Classements monument historique en 1983 et 2003"],
+    desc: "Plan carré à quatre ailes égales autour d'une cour, façades à ordres superposés : jalon de l'architecture modulaire de la Renaissance française.",
+    st: ["Seconde Renaissance française"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Château privé"], acc: "Ouvert au public",
+    com: "Ancy-le-Franc", dep: "Yonne (89)", reg: "Bourgogne", lat: 47.7741, lng: 4.1618,
+    plan: true, liens: []
+  },
+  {
+    id: "besancon", n: "Citadelle de Besançon", v: [],
+    t: "enceinte fortifiée", sc: [17, 18], per: "1668 – 1711", arch: "Sébastien Le Prestre de Vauban",
+    prop: ["Couronne de France", "Commune de Besançon"],
+    ev: ["Première pierre posée en 1668, alors possession espagnole", "Classements monument historique de 1942 à 2025", "Inscription au patrimoine mondial UNESCO en 2008"],
+    desc: "Onze hectares fortifiés au sommet du mont Saint-Étienne, verrouillant le méandre du Doubs : chef-d'œuvre de Vauban parmi les douze sites UNESCO de son réseau.",
+    st: ["Fortification bastionnée"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété communale", "Patrimoine mondial UNESCO"], acc: "Ouvert au public",
+    com: "Besançon", dep: "Doubs (25)", reg: "Franche-Comté", lat: 47.2314, lng: 6.0325,
+    plan: true, liens: []
+  },
+  {
+    id: "rambures", n: "Château de Rambures", v: [],
+    t: "château-fort", sc: [15, 17, 19], per: "XVe s., démantelé au XVIIe s., restauré au XIXe s.",
+    arch: "Seigneurs de Rambures",
+    prop: ["Famille de Rambures"],
+    ev: ["Un des rares châteaux médiévaux subsistants de la Somme", "Démantèlement partiel au XVIIe s.", "Classement monument historique en 1927"],
+    desc: "Plan en losange à tours rondes de brique et silex, chef-d'œuvre de l'architecture militaire médiévale tardive adaptée aux premières bombardes.",
+    st: ["Gothique militaire tardif"], etat: "Bon état",
+    stat: ["Monument historique classé", "Château privé"], acc: "Ouvert au public",
+    com: "Rambures", dep: "Somme (80)", reg: "Picardie / Vimeu", lat: 49.9446, lng: 1.7074,
+    plan: false, liens: []
+  },
+  {
+    id: "hardelot", n: "Château d'Hardelot", v: [],
+    t: "château-fort", sc: [13, 19], per: "Fondations de 1222, manoir actuel achevé au milieu du XIXe s.",
+    arch: "Reconstruction du XIXe s. sur fondations médiévales",
+    prop: ["Seigneurs d'Hardelot", "Propriétaires privés successifs", "Commune de Condette"],
+    ev: ["Fondation en 1222", "Reconstruction en manoir néogothique au XIXe s.", "Centre culturel de l'Entente cordiale depuis les années 2010"],
+    desc: "Polygone à neuf tours entouré de deux fossés concentriques, dominant les marécages et le lac des Miroirs près du littoral.",
+    st: ["Néogothique du XIXe s."], etat: "Intact / restauré",
+    stat: ["Monument historique inscrit", "Propriété communale"], acc: "Ouvert au public",
+    com: "Condette", dep: "Pas-de-Calais (62)", reg: "Côte d'Opale", lat: 50.6457, lng: 1.6115,
+    plan: false, liens: []
+  },
+  {
+    id: "fere", n: "Château de Fère-en-Tardenois", v: [],
+    t: "ruines", sc: [13], per: "Début du XIIIe s.",
+    arch: "Seigneurs de Fère, galerie ajoutée par Anne de Montmorency",
+    prop: ["Seigneurs de Fère", "Connétable Anne de Montmorency"],
+    ev: ["Ajout d'une galerie Renaissance sur pont enjambant les douves au XVIe s.", "Protection partielle au titre des monuments historiques"],
+    desc: "Ruines d'un château fort du XIIIe siècle prolongées par une galerie Renaissance juchée sur un pont à cinq arches, unique en France.",
+    st: ["Militaire médiéval", "Renaissance"], etat: "Ruines",
+    stat: ["Monument historique inscrit"], acc: "Extérieurs uniquement",
+    com: "Fère-en-Tardenois", dep: "Aisne (02)", reg: "Picardie / Tardenois", lat: 49.2222, lng: 3.5321,
+    plan: false, liens: []
+  },
+  {
+    id: "carrouges", n: "Château de Carrouges", v: [],
+    t: "château", sc: [14, 16, 18], per: "XIVe s., remaniements aux XVIe et XVIIIe s.",
+    arch: "Famille Le Veneur",
+    prop: ["Famille de Carrouges", "Famille Le Veneur", "État français"],
+    ev: ["Pavillon ajouté par le cardinal Le Veneur au XVIe s.", "Bastion fortifié pendant les guerres de Religion", "Restauration après les dommages de 1944"],
+    desc: "Logis de brique rose cerné de douves en eau, pavillon d'entrée Renaissance et grands appartements des XVIIe-XVIIIe siècles.",
+    st: ["Gothique", "Renaissance", "Classicisme"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété de l'État"], acc: "Ouvert au public",
+    com: "Carrouges", dep: "Orne (61)", reg: "Normandie", lat: 48.5601, lng: -0.1544,
+    plan: false, liens: []
+  },
+  {
+    id: "caen", n: "Château de Caen", v: ["Château de Guillaume le Conquérant"],
+    t: "château-fort", sc: [11], per: "Fondé vers 1060", arch: "Guillaume le Conquérant",
+    prop: ["Ducs de Normandie", "Couronne de France", "Commune de Caen"],
+    ev: ["Fondation par Guillaume le Conquérant vers 1060", "Résidence ducale puis royale au Moyen Âge", "Reconstruction des musées après les bombardements de 1944"],
+    desc: "Un des plus grands châteaux forts d'Europe avec ses 5,5 hectares intra-muros, donjon disparu et logis ducal du XIIe siècle conservé.",
+    st: ["Militaire médiéval anglo-normand"], etat: "Bon état",
+    stat: ["Monument historique classé", "Propriété communale"], acc: "Ouvert au public",
+    com: "Caen", dep: "Calvados (14)", reg: "Normandie", lat: 49.1864, lng: -0.3628,
+    plan: true, liens: []
+  },
+  {
+    id: "rambouillet", n: "Château de Rambouillet", v: [],
+    t: "domaine", sc: [14, 18], per: "Tour du XIVe s., corps de logis remanié au XVIIIe s.",
+    arch: "Remaniements successifs pour la Couronne",
+    prop: ["Famille d'Angennes", "Louis XVI", "État français"],
+    ev: ["Mort de François Ier au château en 1547", "Premier sommet du G6 en 1975", "Résidence de chasse présidentielle jusqu'en 2009"],
+    desc: "Tour médiévale, corps de logis du XVIIIe siècle et laiterie de la reine, au cœur d'un domaine forestier de 980 hectares.",
+    st: ["Gothique", "Classicisme"], etat: "Intact / restauré",
+    stat: ["Monument historique classé", "Propriété de l'État"], acc: "Visite partielle",
+    com: "Rambouillet", dep: "Yvelines (78)", reg: "Île-de-France", lat: 48.6456, lng: 1.8178,
+    plan: true, liens: []
   }
 ];

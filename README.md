@@ -31,7 +31,7 @@ lisible sans réseau.
 
 ## Ce que fait l'application
 
-Castellor affiche **50 châteaux français géolocalisés** sur une carte sombre.
+Castellor affiche **75 châteaux français géolocalisés** sur une carte sombre.
 Chaque château dispose d'une fiche détaillée : période de construction,
 architecte, propriétaires successifs, événements historiques, description
 architecturale, statut patrimonial et conditions d'accès.
@@ -201,15 +201,16 @@ contributions locales**, qui supprime toutes les contributions d'un coup —
 
 ## Données
 
-Les 50 fiches sont un **jeu de démonstration saisi à la main**, dans
-`chateaux-data.js` (35 fiches initiales, 15 de plus ajoutées le 26 août 2026 en
-suivant Wikipédia fr comme source). Trois objets globaux y sont exposés :
+Les 75 fiches sont un **jeu de démonstration saisi à la main**, dans
+`chateaux-data.js` (35 fiches initiales, puis deux ajouts le 26 août 2026 en
+suivant Wikipédia fr comme source : 15 fiches, puis 25 de plus). Trois objets
+globaux y sont exposés :
 
 | Global | Rôle |
 | --- | --- |
 | `window.CASTELLUM_FILTERS` | Les valeurs des quatre groupes de filtres |
 | `window.CASTELLUM_WIKI` | `id` du château → titre de l'article Wikipédia fr, pour la photo |
-| `window.CASTELLUM` | Les 50 fiches |
+| `window.CASTELLUM` | Les 75 fiches |
 
 Champs d'une fiche : `id`, `n` (nom), `v` (variantes), `t` (type), `sc`
 (siècles), `per` (période), `arch` (architecte), `prop` (propriétaires), `ev`
@@ -235,7 +236,7 @@ et reconstruit deux URL via `Special:FilePath` :
 Les URL obtenues sont mises en cache dans le navigateur, donc les appels ne sont
 faits qu'une fois par appareil.
 
-Les 50 fichiers sont hébergés sur Wikimedia Commons et sous licence libre. Le
+Les 75 fichiers sont hébergés sur Wikimedia Commons et sous licence libre. Le
 détail — fichier, licence, auteur — est dans [PHOTOS.md](PHOTOS.md), avec le
 script qui permet de rejouer l'audit.
 
@@ -243,7 +244,7 @@ script qui permet de rejouer l'audit.
 chaque fichier (`prop=imageinfo&iiprop=extmetadata`) et les affiche : sous la
 photo de la fiche, en lien vers la page Commons du fichier, et dans la liste
 complète de l'onglet **Hors-ligne**. C'est ce qu'exigent les licences CC BY et
-CC BY-SA, qui couvrent 47 des 50 clichés.
+CC BY-SA, qui couvrent 69 des 75 clichés.
 
 ## Stockage local
 
@@ -325,7 +326,7 @@ manifest.webmanifest Manifeste PWA (nom, icônes, plein écran)
 sw.js                Service worker : coquille, tuiles, photos, métadonnées
 netlify.toml         Déploiement, en-têtes de cache et CSP
 castellum-map.js     <castellum-map>, la carte Leaflet
-chateaux-data.js     Les 50 fiches, les filtres, les titres Wikipédia
+chateaux-data.js     Les 75 fiches, les filtres, les titres Wikipédia
 support.js           Runtime Claude Design — GÉNÉRÉ, ne pas modifier
 vendor/              React, Leaflet, Inter, Nocturne — servis depuis le domaine
 icons/               Icônes PWA — GÉNÉRÉES par tools/make-icons.py
@@ -374,16 +375,20 @@ s'affiche seule ; le crédit apparaît au chargement suivant.
   région.
 - **Le canvas ouvert directement n'a pas de service worker** — seule
   l'application servie par HTTP en a un. Le bandeau hors connexion le dit.
-- **50 fiches** de démonstration, pas les ~500 visées.
-- **Lien officiel** : 13 fiches sur 50 en ont un ; les 37 autres affichent
+- **75 fiches** de démonstration, pas les ~500 visées.
+- **Lien officiel** : 13 fiches sur 75 en ont un ; les 62 autres affichent
   « Aucun lien officiel renseigné — contribution bienvenue ».
-- **Plans et cadastres** : 35 fiches sur 50 sont marquées `plan: true` et
+- **Plans et cadastres** : 44 fiches sur 75 sont marquées `plan: true` et
   signalent des plans « référencés dans les sources », mais **aucune
   visionneuse n'existe** et aucun plan n'est fourni.
 - Le tri **« A→Z »** porte sur le nom affiché tel quel : « Château royal
-  d'Amboise » se classe à *royal*, et les neuf fiches qui ne commencent pas par
-  « Château » (Cité de Carcassonne, Forteresse royale de Chinon, Palais des
-  papes d'Avignon…) se dispersent dans la liste.
+  d'Amboise » se classe à *royal*, et les douze fiches qui ne commencent pas
+  par « Château » (Cité de Carcassonne, Forteresse royale de Chinon, Palais des
+  papes d'Avignon, Citadelle de Sisteron…) se dispersent dans la liste.
+- **Auteur non précisé** sous une photo n'indique pas toujours un second appel
+  raté (voir ci-dessous) : le fichier du château du Haut-Barr est du domaine
+  public sans auteur déclaré sur Commons, donc affiché sans attribution alors
+  qu'il n'y en a pas d'exigée.
 - Les crédits photo dépendent d'un second appel à l'API Commons. S'il échoue,
   la photo s'affiche sans attribution — le crédit apparaît au rechargement
   suivant, une fois la métadonnée obtenue.
