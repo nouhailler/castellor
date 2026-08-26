@@ -35,6 +35,11 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 
 <div style="flex:none;padding:6px 16px 10px;display:flex;flex-direction:column;gap:9px">
 <div style="display:flex;align-items:center;gap:10px">
+<button onClick="{{ openMenu }}" aria-label="Menu" style="flex:none;cursor:pointer;background:transparent;border:0;padding:4px 2px;display:flex;flex-direction:column;justify-content:center;gap:3px;color:var(--color-text)">
+<span style="display:block;width:18px;height:2px;border-radius:1px;background:currentColor"></span>
+<span style="display:block;width:18px;height:2px;border-radius:1px;background:currentColor"></span>
+<span style="display:block;width:18px;height:2px;border-radius:1px;background:currentColor"></span>
+</button>
 <div style="font-family:var(--font-heading);font-weight:500;font-size:17px;letter-spacing:-.01em;margin-right:auto">Castellor</div>
 <button onClick="{{ toggleNet }}" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font:500 11px var(--font-heading);color:{{ netBtnFg }};background:{{ netBtnBg }};border:1px solid {{ netBtnBd }};border-radius:6px;padding:4px 9px">{{ netBtnLabel }}</button>
 <button onClick="{{ openSheet }}" style="position:relative;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font:500 11px var(--font-heading);color:{{ filterFg }};background:{{ filterBg }};border:1px solid {{ filterBd }};border-radius:6px;padding:4px 9px">Filtres {{ filterBadge }}</button>
@@ -196,6 +201,64 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 </sc-for>
 </div>
 <button class="btn btn-primary btn-block" onClick="{{ closeSheet }}" style="margin-top:16px">Voir les {{ count }} résultats</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:30;background:color-mix(in srgb,#292b31 55%,transparent);display:flex;align-items:flex-end">
+<div onClick="{{ closeMenu }}" style="position:absolute;inset:0"></div>
+<div style="position:relative;width:100%;max-height:85%;overflow-y:auto;background:var(--color-surface);border-radius:var(--radius-lg) var(--radius-lg) 0 0;box-shadow:var(--shadow-lg);padding:14px 16px 18px;animation:castellum-in .2s ease both">
+<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
+<div style="font:500 16px var(--font-heading)">Menu</div>
+<button onClick="{{ closeMenu }}" style="margin-left:auto;cursor:pointer;background:transparent;border:0;color:var(--color-accent);font:500 11.5px var(--font-heading);padding:0">Fermer</button>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<sc-for list="{{ menuSections }}" as="g" hint-placeholder-count="3">
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);margin-bottom:5px">{{ g.label }}</div>
+<div style="display:flex;flex-direction:column;gap:1px">
+<sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
+<button onClick="{{ it.on }}" style="cursor:pointer;text-align:left;background:transparent;border:0;padding:10px 6px;font:400 13.5px var(--font-body);color:var(--color-text);border-radius:var(--radius-sm)">{{ it.label }}</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ paramsOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:25;background:var(--color-bg);overflow-y:auto;animation:castellum-in .2s ease both">
+<div style="display:flex;align-items:center;gap:10px;padding:14px 16px 4px">
+<div style="font:500 16px var(--font-heading);margin-right:auto">Paramètres</div>
+<button onClick="{{ closeParams }}" style="cursor:pointer;font:500 11px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.8);border:1px solid var(--color-divider);border-radius:7px;padding:6px 10px">Retour</button>
+</div>
+<div style="padding:10px 16px 20px;display:flex;flex-direction:column;gap:14px">
+<div>
+<div style="font:500 13px var(--font-heading);margin-bottom:7px">Version</div>
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:var(--radius-md);background:var(--color-surface)">
+<div><div style="font-size:12.5px">Version de l'application</div><div style="font-size:10.5px;color:color-mix(in srgb,var(--color-text) 52%,transparent)">Castellor {{ appVersion }}</div></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:var(--radius-md);background:var(--color-surface)">
+<div><div style="font-size:12.5px">Dernière mise à jour sur cet appareil</div><div style="font-size:10.5px;color:color-mix(in srgb,var(--color-text) 52%,transparent)">{{ lastUpdateLabel }}</div></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:var(--radius-md);background:var(--color-surface)">
+<div><div style="font-size:12.5px">Service worker</div><div style="font-size:10.5px;color:color-mix(in srgb,var(--color-text) 52%,transparent)">{{ swLabel }}</div></div>
+<span class="tag tag-neutral" style="font-size:10px">{{ cacheTag }}</span>
+</div>
+</div>
+</div>
+<div>
+<div style="font:500 13px var(--font-heading);margin-bottom:7px">Mises à jour</div>
+<div style="font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 62%,transparent);margin-bottom:9px">Une nouvelle version s'installe et s'active automatiquement dès qu'une connexion est disponible ; l'application redémarre seule pour l'appliquer. Ce bouton force une vérification immédiate.</div>
+<button class="btn btn-secondary btn-block" onClick="{{ checkForUpdate }}" style="font-size:12.5px">{{ updateBtnLabel }}</button>
+<sc-if value="{{ hasUpdateMsg }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:8px;font-size:11px;color:color-mix(in srgb,var(--color-text) 58%,transparent)">{{ updateStatusLabel }}</div>
+</sc-if>
+</div>
 </div>
 </div>
 </sc-if>
@@ -385,6 +448,17 @@ const DIV = "rgba(233,233,237,.16)";
 const ACC = "#9184d9";
 /* v3 : le cache porte désormais les crédits, pas seulement les URL. */
 const PHOTO_KEY = "castellor-photos-v3";
+/* Dernière version publiée dans CHANGELOG.md — à faire avancer avec lui,
+   pas à la volée à chaque changement non publié. */
+const APP_VERSION = "0.2.1";
+const UPDATE_KEY = "castellor-last-update";
+
+function formatUpdateDate(iso) {
+  if (!iso) return "Inconnue";
+  try {
+    return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+  } catch (e) { return "Inconnue"; }
+}
 
 /* Un crédit lisible même quand Commons ne déclare pas d'auteur : deux fichiers
    sont dans ce cas, et une licence CC BY-SA impose quand même de citer. */
@@ -412,7 +486,8 @@ class Component extends DCLogic {
     online: typeof navigator === "undefined" || !("onLine" in navigator) ? true : navigator.onLine,
     satellite: false,
     editing: false, draft: null, newEvent: "", drafts: {}, userPos: null, sortByDist: false,
-    copied: false, ready: false, photos: {}, swActif: false
+    copied: false, ready: false, photos: {}, swActif: false,
+    menuOpen: false, paramsOpen: false, updateStatus: "idle", lastUpdate: null
   };
 
   _loadPhotos() {
@@ -520,6 +595,42 @@ class Component extends DCLogic {
       this._sw = () => this.setState({ swActif: !!sw.controller });
       this._sw();
       sw.addEventListener("controllerchange", this._sw);
+
+      /* Date de dernière mise à jour : posée sur cet appareil dès la
+         première visite, puis rafraîchie à chaque prise de contrôle par un
+         nouveau service worker. Ce n'est pas la date de sortie de la
+         version — c'est ce qui tourne réellement sur cet appareil. */
+      try {
+        let last = localStorage.getItem(UPDATE_KEY);
+        if (!last) { last = new Date().toISOString(); localStorage.setItem(UPDATE_KEY, last); }
+        this.setState({ lastUpdate: last });
+      } catch (e) { /* stockage indisponible */ }
+
+      this._bindReg = (reg) => {
+        if (!reg || this._reg === reg) return;
+        this._reg = reg;
+        reg.addEventListener("updatefound", () => this.setState({ updateStatus: "found" }));
+      };
+      sw.getRegistration().then((reg) => reg && this._bindReg(reg)).catch(() => {});
+      sw.ready.then((reg) => this._bindReg(reg)).catch(() => {});
+
+      /* Mise à jour automatique : sw.js installe et active déjà toute
+         nouvelle version sans attendre confirmation (skipWaiting +
+         clients.claim, voir sw.js). Il ne reste qu'à recharger la page pour
+         remplacer le code déjà chargé en mémoire par le nouveau. */
+      this._onControllerChange = () => {
+        if (this._reloading) return;
+        this._reloading = true;
+        try { localStorage.setItem(UPDATE_KEY, new Date().toISOString()); } catch (e) { /* ignore */ }
+        window.location.reload();
+      };
+      sw.addEventListener("controllerchange", this._onControllerChange);
+
+      /* Vérifications proactives : au retour au premier plan, et toutes les
+         45 minutes tant que l'application reste ouverte. */
+      this._onVisible = () => { if (document.visibilityState === "visible" && this._reg) this._reg.update().catch(() => {}); };
+      document.addEventListener("visibilitychange", this._onVisible);
+      this._updateInterval = setInterval(() => { if (this._reg) this._reg.update().catch(() => {}); }, 45 * 60 * 1000);
     }
     this._loadPhotos();
     this._hook();
@@ -531,6 +642,10 @@ class Component extends DCLogic {
       window.removeEventListener("offline", this._net);
     }
     if (this._sw) navigator.serviceWorker.removeEventListener("controllerchange", this._sw);
+    if (this._onControllerChange) navigator.serviceWorker.removeEventListener("controllerchange", this._onControllerChange);
+    if (this._onVisible) document.removeEventListener("visibilitychange", this._onVisible);
+    if (this._updateInterval) clearInterval(this._updateInterval);
+    if (this._checkTimeout) clearTimeout(this._checkTimeout);
     if (this._retry) clearTimeout(this._retry);
   }
 
@@ -596,6 +711,19 @@ class Component extends DCLogic {
     try { localStorage.setItem("castellum-drafts", JSON.stringify(drafts)); } catch (e) { /* ignore */ }
   }
 
+  checkForUpdate() {
+    if (!this._reg) { this.setState({ updateStatus: "uptodate" }); return; }
+    this.setState({ updateStatus: "checking" });
+    this._reg.update().catch(() => {});
+    /* reg.update() ne dit pas directement « rien de neuf » : si l'événement
+       updatefound (écouté dans componentDidMount) n'est pas arrivé sous peu,
+       on considère que la version en place est la dernière. */
+    clearTimeout(this._checkTimeout);
+    this._checkTimeout = setTimeout(() => {
+      this.setState((s) => (s.updateStatus === "checking" ? { updateStatus: "uptodate" } : s));
+    }, 2500);
+  }
+
   renderVals() {
     const s = this.state;
     const online = s.online;
@@ -649,6 +777,38 @@ class Component extends DCLogic {
       on: () => this.setState({ tab: t.key, detailId: null, editing: false })
     }));
 
+    /* Index des fonctionnalités existantes, groupées par catégorie — rien
+       ici qui n'ait déjà son écran ou son bouton ailleurs dans l'app. */
+    const menuSections = [
+      {
+        label: "Explorer",
+        items: [
+          { label: "Carte", on: () => this.setState({ tab: "carte", menuOpen: false, detailId: null, editing: false }) },
+          { label: "Liste des châteaux", on: () => this.setState({ tab: "liste", menuOpen: false, detailId: null, editing: false }) },
+          { label: "Filtres", on: () => this.setState({ menuOpen: false, sheetOpen: true }) },
+          { label: "Autour de moi", on: () => { this.setState({ menuOpen: false }); this.renderVals().locate(); } }
+        ]
+      },
+      {
+        label: "Hors ligne",
+        items: [
+          { label: "Cache et sources de données", on: () => this.setState({ tab: "reglages", menuOpen: false, detailId: null, editing: false }) }
+        ]
+      },
+      {
+        label: "Application",
+        items: [
+          { label: "Paramètres", on: () => this.setState({ menuOpen: false, paramsOpen: true }) }
+        ]
+      }
+    ];
+
+    const updateStatusLabel = {
+      checking: "Vérification en cours…",
+      found: "Mise à jour trouvée — installation en cours, l'application va redémarrer.",
+      uptodate: "Vous utilisez déjà la dernière version."
+    }[s.updateStatus] || "";
+
     const d = d0 ? {
       n: d0.n, t: d0.t, etat: d0.etat, per: d0.per, arch: d0.arch, desc: d0.desc,
       com: d0.com, dep: d0.dep, reg: d0.reg, acc: d0.acc,
@@ -701,6 +861,11 @@ class Component extends DCLogic {
       listDisplay: s.tab === "liste" ? "block" : "none",
       settingsDisplay: s.tab === "reglages" ? "block" : "none",
       tabs: tabs,
+
+      menuOpen: s.menuOpen,
+      openMenu: () => this.setState({ menuOpen: true, detailId: null, editing: false }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      menuSections: menuSections,
 
       satLabel: !online ? "Satellite indispo." : (s.satellite ? "Satellite" : "Plan"),
       satBg: s.satellite && online ? "color-mix(in srgb, " + ACC + " 20%, transparent)" : "rgba(22,24,38,.86)",
@@ -800,6 +965,18 @@ class Component extends DCLogic {
 
       draftCount: draftCount + (draftCount === 1 ? " fiche" : " fiches"),
       clearDrafts: () => this.saveDrafts({}),
+
+      paramsOpen: s.paramsOpen,
+      closeParams: () => this.setState({ paramsOpen: false }),
+      appVersion: APP_VERSION,
+      lastUpdateLabel: formatUpdateDate(s.lastUpdate),
+      swLabel: s.swActif
+        ? "Actif — installé sur cet appareil"
+        : "Non actif (ouvert depuis le canvas, ou navigateur incompatible)",
+      updateBtnLabel: s.updateStatus === "checking" ? "Vérification…" : "Vérifier les mises à jour",
+      hasUpdateMsg: s.updateStatus !== "idle",
+      updateStatusLabel: updateStatusLabel,
+      checkForUpdate: () => this.checkForUpdate(),
 
       mapWrapRef: (this.mapWrapRef = this.mapWrapRef || React.createRef())
     };
