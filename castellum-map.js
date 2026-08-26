@@ -1,6 +1,10 @@
 /* <castellum-map> — carte Leaflet pilotée par la fiche appelante.
    API impérative : setData(list), setSelected(id), setSatellite(bool),
-   setOffline(bool), flyTo(lat, lng, zoom), setUserPos(lat, lng), onSelect(fn). */
+   setOffline(bool), flyTo(lat, lng, zoom), setUserPos(lat, lng), onSelect(fn),
+   onOpen(fn). Chaque élément de setData(list) peut porter un champ `photo`
+   (URL de vignette) : au survol d'un point, une info-bulle affiche cette
+   photo et le nom ; cliquer sur l'info-bulle appelle onOpen(id) pour ouvrir
+   la fiche directement, sans passer par la sélection sur la carte. */
 (function () {
   const OSM = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   const SAT = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
@@ -8,6 +12,20 @@
   const RUIN = '#b2b6ca';
 
   const isRuin = (c) => c.t === 'ruines' || c.etat === 'Ruines' || c.etat === 'Vestiges';
+
+  const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (ch) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+  ));
+
+  const TOOLTIP_CSS = `
+    .castellum-tt{background:transparent;border:0;box-shadow:none;padding:0;opacity:1!important}
+    .castellum-tt:before{display:none}
+    .castellum-tt .castellum-tt-card{width:150px;border-radius:10px;overflow:hidden;background:#1e2030;
+      box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 0 1px #3f424d;cursor:pointer;font-family:var(--font-body,sans-serif)}
+    .castellum-tt .castellum-tt-photo{width:100%;height:84px;background-color:#1b1d2b;background-size:cover;background-position:center}
+    .castellum-tt .castellum-tt-name{padding:6px 8px 7px;font:500 11.5px/1.25 var(--font-heading,sans-serif);
+      color:#e9e9ed;letter-spacing:-.01em}
+  `;
 
   class CastellumMap extends HTMLElement {
     constructor() {
@@ -17,6 +35,7 @@
       this.satellite = false;
       this.offline = false;
       this.onSelect = null;
+      this.onOpen = null;
       this._markers = new Map();
     }
 
@@ -60,6 +79,12 @@
       this._el.querySelectorAll('.leaflet-control-zoom a').forEach((b) => {
         b.style.cssText = 'background:#232532;color:#e9e9ed;border-color:#3f424d;width:28px;height:28px;line-height:28px;font-size:15px';
       });
+      if (!document.getElementById('castellum-tt-style')) {
+        const style = document.createElement('style');
+        style.id = 'castellum-tt-style';
+        style.textContent = TOOLTIP_CSS;
+        document.head.appendChild(style);
+      }
       this._ready = true;
       this.render();
       setTimeout(() => this.map.invalidateSize(), 120);
@@ -150,6 +175,18 @@
         m.on('click', () => { if (this.onSelect) this.onSelect(c.id); });
         m.on('mouseover', () => m.setStyle({ weight: 3 }));
         m.on('mouseout', () => m.setStyle({ weight: sel ? 2.5 : 1.5 }));
+        const photo = c.photo
+          ? `<div class="castellum-tt-photo" style="background-image:url('${c.photo}')"></div>`
+          : `<div class="castellum-tt-photo"></div>`;
+        m.bindTooltip(
+          `<div class="castellum-tt-card">${photo}<div class="castellum-tt-name">${escHtml(c.n)}</div></div>`,
+          { direction: 'top', offset: L.point(0, -6), opacity: 1, className: 'castellum-tt', interactive: true, sticky: false }
+        );
+        m.on('tooltipopen', (e) => {
+          const el = e.tooltip.getElement();
+          if (!el) return;
+          el.onclick = (ev) => { ev.stopPropagation(); if (this.onOpen) this.onOpen(c.id); };
+        });
         m.addTo(this._layer);
         this._markers.set(c.id, m);
         if (sel) {

@@ -491,6 +491,11 @@ class Component extends DCLogic {
     return "url('" + (hd && this.state.online ? p.hd : p.thumb) + "')";
   }
 
+  photoThumb(id) {
+    const p = this.state.photos[id];
+    return p ? p.thumb : null;
+  }
+
   componentDidMount() {
     this.mapWrapRef = this.mapWrapRef || React.createRef();
     try {
@@ -538,9 +543,13 @@ class Component extends DCLogic {
     if (!el._bound) {
       el._bound = true;
       el.onSelect = (id) => this.setState({ selectedId: id, tab: "carte" });
+      /* Survol d'un point : l'info-bulle de castellum-map.js affiche déjà la
+         photo et le nom ; cliquer dessus ouvre la fiche directement, sans
+         passer par la carte de sélection en bas d'écran. */
+      el.onOpen = (id) => this.setState({ selectedId: id, detailId: id, tab: "carte", editing: false, draft: null });
     }
     this._map = el;
-    el.setData(this.visible());
+    el.setData(this.visible().map((c) => Object.assign({ photo: this.photoThumb(c.id) }, c)));
     el.setSelected(this.state.selectedId);
     el.setSatellite(this.state.satellite);
     el.setOffline(!this.state.online);
