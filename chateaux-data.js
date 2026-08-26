@@ -52,6 +52,17 @@ window.CASTELLUM_WIKI = {
   reignac: "Maison forte de Reignac"
 };
 
+/* Deux fichiers Commons n'exposent aucun auteur dans leurs métadonnées, alors
+   que leur licence CC BY-SA impose de citer. Auteurs relevés à la main sur la
+   page du fichier le 2026-08-26 ; ce repli ne s'applique que si l'API ne
+   renvoie rien, pour ne pas masquer une métadonnée corrigée depuis. */
+window.CASTELLUM_PHOTO_CREDITS = {
+  /* Auteur déclaré dans le wikitexte de la page, absent du champ Artist. */
+  chenonceau: { auteur: "Raph" },
+  /* Aucun auteur déclaré : seul le téléverseur est connu. */
+  fougeres: { auteur: "Gratyn (téléverseur — aucun auteur déclaré)" }
+};
+
 window.CASTELLUM = [
   {
     id: "chambord", n: "Château de Chambord", v: ["Chambourg", "Domaine national de Chambord"],

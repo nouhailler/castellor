@@ -149,6 +149,21 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 </div>
 </div>
 <div>
+<div style="font:500 13px var(--font-heading);margin-bottom:7px">Crédits photographiques</div>
+<div style="font-size:11px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 62%,transparent);margin-bottom:8px">Photographies de Wikimedia Commons, sous licence libre. Les licences CC BY et CC BY-SA imposent de citer leur auteur. <span style="color:var(--color-text)">{{ photoCreditsCount }}</span></div>
+<div style="display:flex;flex-direction:column;gap:5px;max-height:230px;overflow-y:auto">
+<sc-for list="{{ photoCredits }}" as="p" hint-placeholder-count="4">
+<a href="{{ p.url }}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:2px;padding:7px 9px;border-radius:var(--radius-sm);background:var(--color-surface);text-decoration:none">
+<span style="font-size:11.5px;color:var(--color-text)">{{ p.n }}</span>
+<span style="font-size:10.5px;line-height:1.4;color:color-mix(in srgb,var(--color-text) 58%,transparent)">{{ p.credit }}</span>
+</a>
+</sc-for>
+</div>
+<sc-if value="{{ noPhotoCredits }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:11px;color:color-mix(in srgb,var(--color-text) 45%,transparent)">Aucune photographie chargée pour l'instant.</div>
+</sc-if>
+</div>
+<div>
 <div style="font:500 13px var(--font-heading);margin-bottom:7px">Contributions locales</div>
 <div style="padding:10px;border-radius:var(--radius-md);background:var(--color-surface);font-size:11.5px;color:color-mix(in srgb,var(--color-text) 68%,transparent);line-height:1.5">Les modifications restent sur cet appareil : aucune remontée vers un serveur n'existe à ce stade, et effacer les données du site les supprime. <span style="color:var(--color-text)">{{ draftCount }}</span> enregistrée(s).</div>
 </div>
@@ -188,7 +203,9 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <div style="position:absolute;inset:0;background:repeating-linear-gradient(122deg,rgba(233,233,237,.035) 0 1px,transparent 1px 13px)"></div>
 <div style="position:absolute;left:14px;top:14px;font:500 9.5px var(--font-heading);letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 40%,transparent);border:1px solid var(--color-divider);border-radius:5px;padding:3px 7px;white-space:nowrap">{{ heroPhotoLabel }}</div>
 <div style="position:absolute;inset:0;background:linear-gradient(to top,var(--color-bg) 2%,rgba(22,24,38,.7) 34%,transparent 66%)"></div>
-<div style="position:absolute;right:14px;bottom:104px;font-size:9.5px;letter-spacing:.02em;color:color-mix(in srgb,var(--color-text) 42%,transparent)">{{ photoCredit }}</div>
+<sc-if value="{{ hasPhotoCredit }}" hint-placeholder-val="{{ true }}">
+<a href="{{ photoCreditUrl }}" target="_blank" rel="noopener" style="position:absolute;right:14px;bottom:104px;max-width:66%;text-align:right;font-size:9.5px;line-height:1.4;letter-spacing:.02em;color:color-mix(in srgb,var(--color-text) 52%,transparent);text-decoration:none">{{ photoCredit }}</a>
+</sc-if>
 </div>
 
 <div style="position:absolute;top:12px;right:12px;display:flex;gap:7px">
@@ -359,6 +376,15 @@ const DATA = () => (window.CASTELLUM || []);
 const ROMAN = { 10: "Xe", 11: "XIe", 12: "XIIe", 13: "XIIIe", 14: "XIVe", 15: "XVe", 16: "XVIe", 17: "XVIIe", 18: "XVIIIe", 19: "XIXe", 20: "XXe" };
 const DIV = "rgba(233,233,237,.16)";
 const ACC = "#9184d9";
+/* v3 : le cache porte désormais les crédits, pas seulement les URL. */
+const PHOTO_KEY = "castellor-photos-v3";
+
+/* Un crédit lisible même quand Commons ne déclare pas d'auteur : deux fichiers
+   sont dans ce cas, et une licence CC BY-SA impose quand même de citer. */
+function creditLine(p) {
+  if (!p) return "";
+  return (p.auteur || "Auteur non précisé") + " · " + (p.licence || "licence à vérifier") + " · Wikimedia Commons";
+}
 
 function centuryLabel(sc) {
   if (!sc || !sc.length) return "—";
@@ -383,10 +409,40 @@ class Component extends DCLogic {
   _loadPhotos() {
     const W = window.CASTELLUM_WIKI || {};
     let cache = {};
-    try { cache = JSON.parse(localStorage.getItem("castellor-photos-v2") || "{}"); } catch (e) { cache = {}; }
+    try { cache = JSON.parse(localStorage.getItem(PHOTO_KEY) || "{}"); } catch (e) { cache = {}; }
+    /* La v2 ne mémorisait que les URL, sans les crédits que les licences
+       exigent : son cache est inexploitable et n'a pas à occuper de place. */
+    try { localStorage.removeItem("castellor-photos-v2"); } catch (e) { /* ignore */ }
     if (Object.keys(cache).length) this.setState({ photos: cache });
     const ids = Object.keys(W).filter((id) => !cache[id]);
     let i = 0;
+
+    const strip = (h) => String(h || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+
+    /* CC BY et CC BY-SA imposent de nommer l'auteur et la licence, et de
+       renvoyer vers la source. Ces métadonnées se lisent par la même API que
+       le fichier : on les récupère avec l'URL, pas après coup. */
+    const withCredits = (id, host, file, rec, done) => {
+      fetch(host + "/w/api.php?action=query&format=json&origin=*&prop=imageinfo"
+        + "&iiprop=extmetadata&titles=" + encodeURIComponent("File:" + file))
+        .then((r) => (r.ok ? r.json() : null))
+        .then((j) => {
+          const pages = j && j.query && j.query.pages;
+          const pg = pages && pages[Object.keys(pages)[0]];
+          const em = pg && pg.imageinfo && pg.imageinfo[0] && pg.imageinfo[0].extmetadata;
+          if (em) {
+            const v = (k) => strip(em[k] && em[k].value);
+            rec.auteur = v("Artist");
+            rec.licence = v("LicenseShortName") || v("License");
+            rec.licenceUrl = v("LicenseUrl");
+          }
+          const fb = (window.CASTELLUM_PHOTO_CREDITS || {})[id];
+          if (fb && !rec.auteur) rec.auteur = fb.auteur;
+          done();
+        })
+        .catch(done);
+    };
+
     const next = () => {
       if (i >= ids.length) return;
       const id = ids[i++];
@@ -397,17 +453,23 @@ class Component extends DCLogic {
           /* upload.wikimedia.org est inaccessible : on passe par Special:FilePath,
              qui sert le même fichier redimensionné depuis le wiki. */
           const m = t && t.match(/\/([^\/]+\.(?:jpg|jpeg|png|webp))\/\d+px-/i);
-          if (m) {
-            const host = t.indexOf("/wikipedia/commons/") > -1 ? "https://commons.wikimedia.org" : "https://fr.wikipedia.org";
-            const base = host + "/wiki/Special:FilePath/" + m[1];
-            const rec = { thumb: base + "?width=400", hd: base + "?width=1280" };
+          if (!m) { next(); return; }
+          const host = t.indexOf("/wikipedia/commons/") > -1 ? "https://commons.wikimedia.org" : "https://fr.wikipedia.org";
+          const enc = m[1];
+          const base = host + "/wiki/Special:FilePath/" + enc;
+          const rec = {
+            thumb: base + "?width=400",
+            hd: base + "?width=1280",
+            page: host + "/wiki/File:" + enc
+          };
+          withCredits(id, host, decodeURIComponent(enc), rec, () => {
             this.setState((s) => {
               const p = Object.assign({}, s.photos, { [id]: rec });
-              try { localStorage.setItem("castellor-photos-v2", JSON.stringify(p)); } catch (e) { /* ignore */ }
+              try { localStorage.setItem(PHOTO_KEY, JSON.stringify(p)); } catch (e) { /* ignore */ }
               return { photos: p };
             });
-          }
-          next();
+            next();
+          });
         })
         .catch(() => next());
     };
@@ -511,6 +573,14 @@ class Component extends DCLogic {
     /* Mesure du poids réel des fiches plutôt qu'une valeur en dur, qui dérive
        dès que le jeu de données change. */
     const dataKo = Math.round(JSON.stringify(DATA()).length / 1024);
+    const detailPhoto = d0 ? s.photos[d0.id] : null;
+    /* Attribution de chaque cliché affiché, exigée par les licences CC BY
+       et CC BY-SA — l'onglet hors-ligne en tient la liste complète. */
+    const credits = DATA().filter((c) => s.photos[c.id]).map((c) => ({
+      n: c.n,
+      credit: creditLine(s.photos[c.id]),
+      url: s.photos[c.id].page || ""
+    }));
 
     const groups = [
       { key: "epoque", label: "Époque", opts: F().epoque.map((e) => ({ id: e.id, label: e.label })) },
@@ -610,7 +680,12 @@ class Component extends DCLogic {
       heroPhotoLabel: online ? "Photo HD · 1280 px · réseau" : "Vignette BR · 400 px · hors-ligne",
       heroBg: d0 ? this.photoBg(d0.id, true) : "none",
       selBg: sel ? this.photoBg(sel.id, false) : "none",
-      photoCredit: "Photos : Wikimedia Commons / Wikipédia",
+      photoCredit: creditLine(detailPhoto),
+      photoCreditUrl: (detailPhoto && detailPhoto.page) || "",
+      hasPhotoCredit: !!detailPhoto,
+      photoCredits: credits,
+      photoCreditsCount: credits.length + " / " + DATA().length + " photographies chargées",
+      noPhotoCredits: credits.length === 0,
       cachedPhotos: Object.keys(s.photos).length + " adresses résolues",
       dataKo: dataKo + " ko",
 

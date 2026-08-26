@@ -205,13 +205,19 @@ Les 35 fichiers sont hébergés sur Wikimedia Commons et sous licence libre. Le
 détail — fichier, licence, auteur — est dans [PHOTOS.md](PHOTOS.md), avec le
 script qui permet de rejouer l'audit.
 
+**Attribution.** Au même moment, l'application lit l'auteur et la licence de
+chaque fichier (`prop=imageinfo&iiprop=extmetadata`) et les affiche : sous la
+photo de la fiche, en lien vers la page Commons du fichier, et dans la liste
+complète de l'onglet **Hors-ligne**. C'est ce qu'exigent les licences CC BY et
+CC BY-SA, qui couvrent 32 des 35 clichés.
+
 ## Stockage local
 
 Tout est en `localStorage`, sur l'appareil, sans serveur :
 
 | Clé | Contenu | Effacement |
 | --- | --- | --- |
-| `castellor-photos-v2` | URL des photos résolues depuis Wikipédia | Vider les données du site |
+| `castellor-photos-v3` | URL, auteur et licence des photos résolues | Vider les données du site |
 | `castellum-drafts` | Contributions locales, par `id` de château | Bouton « Effacer les contributions locales » |
 
 Si `localStorage` est indisponible (navigation privée stricte, stockage bloqué),
@@ -280,11 +286,9 @@ uploads/            Capture d'écran de travail
 - Le tri **« A→Z »** porte sur le nom affiché tel quel : « Château royal
   d'Amboise » se classe à *royal*, et les six fiches qui ne commencent pas par
   « Château » se dispersent dans la liste.
-- **Attribution des photos manquante.** Les 35 photographies sont sous licence
-  libre ([audit complet](PHOTOS.md)), mais 32 d'entre elles exigent de citer
-  leur auteur et leur licence. L'application n'affiche qu'un crédit global
-  « Photos : Wikimedia Commons / Wikipédia » : c'est insuffisant au regard des
-  licences CC BY et CC BY-SA. À corriger avant toute mise en production.
+- Les crédits photo dépendent d'un second appel à l'API Commons. S'il échoue,
+  la photo s'affiche sans attribution — le crédit apparaît au rechargement
+  suivant, une fois la métadonnée obtenue.
 - Les contributions locales ne quittent jamais l'appareil : **aucun mécanisme de
   remontée n'existe**, et l'interface le dit désormais explicitement.
 - L'heure « 9:41 » de la barre d'état est un décor de maquette.

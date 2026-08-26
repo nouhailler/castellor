@@ -34,21 +34,29 @@ Wikipédia fr).
 CC BY ou CC BY-SA demande de citer **l'auteur**, la **licence** et de renvoyer
 vers la source.
 
-> **L'application ne le fait pas aujourd'hui.** Elle affiche un crédit global —
-> « Photos : Wikimedia Commons / Wikipédia » — sans nommer l'auteur ni la
-> licence de chaque cliché. C'est le seul point de non-conformité relevé, et il
-> se corrige en affichant les données du tableau ci-dessous, disponibles par la
-> même API que les photos.
+> **Fait depuis le 26 août 2026.** L'application affiche, sous chaque photo de
+> fiche, « Auteur · Licence · Wikimedia Commons » en lien vers la page du
+> fichier, et l'onglet **Hors-ligne** tient la liste complète des crédits. Les
+> métadonnées sont lues par la même API que les images, au moment où l'URL est
+> résolue. Vérifié : **35 crédits sur 35**, aucun « Auteur non précisé ».
 
 Le partage à l'identique des licences **CC BY-SA ne contamine pas le code** :
 il s'applique aux œuvres dérivées de la photographie, pas à un logiciel qui se
 contente de l'afficher. La licence [MIT](LICENSE) du projet n'est pas affectée.
 
-## Points à traiter manuellement
+## Les deux exceptions, résolues
 
-Deux fichiers exigent l'attribution mais ne déclarent aucun auteur exploitable
-dans leurs métadonnées : **chenonceau, fougeres**. L'auteur doit être relevé
-à la main sur leur page Commons avant tout affichage de crédit.
+Deux fichiers exigent l'attribution sans exposer d'auteur dans le champ `Artist`
+de leurs métadonnées. Relevés à la main sur Commons, ils sont désormais couverts
+par `window.CASTELLUM_PHOTO_CREDITS` dans `chateaux-data.js` :
+
+| Fiche | Situation sur Commons | Crédit affiché |
+| --- | --- | --- |
+| Chenonceau | Auteur déclaré dans le wikitexte de la page, absent des métadonnées | `Raph` |
+| Fougères | Aucun auteur déclaré ; page sans modèle d'infobox | `Gratyn (téléverseur — aucun auteur déclaré)` |
+
+Ce repli ne s'applique **que si l'API ne renvoie rien**, pour ne pas masquer une
+métadonnée corrigée entre-temps sur Commons.
 
 ## Détail par fiche
 
