@@ -78,6 +78,10 @@ sont jamais définitifs sans validation humaine.
 
 ## État du dépôt
 
-Pas de Git, pas de `package.json`, pas de tests, pas de build ni de procédure de
+https://github.com/nouhailler/castellor — public, sous licence **MIT**, branche
+`main`. La licence ne couvre que le code écrit pour ce projet : voir le tableau
+des éléments tiers dans le [README](README.md#licence).
+
+Pas de `package.json`, pas de tests, pas de build ni de procédure de
 déploiement. Le jeu de données compte **35 fiches** de démonstration saisies à
 la main, taillées pour l'import Wikidata / POP-Mérimée à venir.

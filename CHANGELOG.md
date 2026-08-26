@@ -46,10 +46,17 @@ entrées suivantes devront être écrites au fil des modifications.
   carte atténué », et « édition complète d'une fiche » précise les trois champs
   réellement modifiables.
 
+### Ajouté
+
+- **`LICENSE`** — le code passe sous licence MIT. La portée est précisée dans le
+  README : elle couvre le code écrit pour ce projet, pas le runtime généré, le
+  design system, les fonds de carte ni les photographies.
+
 ### Documentation
 
 - `README.md`, `CONTEXT.md` §7 et `CLAUDE.md` mis en cohérence avec les
   corrections.
+- Publication du projet sur https://github.com/nouhailler/castellor.
 
 Les chantiers restants sont listés dans
 [CONTEXT.md §8](CONTEXT.md#8-feuille-de-route).

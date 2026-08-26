@@ -8,6 +8,7 @@ lisible sans réseau.
 - **Statut** : prototype interactif (maquette Claude Design), **pas encore une
   PWA installable** — voir [Limites connues](#limites-connues)
 - **Langue** : français
+- **Licence** : [MIT](LICENSE)
 - **Documentation** : suit `DOCUMENTATION_SPEC.md` (voir [CONTEXT.md](CONTEXT.md))
 
 ---
@@ -290,7 +291,25 @@ uploads/            Capture d'écran de travail
 - Interface : design system **Nocturne** (`_ds/`), typographie Inter
 - Contenu patrimonial : **Wikidata**, base **POP / Mérimée**
 
-> **À vérifier** : aucune licence n'est déclarée pour le projet lui-même, et
-> aucune mention légale ni politique de confidentialité n'a été rédigée. Ces
-> contenus juridiques doivent être écrits et **validés par une personne** avant
-> publication.
+### Licence
+
+Le code de Castellor est publié sous licence **[MIT](LICENSE)**.
+
+Cette licence couvre le code écrit pour ce projet : `Castellor.dc.html`,
+`castellum-map.js` et `chateaux-data.js`. Elle **ne s'étend pas** aux éléments
+tiers présents dans le dépôt ou chargés à l'exécution, qui gardent leurs
+conditions propres :
+
+| Élément | Statut |
+| --- | --- |
+| `support.js` | Runtime Claude Design, généré — conditions de l'outil |
+| `_ds/nocturne-…/` | Design system Nocturne — conditions de l'outil |
+| Leaflet 1.9.4 | BSD-2-Clause |
+| Tuiles OpenStreetMap | ODbL, attribution obligatoire |
+| Imagerie satellite Esri | Conditions Esri |
+| Photographies Wikimedia | Licence propre à chaque fichier — **non vérifiées** |
+| Contenu patrimonial (Wikidata, POP / Mérimée) | Licences propres aux bases |
+
+> **À vérifier** : aucune mention légale ni politique de confidentialité n'a été
+> rédigée. Ces contenus juridiques doivent être écrits et **validés par une
+> personne** avant publication.

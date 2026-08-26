@@ -7,7 +7,8 @@ projet. Complète [README.md](README.md), qui décrit le produit ;
 - **Dernière mise à jour** : 2026-08-26
 - **Version applicative** : 0.1.0 — *Prototype v1*
 - **Version de la documentation** : 1.0.0
-- **Dépôt Git** : aucun — le projet n'est pas encore versionné
+- **Dépôt Git** : https://github.com/nouhailler/castellor (public)
+- **Licence** : MIT
 
 ---
 
@@ -234,9 +235,16 @@ les qualificatifs de tête — décision non prise à ce jour.
 9. Visionneuse de plans et de cadastres.
 10. Mécanisme réel de remontée des contributions.
 
-**Chantiers transverses non ouverts** : versionnage Git, tests, mentions légales
-et politique de confidentialité (contenus juridiques — **validation humaine
-obligatoire**), procédure de déploiement.
+**Chantiers transverses non ouverts** : tests, mentions légales et politique de
+confidentialité (contenus juridiques — **validation humaine obligatoire**),
+procédure de déploiement.
+
+Le code est sous **licence MIT** depuis le 2026-08-26. Cette licence ne couvre
+que le code écrit pour ce projet : le runtime `support.js`, le design system
+`_ds/`, les fonds de carte et les photographies gardent leurs conditions
+propres (tableau dans le [README](README.md#licence)). Si le jeu de données
+grossit par import Wikidata / POP, sa licence devra être traitée séparément —
+une base de données n'est pas du code.
 
 ## 9. Règle documentaire
 
