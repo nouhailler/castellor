@@ -407,5 +407,67 @@ window.CASTELLUM_ENCYCLOPEDIA = [
         ]
       }
     ]
+  },
+  {
+    id: "celebres",
+    partie: "XI. Châteaux célèbres",
+    chapitres: [
+      {
+        id: "cel-royaux",
+        titre: "Les grands châteaux royaux",
+        paragraphes: [
+          "Plusieurs châteaux résument à eux seuls des siècles de pouvoir royal français. Vincennes, avec son donjon du XIVe siècle et sa Sainte-Chapelle, fut résidence, prison d'État et enfin dépôt d'archives militaires. Fontainebleau, remanié sur près de huit siècles par les rois de France de Saint Louis à Napoléon III, en constitue la synthèse la plus complète. Versailles, enfin, reste l'exemple absolu du château comme instrument de pouvoir : Louis XIV y installe la cour tout entière en 1682, faisant du château le centre politique du royaume pendant plus d'un siècle.",
+          "Amboise et Blois, sur les bords de la Loire, furent également résidences royales à part entière sous Charles VIII, Louis XII et François Ier, avant que la cour ne se fixe définitivement en Île-de-France."
+        ]
+      },
+      {
+        id: "cel-loire",
+        titre: "Les châteaux de la Loire",
+        paragraphes: [
+          "La vallée de la Loire concentre l'une des plus fortes densités de châteaux de France, résultat de plusieurs siècles de résidence royale et aristocratique le long du fleuve. Chambord, chantier démesuré de François Ier, en est l'expression la plus spectaculaire ; Chenonceau, avec sa galerie enjambant le Cher, sans doute la plus photographiée. Azay-le-Rideau et Villandry illustrent le raffinement de la Renaissance ligérienne, tandis qu'Amboise, Blois et Chinon gardent la mémoire des rois qui y résidèrent avant que la cour ne s'installe définitivement en Île-de-France.",
+          "Cette concentration exceptionnelle, protégée notamment autour de Chambord, Chenonceau et Amboise, vaut au Val de Loire son inscription au patrimoine mondial de l'UNESCO depuis 2000."
+        ]
+      },
+      {
+        id: "cel-cathares",
+        titre: "Les forteresses cathares",
+        paragraphes: [
+          "Dans les Pyrénées et les Corbières, une série de forteresses perchées sur des sites vertigineux doit sa notoriété à la croisade albigeoise du début du XIIIe siècle, menée contre l'hérésie cathare. Carcassonne, la plus connue, résista au siège de 1209 avant de tomber, puis devint une place forte royale à la frontière du royaume d'Aragon. Peyrepertuse, sur sa crête calcaire, et Montségur, tombé après un siège de dix mois en 1244 qui se conclut par le bûcher de plus de deux cents cathares, comptent parmi les sites les plus emblématiques de cette histoire tragique.",
+          "Ces forteresses, souvent qualifiées de « cathares » par raccourci, n'ont pour la plupart été fortifiées ou reconstruites qu'après la croisade, sous l'autorité du roi de France : elles gardent la mémoire du conflit plus qu'elles n'en furent, à l'origine, les places fortes."
+        ]
+      },
+      {
+        id: "cel-philippiens",
+        titre: "Les châteaux philippiens",
+        paragraphes: [
+          "Le règne de Philippe Auguste (1180-1223) impose un modèle de fortification si influent qu'il porte son nom : enceinte quadrangulaire régulière, tours cylindriques identiques également espacées, donjon isolé en tour maîtresse ronde. Le Louvre primitif, aujourd'hui enfoui sous le palais actuel mais dont les fondations sont visibles en sous-sol, en est l'exemple fondateur, imité dans nombre de places fortes royales du domaine capétien comme Dourdan ou Yèvre-le-Château.",
+          "Ce modèle, conçu pour supprimer les angles morts qu'offraient les tours carrées aux assaillants, marque une rupture décisive dans l'histoire de la fortification médiévale et influence durablement l'architecture castrale française du XIIIe siècle, bien au-delà des chantiers directement commandités par la couronne."
+        ]
+      },
+      {
+        id: "cel-vauban",
+        titre: "Les forteresses de Vauban",
+        paragraphes: [
+          "Sébastien Le Prestre de Vauban (1633-1707), ingénieur et maréchal de Louis XIV, réorganise en profondeur la défense des frontières du royaume. Sa méthode, fondée sur des bastions bas et épais capables de résister à l'artillerie et de la contre-battre, ainsi que sur un système de fortifications concentriques complété de places fortes avancées, donne naissance à ce qu'il appelait lui-même son « pré carré » : une double ceinture de places fortes protégeant les frontières du nord et de l'est.",
+          "Douze de ces sites, choisis parmi plus d'une centaine de fortifications attribuées à Vauban, sont aujourd'hui inscrits au patrimoine mondial de l'UNESCO — parmi eux, la citadelle de Besançon, verrouillant un méandre du Doubs, illustre l'ampleur et la sophistication de cette architecture militaire, qui marque la fin de l'ère du château fort médiéval au profit d'une science purement défensive."
+        ]
+      },
+      {
+        id: "cel-renaissance",
+        titre: "Les châteaux Renaissance",
+        paragraphes: [
+          "Au XVIe siècle, le contact avec l'Italie transforme profondément l'architecture castrale française. Chambord, avec son plan centré à donjon cantonné et son escalier à double révolution, synthétise cette rencontre entre tradition française et vocabulaire italien. Azay-le-Rideau et Villandry, plus modestes, illustrent le même mouvement à l'échelle d'une résidence de notable : symétrie des façades, grandes fenêtres à meneaux, jardins ordonnancés.",
+          "Ancy-le-Franc, en Bourgogne, œuvre de l'architecte italien Sebastiano Serlio, pousse plus loin encore l'importation directe des modèles transalpins, avec un plan carré à quatre ailes égales considéré comme l'une des premières réalisations pleinement renaissantes de l'architecture française."
+        ]
+      },
+      {
+        id: "cel-bourgogne",
+        titre: "Les châteaux des ducs de Bourgogne",
+        paragraphes: [
+          "Au XIVe et XVe siècles, les ducs de Bourgogne de la maison de Valois — Philippe le Hardi, Jean sans Peur, Philippe le Bon, Charles le Téméraire — dirigent l'un des États les plus riches et les plus raffinés d'Europe, dont la puissance rivalise avec celle du royaume de France lui-même. Leur résidence principale, le palais ducal de Dijon, aujourd'hui largement remanié en hôtel de ville, témoigne de cette magnificence, de même que les châteaux ducaux de Flandre, pour la plupart disparus ou profondément transformés depuis.",
+          "Le duché s'éteint avec la mort de Charles le Téméraire en 1477 devant Nancy, et ses terres bourguignonnes reviennent à la couronne de France ; le château de Bussy-Rabutin, bâti sur des fondations médiévales de cette même Bourgogne, en garde le souvenir architectural bien après la disparition du duché, quoique sous une forme entièrement remaniée au XVIIe siècle."
+        ]
+      }
+    ]
   }
 ];
