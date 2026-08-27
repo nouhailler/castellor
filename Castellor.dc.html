@@ -1044,7 +1044,15 @@ class Component extends DCLogic {
       openSheet: () => this.setState({ sheetOpen: true }),
       closeSheet: () => this.setState({ sheetOpen: false }),
       sheetOpen: s.sheetOpen,
-      reset: () => this.setState({ filters: { epoque: [], type: [], etat: [], acces: [] }, q: "" }),
+      /* Réinitialiser doit aussi lever le filtre département (mapDept),
+         sans quoi la liste reste bornée au département choisi malgré les
+         filtres époque/type/état/accès effacés — c'est ce qui donnait
+         l'impression que le bouton ne faisait rien. */
+      reset: () => {
+        this.setState({ filters: { epoque: [], type: [], etat: [], acces: [] }, q: "", mapDept: "all" }, () => {
+          if (this._map) this._map.fitAll();
+        });
+      },
       chipGroups: groups,
 
       count: list.length, total: DATA().length,
