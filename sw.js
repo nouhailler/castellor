@@ -8,7 +8,7 @@
    Le satellite reste volontairement en ligne seulement : mettre en cache de
    l'imagerie haute résolution remplirait l'appareil sans bénéfice réel. */
 
-const VERSION = "v12";
+const VERSION = "v13";
 const SHELL   = "castellor-shell-" + VERSION;
 const TILES   = "castellor-tuiles-" + VERSION;
 const PHOTOS  = "castellor-photos-" + VERSION;

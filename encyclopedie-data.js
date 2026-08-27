@@ -148,5 +148,51 @@ window.CASTELLUM_ENCYCLOPEDIA = [
         ]
       }
     ]
+  },
+  {
+    id: "defense",
+    partie: "IV. Les systèmes défensifs",
+    chapitres: [
+      {
+        id: "def-obstacles",
+        titre: "Obstacles",
+        paragraphes: [
+          "Avant même d'atteindre le pied des murs, l'assaillant doit franchir une série d'obstacles destinés à le retarder, l'exposer aux tirs des défenseurs et rendre inopérantes ses machines de siège. Le fossé, creusé tout autour de la fortification, en est l'élément le plus ancien et le plus universel ; rempli d'eau, il devient douve et complique en outre le sapement, en noyant toute tentative de galerie souterraine. Le talus, plinthe inclinée à la base des murs, renforce leurs fondations tout en gênant l'approche des béliers et des tours de siège.",
+          "Aux fortifications les plus anciennes ou les plus modestes, la palissade — une clôture de pieux de bois plantés en terre — tient lieu de première enceinte, rapide à édifier mais vulnérable au feu. Devant les portes, enfin, la barbacane, ouvrage avancé isolé ou relié à l'enceinte, oblige l'assaillant à s'exposer une seconde fois avant même d'atteindre l'entrée véritable."
+        ]
+      },
+      {
+        id: "def-murs",
+        titre: "Murs",
+        paragraphes: [
+          "L'enceinte désigne l'ensemble des murailles qui délimitent et protègent un château ; elle se compose de courtines, les pans de mur reliant deux tours ou deux bastions, dont l'épaisseur et la hauteur constituent la première ligne de résistance aux machines de siège. Dans les châteaux les plus anciens, avant la généralisation d'une enceinte complète, un mur-bouclier isolé — une simple façade épaisse dressée face à la direction d'attaque la plus probable — peut suffire à protéger un site naturellement défendu sur ses autres flancs.",
+          "Au sommet des courtines, un parapet — muret protecteur, souvent crénelé — permet aux défenseurs de se tenir en sécurité relative, tandis que le chemin de ronde, passage aménagé au sommet ou à l'intérieur du mur, leur permet de circuler tout au long de l'enceinte pour se porter rapidement au point le plus menacé."
+        ]
+      },
+      {
+        id: "def-tours",
+        titre: "Tours",
+        paragraphes: [
+          "La forme des tours suit de près l'évolution des techniques de siège. La tour carrée, la plus ancienne, est simple à construire mais laisse des angles morts que l'assaillant peut exploiter pour saper ses fondations à l'abri des tirs. La tour ronde, généralisée à partir du XIIIe siècle avec le modèle philippien, supprime cet angle mort et résiste mieux aux coups de bélier ; la tour polygonale et la tour semi-circulaire en sont des variantes intermédiaires, parfois choisies pour des raisons de terrain ou d'économie de construction.",
+          "Avec l'arrivée de l'artillerie à partir du XVe siècle, la tour à éperon — dotée d'un bec massif orienté vers l'ennemi pour faire dévier les boulets — puis la tour bastionnée, ancêtre du bastion proprement dit, marquent la transition vers une architecture pensée pour résister au canon plutôt qu'au seul choc mécanique des machines de siège médiévales."
+        ]
+      },
+      {
+        id: "def-ouvertures",
+        titre: "Ouvertures défensives",
+        paragraphes: [
+          "Chaque ouverture percée dans un mur défensif est un compromis entre la nécessité de tirer sur l'assaillant et celle de ne pas s'exposer à ses propres tirs. L'archère, fente verticale étroite, permet de tirer à l'arc ou à l'arbalète ; la meurtrière en est un terme proche, plus général, pouvant désigner toute fente de tir. Avec la diffusion des armes à feu à partir du XIVe siècle apparaît la canonnière, ouverture plus large et souvent évasée vers l'intérieur, adaptée au maniement des premières pièces d'artillerie.",
+          "Au sommet des murs, le créneau — ouverture rectangulaire alternée avec les parties pleines, les merlons — permet de tirer tout en s'abritant. Le mâchicoulis, ouverture ménagée dans le plancher d'un encorbellement de pierre, autorise une défense verticale : surveiller le pied du mur et y faire tomber des projectiles. L'assommoir, souvent aménagé au-dessus d'un passage ou d'une porte, remplit une fonction voisine, concentrée sur la défense d'un point de passage précis."
+        ]
+      },
+      {
+        id: "def-entrees",
+        titre: "Entrées",
+        paragraphes: [
+          "L'entrée est le point le plus vulnérable de toute fortification, puisqu'elle doit rester praticable en temps de paix tout en étant défendable en cas d'attaque. La porte fortifiée concentre pour cela plusieurs dispositifs successifs : un pont-levis, mobile, qui interrompt l'accès en se relevant ; une herse, grille coulissant verticalement, qui peut se fermer en urgence même si le pont reste baissé ; et souvent un assommoir aménagé juste au-dessus du passage, pour prendre à revers quiconque aurait forcé les deux premiers obstacles.",
+          "Les entrées les plus importantes sont en outre protégées par un châtelet, ensemble fortifié flanqué de tours qui encadre et surveille l'accès, précédé le cas échéant d'une barbacane avancée qui oblige l'assaillant à s'exposer une première fois avant même d'atteindre la porte proprement dite."
+        ]
+      }
+    ]
   }
 ];
