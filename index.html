@@ -40,6 +40,8 @@ window.__resources = {
 
 <script src="vendor/leaflet.js"></script>
 <script src="chateaux-data.js"></script>
+<script src="glossaire-data.js"></script>
+<script src="encyclopedie-data.js"></script>
 <script src="castellum-map.js"></script>
 <style>
 body{margin:0;background:#0f1119;color:var(--color-text);font-family:var(--font-body)}
@@ -286,6 +288,66 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 </div>
 </sc-if>
 
+<sc-if value="{{ glossaryOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:25;background:var(--color-bg);overflow-y:auto;animation:castellum-in .2s ease both">
+<div style="display:flex;align-items:center;gap:10px;padding:14px 16px 4px">
+<div style="font:500 16px var(--font-heading);margin-right:auto">Glossaire</div>
+<button onClick="{{ closeGlossary }}" style="cursor:pointer;font:500 11px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.8);border:1px solid var(--color-divider);border-radius:7px;padding:6px 10px">Retour</button>
+</div>
+<div style="padding:4px 16px 20px;display:flex;flex-direction:column;gap:10px">
+<div style="position:relative">
+<input class="input" value="{{ glossaryQuery }}" onChange="{{ onGlossaryQuery }}" placeholder="Chercher un terme…" style="padding-left:32px;font-size:13px">
+<span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);width:11px;height:11px;border:1.5px solid color-mix(in srgb,var(--color-text) 45%,transparent);border-radius:50%"></span>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ glossaryTerms }}" as="g" hint-placeholder-count="6">
+<div style="padding:10px 12px;border-radius:var(--radius-md);background:var(--color-surface)">
+<div style="font:500 13px var(--font-heading);color:var(--color-accent);margin-bottom:3px">{{ g.terme }}</div>
+<div style="font-size:12.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 78%,transparent)">{{ g.def }}</div>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ glossaryEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="padding:34px 4px;text-align:center;font-size:12.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Aucun terme ne correspond.</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ encyclopediaOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:25;background:var(--color-bg);overflow-y:auto;animation:castellum-in .2s ease both">
+<div style="display:flex;align-items:center;gap:10px;padding:14px 16px 4px">
+<div style="font:500 16px var(--font-heading);margin-right:auto">Encyclopédie</div>
+<button onClick="{{ backEncyclopedia }}" style="cursor:pointer;font:500 11px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.8);border:1px solid var(--color-divider);border-radius:7px;padding:6px 10px">Retour</button>
+</div>
+
+<sc-if value="{{ encyclopediaShowingToc }}" hint-placeholder-val="{{ true }}">
+<div style="padding:6px 16px 20px;display:flex;flex-direction:column;gap:18px">
+<sc-for list="{{ encyclopediaParties }}" as="p" hint-placeholder-count="2">
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">{{ p.partie }}</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<sc-for list="{{ p.chapitres }}" as="c" hint-placeholder-count="4">
+<button onClick="{{ c.open }}" style="cursor:pointer;text-align:left;background:var(--color-surface);border:0;padding:12px 13px;font:500 13px var(--font-heading);color:var(--color-text);border-radius:var(--radius-md)">{{ c.titre }}</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ encyclopediaShowingChapter }}" hint-placeholder-val="{{ false }}">
+<div style="padding:6px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent)">{{ encyclopediaChapter.partie }}</div>
+<h3 style="margin:0;font-size:20px;letter-spacing:-.01em;text-wrap:pretty">{{ encyclopediaChapter.titre }}</h3>
+<sc-for list="{{ encyclopediaChapter.paragraphes }}" as="para" hint-placeholder-count="2">
+<p style="margin:0;font-size:13.5px;line-height:1.65;text-wrap:pretty">{{ para }}</p>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
 <sc-if value="{{ detailOpen }}" hint-placeholder-val="{{ false }}">
 <div style="position:absolute;inset:0;z-index:20;background:var(--color-bg);overflow-y:auto;animation:castellum-in .2s ease both">
 
@@ -431,6 +493,8 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:880,&quot;height&quot;:1000}}">
 const F = () => (window.CASTELLUM_FILTERS || { epoque: [], type: [], etat: [], acces: [] });
 const DATA = () => (window.CASTELLUM || []);
+const GLOSSARY = () => (window.CASTELLUM_GLOSSARY || []);
+const ENCYCLOPEDIA = () => (window.CASTELLUM_ENCYCLOPEDIA || []);
 const ROMAN = { 10: "Xe", 11: "XIe", 12: "XIIe", 13: "XIIIe", 14: "XIVe", 15: "XVe", 16: "XVIe", 17: "XVIIe", 18: "XVIIIe", 19: "XIXe", 20: "XXe" };
 const DIV = "rgba(233,233,237,.16)";
 const ACC = "#9184d9";
@@ -475,7 +539,9 @@ class Component extends DCLogic {
     satellite: false,
     editing: false, draft: null, newEvent: "", drafts: {}, userPos: null, sortByDist: false,
     copied: false, ready: false, photos: {}, swActif: false,
-    menuOpen: false, paramsOpen: false, updateStatus: "idle", lastUpdate: null
+    menuOpen: false, paramsOpen: false, updateStatus: "idle", lastUpdate: null,
+    glossaryOpen: false, glossaryQuery: "",
+    encyclopediaOpen: false, encyclopediaChapterId: null
   };
 
   _loadPhotos() {
@@ -774,7 +840,8 @@ class Component extends DCLogic {
           { label: "Carte", on: () => this.setState({ tab: "carte", menuOpen: false, detailId: null, editing: false }) },
           { label: "Liste des châteaux", on: () => this.setState({ tab: "liste", menuOpen: false, detailId: null, editing: false }) },
           { label: "Filtres", on: () => this.setState({ menuOpen: false, sheetOpen: true }) },
-          { label: "Autour de moi", on: () => { this.setState({ menuOpen: false }); this.renderVals().locate(); } }
+          { label: "Autour de moi", on: () => { this.setState({ menuOpen: false }); this.renderVals().locate(); } },
+          { label: "Glossaire", on: () => this.setState({ menuOpen: false, glossaryOpen: true, paramsOpen: false, encyclopediaOpen: false }) }
         ]
       },
       {
@@ -784,12 +851,40 @@ class Component extends DCLogic {
         ]
       },
       {
+        label: "Découvrir",
+        items: [
+          { label: "Encyclopédie", on: () => this.setState({ menuOpen: false, encyclopediaOpen: true, encyclopediaChapterId: null, paramsOpen: false, glossaryOpen: false }) }
+        ]
+      },
+      {
         label: "Application",
         items: [
-          { label: "Paramètres", on: () => this.setState({ menuOpen: false, paramsOpen: true }) }
+          { label: "Paramètres", on: () => this.setState({ menuOpen: false, paramsOpen: true, glossaryOpen: false, encyclopediaOpen: false }) }
         ]
       }
     ];
+
+    const glossaryQuery = s.glossaryQuery.trim().toLowerCase();
+    const glossaryTerms = GLOSSARY()
+      .filter((g) => !glossaryQuery || g.terme.toLowerCase().includes(glossaryQuery) || g.def.toLowerCase().includes(glossaryQuery))
+      .slice()
+      .sort((a, b) => a.terme.localeCompare(b.terme, "fr", { sensitivity: "base" }));
+
+    const encyclopediaParties = ENCYCLOPEDIA().map((p) => ({
+      partie: p.partie,
+      chapitres: p.chapitres.map((c) => ({
+        titre: c.titre,
+        open: () => this.setState({ encyclopediaChapterId: c.id })
+      }))
+    }));
+    const encyclopediaChapter = (() => {
+      if (!s.encyclopediaChapterId) return null;
+      for (const p of ENCYCLOPEDIA()) {
+        const c = p.chapitres.find((x) => x.id === s.encyclopediaChapterId);
+        if (c) return Object.assign({ partie: p.partie }, c);
+      }
+      return null;
+    })();
 
     const updateStatusLabel = {
       checking: "Vérification en cours…",
@@ -965,6 +1060,23 @@ class Component extends DCLogic {
       hasUpdateMsg: s.updateStatus !== "idle",
       updateStatusLabel: updateStatusLabel,
       checkForUpdate: () => this.checkForUpdate(),
+
+      glossaryOpen: s.glossaryOpen,
+      closeGlossary: () => this.setState({ glossaryOpen: false, glossaryQuery: "" }),
+      glossaryQuery: s.glossaryQuery,
+      onGlossaryQuery: (e) => this.setState({ glossaryQuery: e.target.value }),
+      glossaryTerms: glossaryTerms,
+      glossaryEmpty: glossaryTerms.length === 0,
+
+      encyclopediaOpen: s.encyclopediaOpen,
+      encyclopediaParties: encyclopediaParties,
+      encyclopediaChapter: encyclopediaChapter,
+      encyclopediaShowingChapter: !!encyclopediaChapter,
+      encyclopediaShowingToc: !encyclopediaChapter,
+      backEncyclopedia: () => {
+        if (s.encyclopediaChapterId) this.setState({ encyclopediaChapterId: null });
+        else this.setState({ encyclopediaOpen: false });
+      },
 
       mapWrapRef: (this.mapWrapRef = this.mapWrapRef || React.createRef())
     };

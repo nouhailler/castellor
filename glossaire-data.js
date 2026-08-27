@@ -1,0 +1,33 @@
+/* Glossaire des termes d'architecture castrale et militaire médiévale.
+   Chaque entrée : { terme, def }. Triées à l'affichage, pas ici. */
+window.CASTELLUM_GLOSSARY = [
+  { terme: "Archère", def: "Fente verticale étroite percée dans un mur, permettant de tirer à l'arc ou à l'arbalète tout en restant protégé." },
+  { terme: "Assommoir", def: "Ouverture aménagée au-dessus d'une porte ou d'un passage pour y précipiter des projectiles ou des liquides sur l'assaillant." },
+  { terme: "Barbacane", def: "Ouvrage avancé, isolé ou relié à l'enceinte, construit pour défendre un accès, un pont ou une porte." },
+  { terme: "Bastion", def: "Ouvrage saillant en forme de pointe, aux flancs orientés pour battre les abords à l'artillerie ; caractéristique des fortifications modernes, du XVe au XVIIe siècle." },
+  { terme: "Bretèche", def: "Petit ouvrage en encorbellement au-dessus d'une porte ou d'un passage, percé d'ouvertures verticales pour surveiller et défendre l'entrée." },
+  { terme: "Casemate", def: "Abri voûté, à l'épreuve des tirs, aménagé dans l'épaisseur d'un mur ou d'un bastion pour y loger de l'artillerie ou une garnison." },
+  { terme: "Caponnière", def: "Ouvrage bas, souvent couvert, reliant deux parties d'une fortification et permettant un tir rasant le long des fossés." },
+  { terme: "Chemin de ronde", def: "Passage aménagé au sommet ou à l'intérieur d'un rempart, permettant aux défenseurs de circuler et de surveiller les abords." },
+  { terme: "Châtelet", def: "Ensemble fortifié encadrant et défendant l'entrée principale d'un château, souvent flanqué de deux tours." },
+  { terme: "Courtine", def: "Pan de mur d'enceinte reliant deux tours ou deux bastions." },
+  { terme: "Créneau", def: "Ouverture rectangulaire pratiquée au sommet d'un parapet, alternée avec les merlons, permettant de tirer tout en s'abritant." },
+  { terme: "Demi-lune", def: "Ouvrage de fortification en forme de triangle, placé en avant d'une courtine ou d'un bastion pour en protéger l'accès." },
+  { terme: "Donjon", def: "Tour maîtresse d'un château fort, la plus fortifiée, servant à la fois de résidence seigneuriale, de symbole du pouvoir et de dernier refuge en cas de siège." },
+  { terme: "Douve", def: "Fossé, sec ou rempli d'eau, creusé autour d'une fortification pour tenir les assaillants à distance." },
+  { terme: "Échauguette", def: "Petite guérite de guet en encorbellement, placée à l'angle d'un mur ou d'une tour pour surveiller les abords." },
+  { terme: "Enceinte", def: "Ensemble des murailles fortifiées qui délimitent et protègent un château, une ville ou une place forte." },
+  { terme: "Glacis", def: "Talus incliné aménagé en avant d'une fortification, dégageant le champ de tir des défenseurs et exposant l'assaillant." },
+  { terme: "Herse", def: "Grille de bois ou de fer, coulissant verticalement dans des rainures, qui ferme rapidement une porte fortifiée." },
+  { terme: "Hourd", def: "Galerie de bois en encorbellement fixée temporairement au sommet d'un mur, percée d'ouvertures pour tirer ou jeter des projectiles ; ancêtre du mâchicoulis en pierre." },
+  { terme: "Lice", def: "Espace libre compris entre deux enceintes concentriques, où les défenseurs pouvaient se regrouper ou combattre à cheval." },
+  { terme: "Mâchicoulis", def: "Ouverture ménagée dans le plancher d'un encorbellement de pierre, au sommet d'un mur ou d'une porte, pour surveiller le pied de la muraille et y faire tomber des projectiles." },
+  { terme: "Merlon", def: "Partie pleine d'un parapet crénelé, comprise entre deux créneaux." },
+  { terme: "Meurtrière", def: "Fente étroite percée dans un mur, destinée à tirer à couvert avec des armes de trait ou à feu." },
+  { terme: "Motte castrale", def: "Butte de terre artificielle surmontée d'une tour ou d'un donjon de bois, entourée d'une palissade ; forme la plus ancienne du château fortifié médiéval." },
+  { terme: "Oubliette", def: "Cachot souterrain, accessible seulement par une trappe, où l'on enfermait des prisonniers." },
+  { terme: "Pont-levis", def: "Pont mobile, articulé ou coulissant, qui se relève pour interrompre l'accès à une porte fortifiée." },
+  { terme: "Poterne", def: "Petite porte discrète percée dans une enceinte, permettant une sortie ou une entrée dérobée." },
+  { terme: "Rempart", def: "Muraille épaisse et surélevée qui constitue l'élément principal d'une enceinte fortifiée." },
+  { terme: "Talus", def: "Plinthe inclinée à la base d'un mur, renforçant la fondation et gênant le sapage." }
+];
