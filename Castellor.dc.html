@@ -70,6 +70,7 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <div style="margin-left:auto;display:flex;flex-direction:column;gap:6px;pointer-events:auto">
 <button onClick="{{ toggleSat }}" style="cursor:pointer;font:500 10.5px var(--font-heading);letter-spacing:.02em;color:{{ satFg }};background:{{ satBg }};border:1px solid {{ satBd }};border-radius:7px;padding:6px 9px;backdrop-filter:blur(6px)">{{ satLabel }}</button>
 <button onClick="{{ locate }}" style="cursor:pointer;font:500 10.5px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.86);border:1px solid var(--color-divider);border-radius:7px;padding:6px 9px;backdrop-filter:blur(6px)">Autour de moi</button>
+<button onClick="{{ openDeptPicker }}" style="cursor:pointer;font:500 10.5px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.86);border:1px solid var(--color-divider);border-radius:7px;padding:6px 9px;backdrop-filter:blur(6px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;text-align:right">{{ deptButtonLabel }} ▾</button>
 <button onClick="{{ fitAll }}" style="cursor:pointer;font:500 10.5px var(--font-heading);color:color-mix(in srgb,var(--color-text) 70%,transparent);background:rgba(22,24,38,.86);border:1px solid var(--color-divider);border-radius:7px;padding:6px 9px;backdrop-filter:blur(6px)">France entière</button>
 </div>
 </div>
@@ -203,6 +204,32 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 </sc-for>
 </div>
 <button class="btn btn-primary btn-block" onClick="{{ closeSheet }}" style="margin-top:16px">Voir les {{ count }} résultats</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ deptPickerOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:30;background:color-mix(in srgb,#292b31 55%,transparent);display:flex;align-items:flex-end">
+<div onClick="{{ closeDeptPicker }}" style="position:absolute;inset:0"></div>
+<div style="position:relative;width:100%;max-height:85%;overflow-y:auto;background:var(--color-surface);border-radius:var(--radius-lg) var(--radius-lg) 0 0;box-shadow:var(--shadow-lg);padding:14px 16px 18px;animation:castellum-in .2s ease both">
+<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
+<div style="font:500 16px var(--font-heading)">Département</div>
+<button onClick="{{ closeDeptPicker }}" style="margin-left:auto;cursor:pointer;background:transparent;border:0;color:var(--color-accent);font:500 11.5px var(--font-heading);padding:0">Fermer</button>
+</div>
+<div style="position:relative;margin-bottom:10px">
+<input class="input" value="{{ deptQuery }}" onChange="{{ onDeptQuery }}" placeholder="Chercher un département…" style="padding-left:32px;font-size:13px">
+<span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);width:11px;height:11px;border:1.5px solid color-mix(in srgb,var(--color-text) 45%,transparent);border-radius:50%"></span>
+</div>
+<div style="display:flex;flex-direction:column;gap:2px;max-height:48vh;overflow-y:auto">
+<button onClick="{{ setDeptIdf }}" style="cursor:pointer;text-align:left;background:{{ idfBg }};border:0;padding:11px 12px;font:500 13px var(--font-heading);color:{{ idfFg }};border-radius:var(--radius-md)">Île-de-France</button>
+<button onClick="{{ setDeptAll }}" style="cursor:pointer;text-align:left;background:{{ allBg }};border:0;padding:11px 12px;font:500 13px var(--font-heading);color:{{ allFg }};border-radius:var(--radius-md)">Toute la France</button>
+<sc-for list="{{ deptOptions }}" as="d" hint-placeholder-count="6">
+<button onClick="{{ d.on }}" style="cursor:pointer;text-align:left;background:{{ d.bg }};border:0;padding:11px 12px;font:400 13px var(--font-body);color:{{ d.fg }};border-radius:var(--radius-md)">{{ d.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ deptEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="padding:20px 4px;text-align:center;font-size:12.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Aucun département ne correspond.</div>
+</sc-if>
 </div>
 </div>
 </sc-if>
@@ -510,6 +537,14 @@ const ENCYCLOPEDIA = () => (window.CASTELLUM_ENCYCLOPEDIA || []);
 const ROMAN = { 10: "Xe", 11: "XIe", 12: "XIIe", 13: "XIIIe", 14: "XIVe", 15: "XVe", 16: "XVIe", 17: "XVIIe", 18: "XVIIIe", 19: "XIXe", 20: "XXe" };
 const DIV = "rgba(233,233,237,.16)";
 const ACC = "#9184d9";
+/* Départements de la région Île-de-France, vue par défaut à l'arrivée sur
+   la carte : moins dense que la France entière, lisible même avec un jeu de
+   données qui grossira au-delà des 75 fiches actuelles. */
+const IDF_CODES = ["75", "77", "78", "91", "92", "93", "94", "95"];
+const depCode = (c) => {
+  const m = /\(([0-9A-Za-z]+)\)\s*$/.exec(c.dep || "");
+  return m ? m[1].toUpperCase() : "";
+};
 /* v3 : le cache porte désormais les crédits, pas seulement les URL. */
 const PHOTO_KEY = "castellor-photos-v3";
 /* Dernière version publiée dans CHANGELOG.md — à faire avancer avec lui,
@@ -553,7 +588,8 @@ class Component extends DCLogic {
     copied: false, ready: false, photos: {}, swActif: false,
     menuOpen: false, paramsOpen: false, updateStatus: "idle", lastUpdate: null,
     glossaryOpen: false, glossaryQuery: "",
-    encyclopediaOpen: false, encyclopediaChapterId: null
+    encyclopediaOpen: false, encyclopediaChapterId: null,
+    mapDept: "idf", deptPickerOpen: false, deptQuery: ""
   };
 
   _loadPhotos() {
@@ -721,8 +757,10 @@ class Component extends DCLogic {
     const wrap = this.mapWrapRef && this.mapWrapRef.current;
     const el = wrap && wrap.querySelector("castellum-map");
     if (!el) { if (!this._retry) { this._retry = setTimeout(() => { this._retry = null; this._hook(); }, 150); } return; }
+    let firstBind = false;
     if (!el._bound) {
       el._bound = true;
+      firstBind = true;
       el.onSelect = (id) => this.setState({ selectedId: id, tab: "carte" });
       /* Survol d'un point : l'info-bulle de castellum-map.js affiche déjà la
          photo et le nom ; cliquer dessus ouvre la fiche directement, sans
@@ -731,6 +769,9 @@ class Component extends DCLogic {
     }
     this._map = el;
     el.setData(this.visible().map((c) => Object.assign({ photo: this.photoThumb(c.id) }, c)));
+    /* Premier rattachement de la carte : cadrer sur le filtre par défaut
+       (Île-de-France) plutôt que sur la vue France entière codée en dur. */
+    if (firstBind) el.fitAll();
     el.setSelected(this.state.selectedId);
     el.setSatellite(this.state.satellite);
     el.setOffline(!this.state.online);
@@ -742,10 +783,14 @@ class Component extends DCLogic {
   }
 
   visible() {
-    const { q, filters } = this.state;
+    const { q, filters, mapDept } = this.state;
     const needle = q.trim().toLowerCase();
     const ep = F().epoque.filter((e) => filters.epoque.includes(e.id));
     return DATA().map((c) => this.record(c)).filter((c) => {
+      if (mapDept && mapDept !== "all") {
+        const code = depCode(c);
+        if (mapDept === "idf" ? !IDF_CODES.includes(code) : code !== mapDept) return false;
+      }
       if (needle) {
         const hay = [c.n, c.com, c.dep, c.reg].concat(c.v || []).join(" ").toLowerCase();
         if (!hay.includes(needle)) return false;
@@ -817,6 +862,37 @@ class Component extends DCLogic {
       credit: creditLine(s.photos[c.id]),
       url: s.photos[c.id].page || ""
     }));
+
+    /* Départements présents dans le jeu de données, déduits à la volée : la
+       liste s'étoffe d'elle-même quand de nouvelles fiches couvrent de
+       nouveaux départements, sans liste figée à tenir à jour. */
+    const depLabels = new Map();
+    DATA().forEach((c) => {
+      const code = depCode(c);
+      if (code && !depLabels.has(code)) depLabels.set(code, c.dep);
+    });
+    const deptQuery = s.deptQuery.trim().toLowerCase();
+    const pickStyle = (active) => active
+      ? { bg: "color-mix(in srgb, " + ACC + " 18%, transparent)", fg: "#d2cefd" }
+      : { bg: "transparent", fg: "var(--color-text)" };
+    const setMapDept = (code) => {
+      this.setState({ mapDept: code, deptPickerOpen: false, deptQuery: "" }, () => {
+        if (this._map) this._map.fitAll();
+      });
+    };
+    const deptOptions = Array.from(depLabels.entries())
+      .map(([code, label]) => ({ code, label }))
+      .filter((d) => !deptQuery || d.label.toLowerCase().includes(deptQuery))
+      .sort((a, b) => a.label.localeCompare(b.label, "fr", { sensitivity: "base" }))
+      .map((d) => {
+        const st = pickStyle(s.mapDept === d.code);
+        return { code: d.code, label: d.label, bg: st.bg, fg: st.fg, on: () => setMapDept(d.code) };
+      });
+    const idfSt = pickStyle(s.mapDept === "idf");
+    const allSt = pickStyle(s.mapDept === "all");
+    const deptButtonLabel = s.mapDept === "all"
+      ? "Toute la France"
+      : s.mapDept === "idf" ? "Île-de-France" : (depLabels.get(s.mapDept) || "Département");
 
     const groups = [
       { key: "epoque", label: "Époque", opts: F().epoque.map((e) => ({ id: e.id, label: e.label })) },
@@ -967,7 +1043,20 @@ class Component extends DCLogic {
       satFg: !online ? "rgba(233,233,237,.35)" : (s.satellite ? "#d2cefd" : "rgba(233,233,237,.8)"),
       satBd: s.satellite && online ? ACC : DIV,
       toggleSat: () => { if (online) this.setState({ satellite: !s.satellite }); },
-      fitAll: () => { if (this._map) this._map.fitAll(); },
+      fitAll: () => setMapDept("all"),
+
+      deptButtonLabel: deptButtonLabel,
+      openDeptPicker: () => this.setState({ deptPickerOpen: true }),
+      closeDeptPicker: () => this.setState({ deptPickerOpen: false, deptQuery: "" }),
+      deptPickerOpen: s.deptPickerOpen,
+      deptQuery: s.deptQuery,
+      onDeptQuery: (e) => this.setState({ deptQuery: e.target.value }),
+      deptOptions: deptOptions,
+      deptEmpty: deptOptions.length === 0,
+      setDeptIdf: () => setMapDept("idf"),
+      setDeptAll: () => setMapDept("all"),
+      idfBg: idfSt.bg, idfFg: idfSt.fg,
+      allBg: allSt.bg, allFg: allSt.fg,
       locate: () => {
         const apply = (lat, lng) => {
           this.setState({ userPos: [lat, lng], sortByDist: true, tab: "carte" });
