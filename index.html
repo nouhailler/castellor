@@ -394,6 +394,41 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 </div>
 </sc-if>
 
+<sc-if value="{{ encyclopediaChapterIsSiege }}" hint-placeholder-val="{{ false }}">
+<p style="margin:0 0 4px;font-size:12px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 62%,transparent)">Choisissez une tactique, une machine de siège en renfort si vous le souhaitez, puis lancez le siège. Simulation pédagogique : le hasard y tient sa part, comme dans un vrai siège.</p>
+
+<div style="font:500 10px var(--font-heading);letter-spacing:.09em;text-transform:uppercase;color:var(--color-accent);margin:8px 0 6px">Tactique</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ siegeTacticOptions }}" as="t" hint-placeholder-count="4">
+<button onClick="{{ t.on }}" style="cursor:pointer;font:400 11.5px var(--font-body);padding:5px 10px;border-radius:6px;background:{{ t.bg }};color:{{ t.fg }};border:1px solid {{ t.bd }}">{{ t.nom }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ hasSiegeTactic }}" hint-placeholder-val="{{ false }}">
+<p style="margin:6px 0 0;font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 70%,transparent)">{{ siegeTacticDesc }}</p>
+</sc-if>
+
+<div style="font:500 10px var(--font-heading);letter-spacing:.09em;text-transform:uppercase;color:var(--color-accent);margin:12px 0 6px">Machine de siège (facultatif)</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ siegeMachineOptions }}" as="m" hint-placeholder-count="4">
+<button onClick="{{ m.on }}" style="cursor:pointer;font:400 11.5px var(--font-body);padding:5px 10px;border-radius:6px;background:{{ m.bg }};color:{{ m.fg }};border:1px solid {{ m.bd }}">{{ m.nom }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ hasSiegeMachine }}" hint-placeholder-val="{{ false }}">
+<p style="margin:6px 0 0;font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 70%,transparent)">{{ siegeMachineDesc }}</p>
+</sc-if>
+
+<button class="btn btn-primary btn-block" onClick="{{ runSiege }}" style="margin-top:14px">Lancer le siège</button>
+
+<sc-if value="{{ hasSiegeResult }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:12px;padding:14px;border-radius:var(--radius-md);background:var(--color-surface);display:flex;flex-direction:column;gap:8px">
+<span style="align-self:flex-start;display:inline-flex;align-items:center;font-size:11px;letter-spacing:.02em;padding:3px 10px;border-radius:6px;background:{{ siegeResultBg }};color:{{ siegeResultFg }}">{{ siegeResultTitle }}</span>
+<div style="font-size:12px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 72%,transparent)">{{ siegeResultSummary }}</div>
+<div style="font-size:12px;line-height:1.55;padding-top:8px;border-top:1px solid var(--color-divider)">{{ siegeResultDefense }}</div>
+</div>
+<button class="btn btn-secondary btn-block" onClick="{{ resetSiege }}" style="margin-top:10px">Recommencer</button>
+</sc-if>
+</sc-if>
+
 <sc-if value="{{ encyclopediaChapterIsText }}" hint-placeholder-val="{{ true }}">
 <sc-for list="{{ encyclopediaChapter.paragraphes }}" as="para" hint-placeholder-count="2">
 <p style="margin:0;font-size:13.5px;line-height:1.65;text-wrap:pretty">{{ para }}</p>
@@ -606,7 +641,8 @@ class Component extends DCLogic {
     menuOpen: false, paramsOpen: false, updateStatus: "idle", lastUpdate: null,
     glossaryOpen: false, glossaryQuery: "",
     encyclopediaOpen: false, encyclopediaChapterId: null,
-    mapDept: "idf", deptPickerOpen: false, deptQuery: ""
+    mapDept: "idf", deptPickerOpen: false, deptQuery: "",
+    siegeTactic: null, siegeMachine: null, siegeResult: null
   };
 
   _loadPhotos() {
@@ -991,6 +1027,42 @@ class Component extends DCLogic {
       return null;
     })();
 
+    /* Simulateur de siège (partie VI, chapitre type "siege") : une
+       simulation pédagogique, pas un calcul historique — le hasard y tient
+       sa part, comme dans un vrai siège. Les données (tactiques, machines,
+       chances de base) viennent d'encyclopedie-data.js ; seule la mécanique
+       du tirage vit ici. */
+    const siegeChapter = (encyclopediaChapter && encyclopediaChapter.type === "siege") ? encyclopediaChapter : null;
+    const selectedTactic = siegeChapter ? siegeChapter.tactiques.find((t) => t.id === s.siegeTactic) : null;
+    const selectedMachine = siegeChapter ? siegeChapter.machines.find((m) => m.id === s.siegeMachine) : null;
+    const siegeTacticOptions = siegeChapter ? siegeChapter.tactiques.map((t) => {
+      const st = this.chipStyle(s.siegeTactic === t.id);
+      return { nom: t.nom, bg: st.bg, fg: st.fg, bd: st.bd, on: () => this.setState({ siegeTactic: t.id, siegeResult: null }) };
+    }) : [];
+    const siegeMachineOptions = siegeChapter ? siegeChapter.machines.map((m) => {
+      const st = this.chipStyle(s.siegeMachine === m.id);
+      return {
+        nom: m.nom, bg: st.bg, fg: st.fg, bd: st.bd,
+        on: () => this.setState({ siegeMachine: s.siegeMachine === m.id ? null : m.id, siegeResult: null })
+      };
+    }) : [];
+    const runSiege = () => {
+      if (!selectedTactic) return;
+      const bonus = (selectedMachine && selectedMachine.boost && selectedMachine.boost[selectedTactic.id]) || 0;
+      const chance = Math.min(0.92, Math.max(0.05, selectedTactic.succes + bonus));
+      const success = Math.random() < chance;
+      const duree = Math.round(selectedTactic.dureeMin + Math.random() * (selectedTactic.dureeMax - selectedTactic.dureeMin));
+      const dureeLabel = duree >= 60 ? Math.round(duree / 30) + " mois" : duree + (duree > 1 ? " jours" : " jour");
+      this.setState({
+        siegeResult: {
+          success, dureeLabel, chancePct: Math.round(chance * 100),
+          tacticNom: selectedTactic.nom, machineNom: selectedMachine ? selectedMachine.nom : null,
+          defense: selectedTactic.defense
+        }
+      });
+    };
+    const sr = s.siegeResult;
+
     const updateStatusLabel = {
       checking: "Vérification en cours…",
       found: "Mise à jour trouvée — installation en cours, l'application va redémarrer.",
@@ -1200,7 +1272,7 @@ class Component extends DCLogic {
       encyclopediaShowingChapter: !!encyclopediaChapter,
       encyclopediaShowingToc: !encyclopediaChapter,
       encyclopediaChapterIsDiagram: !!encyclopediaChapter && encyclopediaChapter.type === "diagram",
-      encyclopediaChapterIsText: !!encyclopediaChapter && encyclopediaChapter.type !== "diagram",
+      encyclopediaChapterIsText: !!encyclopediaChapter && !encyclopediaChapter.type,
       /* Schéma « Anatomie d'un château » : les pièces majeures ouvrent leur
          propre article (autre chapitre de l'encyclopédie), les termes de
          vocabulaire renvoient directement au glossaire, recherche pré-remplie. */
@@ -1213,9 +1285,28 @@ class Component extends DCLogic {
       openHerse: () => this.setState({ encyclopediaOpen: false, encyclopediaChapterId: null, glossaryOpen: true, glossaryQuery: "herse" }),
       openPontLevis: () => this.setState({ encyclopediaOpen: false, encyclopediaChapterId: null, glossaryOpen: true, glossaryQuery: "pont-levis" }),
       backEncyclopedia: () => {
-        if (s.encyclopediaChapterId) this.setState({ encyclopediaChapterId: null });
-        else this.setState({ encyclopediaOpen: false });
+        const siegeReset = { siegeTactic: null, siegeMachine: null, siegeResult: null };
+        if (s.encyclopediaChapterId) this.setState(Object.assign({ encyclopediaChapterId: null }, siegeReset));
+        else this.setState(Object.assign({ encyclopediaOpen: false }, siegeReset));
       },
+
+      encyclopediaChapterIsSiege: !!siegeChapter,
+      siegeTacticOptions: siegeTacticOptions,
+      siegeMachineOptions: siegeMachineOptions,
+      hasSiegeTactic: !!selectedTactic,
+      siegeTacticDesc: selectedTactic ? selectedTactic.desc : "",
+      hasSiegeMachine: !!selectedMachine,
+      siegeMachineDesc: selectedMachine ? selectedMachine.desc : "",
+      runSiege: runSiege,
+      resetSiege: () => this.setState({ siegeTactic: null, siegeMachine: null, siegeResult: null }),
+      hasSiegeResult: !!sr,
+      siegeResultBg: sr && sr.success ? "var(--color-accent-800)" : "var(--color-neutral-800)",
+      siegeResultFg: sr && sr.success ? "var(--color-accent-100)" : "var(--color-neutral-100)",
+      siegeResultTitle: sr ? (sr.success ? "Château pris !" : "Le siège échoue") : "",
+      siegeResultSummary: sr
+        ? "Tactique : " + sr.tacticNom + (sr.machineNom ? " avec " + sr.machineNom : "") + " · Durée : " + sr.dureeLabel + " · Chances estimées : " + sr.chancePct + " %"
+        : "",
+      siegeResultDefense: sr ? sr.defense : "",
 
       mapWrapRef: (this.mapWrapRef = this.mapWrapRef || React.createRef())
     };

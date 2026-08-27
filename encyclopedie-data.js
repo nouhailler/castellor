@@ -194,5 +194,120 @@ window.CASTELLUM_ENCYCLOPEDIA = [
         ]
       }
     ]
+  },
+  {
+    id: "vie",
+    partie: "V. La vie dans le château",
+    chapitres: [
+      {
+        id: "vie-habitants",
+        titre: "Les habitants",
+        paragraphes: [
+          "Un château médiéval héberge une communauté hiérarchisée bien plus large que la seule famille seigneuriale. Le seigneur, maître des lieux, y exerce son autorité, rend la justice et reçoit l'hommage de ses vassaux ; à ses côtés, la dame gère souvent l'intendance du domaine, en particulier lorsque son époux est absent — en campagne, en croisade ou en pèlerinage — et peut assurer la défense du château en cas de siège.",
+          "Autour d'eux gravitent les chevaliers, hommes d'armes montés liés au seigneur par serment de fidélité, et les soldats de la garnison, chargés de la garde permanente des remparts et des tours. Le fonctionnement quotidien du château repose sur une domesticité nombreuse : serviteurs affectés aux tâches du logis, artisans — charpentiers, forgerons, tanneurs — entretenant bâtiments et équipements, cuisiniers nourrissant l'ensemble de la maisonnée, et, dans les châteaux dotés d'une chapelle, un chapelain qui assure les offices et tient souvent aussi le rôle de secrétaire ou de précepteur."
+        ]
+      },
+      {
+        id: "vie-espaces",
+        titre: "Les espaces",
+        paragraphes: [
+          "L'organisation intérieure du château répond aux besoins de toute une communauté. La grande salle en est le cœur : vaste pièce où se tiennent les repas collectifs, les réceptions, la justice seigneuriale et parfois les assemblées de vassaux. La chambre seigneuriale, plus retirée, sert à la fois de lieu de repos et d'espace privé où se règlent les affaires les plus confidentielles ; la chapelle, quand le château en possède une, assure la vie religieuse du seigneur et de sa maisonnée sans avoir à sortir de l'enceinte.",
+          "Les espaces de service occupent une part importante du bâti : la cuisine, souvent isolée du corps de logis principal pour limiter les risques d'incendie, le cellier et la cave, où sont conservées les réserves de vivres et de boissons, la forge, indispensable à l'entretien des armes, outils et ferrures, et l'écurie, qui abrite les chevaux de guerre comme les montures de trait. Le grenier met les récoltes de céréales à l'abri de l'humidité et des rongeurs, tandis que les latrines, aménagées en encorbellement au-dessus des douves ou d'une fosse, évacuent les eaux usées loin des espaces de vie."
+        ]
+      },
+      {
+        id: "vie-quotidien",
+        titre: "Vie quotidienne",
+        paragraphes: [
+          "La vie quotidienne au château est rythmée par des contraintes matérielles bien éloignées de l'image d'apparat qu'on lui prête parfois. L'alimentation repose sur les céréales, les légumes du potager, la viande de chasse ou d'élevage et le poisson des viviers ; elle varie considérablement selon le rang, la table seigneuriale se distinguant par les épices, le gibier et le vin. Le chauffage, assuré par de grandes cheminées murales généralisées à partir du XIIe siècle, reste insuffisant dans les pièces les plus vastes et les plus hautes, tandis que l'éclairage dépend des chandelles de suif ou de cire et de rares fenêtres, souvent étroites pour des raisons défensives.",
+          "L'hygiène s'organise autour de bassines, de baignoires de bois pour les plus fortunés et des latrines déjà évoquées ; le sommeil se prend le plus souvent à plusieurs dans une même pièce, sur des lits clos ou de simples paillasses selon le rang. Les vêtements, de laine ou de lin, se superposent en couches pour lutter contre le froid des murs de pierre. Les déplacements, enfin, s'effectuent à cheval ou à pied sur des routes souvent médiocres, tandis que la religion rythme l'année entière : offices quotidiens dans la chapelle, fêtes du calendrier liturgique et pèlerinages ponctuent la vie de toute la maisonnée, du seigneur au dernier des serviteurs."
+        ]
+      }
+    ]
+  },
+  {
+    id: "guerre",
+    partie: "VI. La guerre et le siège",
+    chapitres: [
+      {
+        id: "guerre-prise",
+        titre: "Comment prend-on un château ?",
+        paragraphes: [
+          "Prendre un château fort n'est jamais une affaire simple : chaque option s'offrant à l'assiégeant comporte ses risques, son coût et son incertitude. Le blocus, le plus prudent, consiste à encercler la place et à couper tous ses accès, en pariant sur l'épuisement progressif des défenseurs plutôt que sur la force ; poussé à son terme, il devient un siège par la famine, capable de faire capituler une garnison sans qu'un seul coup ne soit porté contre les murs, au prix de plusieurs mois — le siège de Château-Gaillard, en 1203-1204, dura ainsi près de six mois avant la prise de la forteresse.",
+          "L'assaut direct, à l'inverse, cherche une décision rapide : échelles pour l'escalade, béliers contre les portes, machines de siège pour ouvrir une brèche. Plus risqué, il expose les assaillants aux tirs des défenseurs mais peut emporter la décision en quelques jours. La sape, elle, mise sur la patience et la technique : creuser sous les fondations pour provoquer leur effondrement. Plus rarement, l'incendie s'attaque aux éléments de bois du château, et la trahison — la corruption ou la persuasion d'un défenseur — permet parfois de s'emparer d'une place jugée imprenable sans lever la moindre machine de siège."
+        ]
+      },
+      {
+        id: "guerre-machines",
+        titre: "Les machines de siège",
+        paragraphes: [
+          "Les machines de siège médiévales se répartissent en deux grandes familles : celles qui projettent des charges à distance, et celles qui permettent l'assaut direct des murs. Le trébuchet, machine à contrepoids apparue en Occident au XIIe siècle, projette des blocs de plusieurs dizaines de kilos à plus d'une centaine de mètres et représente l'arme de siège la plus redoutable contre la maçonnerie avant l'artillerie à poudre. Le mangonneau, plus ancien et fonctionnant par torsion, offre une portée et une puissance moindres mais se met en œuvre plus rapidement. Le terme de catapulte, plus générique, désigne l'ensemble de ces machines de jet, souvent employées pour lancer des projectiles enflammés ou, en dernier recours, des charognes destinées à propager la maladie dans la place assiégée.",
+          "Pour l'assaut direct, le bélier — poutre renforcée, parfois montée sur roues et protégée par un abri — enfonce les portes ou fissure les murs à coups répétés, tandis que le beffroi, tour de siège mobile aussi haute que les remparts visés, permet aux assaillants de rejoindre le chemin de ronde par une passerelle, sans avoir à escalader la muraille à découvert."
+        ]
+      },
+      {
+        id: "guerre-defense",
+        titre: "La défense du siège",
+        paragraphes: [
+          "Face à ces techniques, les défenseurs disposent eux aussi de tout un arsenal de réponses. Les tirs depuis les tours et le chemin de ronde — archères, meurtrières, mâchicoulis, assommoirs — infligent de lourdes pertes à quiconque s'approche des murs, tandis que des projectiles variés (pierres, poix bouillante, chaux vive) peuvent être jetés sur les assaillants massés au pied de l'enceinte. Une réserve d'eau suffisante, puisée dans un puits ou une citerne intérieure, protège des tentatives d'incendie comme d'un blocus prolongé de la seule source extérieure ; des réserves alimentaires abondantes, constituées avant le début du siège, permettent de tenir des mois entiers sans céder à la famine.",
+          "Contre la sape, les défenseurs peuvent creuser une contre-mine pour intercepter les galeries ennemies et combattre les sapeurs sous terre. Enfin, des sorties, menées de nuit ou par surprise, permettent d'attaquer le camp assiégeant, de détruire ses machines de siège ou de se ravitailler discrètement — inversant, l'espace d'une nuit, les rôles de l'assiégeant et de l'assiégé."
+        ]
+      },
+      {
+        id: "guerre-simulation",
+        titre: "Simulation : mener un siège",
+        type: "siege",
+        /* succes : chance de base (0-1) que la tactique fasse tomber le
+           château. duree en jours. Une simulation pédagogique, pas un
+           calcul historique : le hasard y tient sa part, comme dans un
+           vrai siège. */
+        tactiques: [
+          { id: "blocus", nom: "Blocus", desc: "Encercler le château et couper tous ses accès pour épuiser ses réserves, sans risquer l'assaut direct.", dureeMin: 30, dureeMax: 180, succes: 0.55, defense: "Des réserves alimentaires bien constituées et une source d'eau propre à l'enceinte peuvent faire tenir une garnison des mois ; des sorties nocturnes permettent parfois de ravitailler discrètement le château ou d'attaquer le camp assiégeant." },
+          { id: "assaut", nom: "Assaut direct", desc: "Lancer une attaque frontale contre les murs ou les portes, au prix de lourdes pertes, en cherchant une prise rapide.", dureeMin: 1, dureeMax: 14, succes: 0.35, defense: "Les tirs depuis les tours — archères, meurtrières, mâchicoulis — et les projectiles jetés du chemin de ronde infligent de lourdes pertes aux assaillants massés au pied des murs." },
+          { id: "escalade", nom: "Escalade", desc: "Franchir discrètement les murs à l'aide d'échelles, de nuit, pour ouvrir une porte de l'intérieur.", dureeMin: 1, dureeMax: 3, succes: 0.25, defense: "Un chemin de ronde bien gardé et des rondes de nuit régulières rendent l'escalade discrète très risquée ; repérés, les assaillants sont abattus avant d'atteindre le sommet du mur." },
+          { id: "sape", nom: "Sape", desc: "Creuser une galerie sous les fondations d'une tour ou d'une courtine, puis y mettre le feu pour provoquer son effondrement.", dureeMin: 14, dureeMax: 60, succes: 0.5, defense: "Une douve en eau noie toute tentative de galerie ; à défaut, les défenseurs peuvent creuser une contre-mine pour intercepter les sapeurs et les combattre sous terre." },
+          { id: "incendie", nom: "Incendie", desc: "Mettre le feu aux éléments de bois du château — palissades, hourds, toitures, portes — à l'aide de projectiles enflammés.", dureeMin: 1, dureeMax: 10, succes: 0.3, defense: "Les réserves d'eau conservées en hauteur et des toitures d'ardoise ou de tuile plutôt que de chaume limitent la prise du feu." },
+          { id: "famine", nom: "Siège par la famine", desc: "Prolonger l'encerclement jusqu'à l'épuisement complet des vivres, sans tenter le moindre assaut.", dureeMin: 60, dureeMax: 365, succes: 0.7, defense: "Un cellier bien approvisionné avant le début du siège, et un rationnement sévère de la garnison, peuvent repousser l'échéance de plusieurs mois." },
+          { id: "trahison", nom: "Trahison", desc: "Corrompre ou convaincre un défenseur d'ouvrir une porte ou une poterne, court-circuitant toute la défense.", dureeMin: 1, dureeMax: 1, succes: 0.15, defense: "Rien ne protège totalement contre la trahison, sinon la loyauté de la garnison — mais une porte solidement gardée et une herse tenue prête limitent les dégâts d'une brève ouverture." }
+        ],
+        machines: [
+          { id: "trebuchet", nom: "Trébuchet", desc: "Machine à contrepoids capable de projeter des blocs de plusieurs dizaines de kilos à plus de 100 mètres, redoutable contre les courtines.", boost: { assaut: 0.15, blocus: 0.05 } },
+          { id: "mangonneau", nom: "Mangonneau", desc: "Machine à torsion plus légère et plus rapide à mettre en œuvre que le trébuchet, mais de portée et de puissance moindres.", boost: { assaut: 0.08 } },
+          { id: "belier", nom: "Bélier", desc: "Poutre renforcée, souvent montée sur roues et protégée par un abri, destinée à enfoncer une porte ou à fissurer un mur par chocs répétés.", boost: { assaut: 0.12 } },
+          { id: "beffroi", nom: "Beffroi", desc: "Tour de siège mobile, aussi haute que les remparts qu'elle affronte, permettant aux assaillants de rejoindre le chemin de ronde par une passerelle.", boost: { assaut: 0.1, escalade: 0.15 } },
+          { id: "catapulte", nom: "Catapulte", desc: "Terme générique désignant les machines de jet antiques et médiévales ; utile pour lancer projectiles enflammés ou charognes au-dessus des murs.", boost: { incendie: 0.15, blocus: 0.03 } }
+        ]
+      }
+    ]
+  },
+  {
+    id: "construction",
+    partie: "VII. Les techniques de construction",
+    chapitres: [
+      {
+        id: "constr-materiaux",
+        titre: "Matériaux",
+        paragraphes: [
+          "Le choix des matériaux d'un château dépend d'abord de ce que le terrain environnant fournit à moindre coût. La pierre reste le matériau de prédilection des fortifications durables, sous deux formes complémentaires : le moellon, pierre brute ou grossièrement équarrie, rapide à mettre en œuvre pour le cœur des murs, et la pierre de taille, soigneusement taillée à angles droits, réservée aux parements visibles, aux angles et aux encadrements d'ouvertures pour leur solidité et leur régularité.",
+          "La brique, cuite dans des fours locaux, se généralise à partir du XIIIe siècle dans les régions pauvres en pierre de bonne qualité, notamment dans le nord et le sud-ouest de la France ; elle permet des motifs décoratifs par alternance de couleurs. Le bois, omniprésent dans les premiers châteaux (mottes castrales, palissades, hourds), reste indispensable même après la généralisation de la pierre pour les charpentes, les échafaudages et les planchers. La terre, enfin, sert à l'origine des mottes castrales et, sous forme de mortier ou de torchis, entre dans la composition de nombreux ouvrages annexes."
+        ]
+      },
+      {
+        id: "constr-construction",
+        titre: "Construction",
+        paragraphes: [
+          "Édifier un château mobilise un savoir-faire technique considérable, souvent développé sur plusieurs années de chantier. L'extraction s'effectue dans une carrière la plus proche possible du site, pour limiter le coût et la difficulté du transport des blocs ; la taille de pierre y donne aux blocs leur forme définitive, ou se poursuit sur le chantier lui-même pour les pièces d'encadrement les plus délicates. La maçonnerie proprement dite consiste à assembler les pierres au mortier, un mélange de chaux, de sable et d'eau qui durcit progressivement et solidarise l'ensemble.",
+          "Pour travailler en hauteur, des échafaudages de bois, dont les trous de boulin — ces encoches encore visibles dans certains murs anciens — marquent l'emplacement, accompagnent la progression du chantier ; le levage des blocs les plus lourds fait appel à des grues à roue, actionnées par la force humaine. Les voûtes, en berceau ou d'arêtes selon les périodes, couvrent les salles sans recourir au bois, réduisant les risques d'incendie ; les charpentes, elles, restent indispensables pour porter les toitures et les planchers des étages."
+        ]
+      },
+      {
+        id: "constr-chantier",
+        titre: "Organisation du chantier",
+        paragraphes: [
+          "Un chantier de château mobilise une organisation hiérarchisée de métiers spécialisés, sous l'autorité d'un maître d'œuvre qui conçoit l'ouvrage, dirige son exécution et coordonne l'ensemble des corps de métier — l'équivalent médiéval de l'architecte, bien que le terme lui-même ne s'impose que plus tardivement. Les carriers extraient la pierre à la carrière, que les tailleurs de pierre façonnent ensuite selon les gabarits fournis par le maître d'œuvre, avant que les maçons ne l'assemblent sur le chantier.",
+          "Les charpentiers construisent échafaudages, cintres de voûte et charpentes de toiture, tandis que les forgerons fabriquent et entretiennent les outils de tous ces corps de métier, ainsi que les ferrures des portes et les éléments métalliques de la construction. Ce chantier pouvait employer, sur les entreprises royales les plus vastes, plusieurs centaines d'ouvriers simultanément, mobilisés parfois pendant des décennies."
+        ]
+      }
+    ]
   }
 ];
