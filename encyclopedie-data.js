@@ -331,5 +331,81 @@ window.CASTELLUM_ENCYCLOPEDIA = [
         ]
       }
     ]
+  },
+  {
+    id: "typologie",
+    partie: "IX. Typologie des châteaux",
+    chapitres: [
+      {
+        id: "typo-fonction",
+        titre: "Selon la fonction",
+        paragraphes: [
+          "Un même mot désigne des édifices aux fonctions très différentes. Le château résidence privilégie le confort et l'apparat sur la défense : c'est le cas de la plupart des châteaux de la Renaissance et de l'époque classique, conçus pour être habités et pour recevoir. À l'opposé, la forteresse subordonne tout à l'efficacité militaire, quitte à sacrifier tout confort résidentiel — les places frontières bâties ou remaniées par Vauban en offrent l'exemple le plus abouti.",
+          "Entre ces deux pôles, le château administratif sert de siège à l'exercice du pouvoir local : perception des droits, justice, gestion du domaine, sans qu'il soit nécessairement le lieu de résidence principal de son détenteur. Le château royal cumule souvent plusieurs de ces fonctions à l'échelle du royaume : résidence, symbole du pouvoir monarchique, verrou stratégique ou administration d'une province. Le château épiscopal, enfin, appartient à un évêque ou à un archevêque, qui y exerce à la fois son autorité spirituelle et les prérogatives temporelles souvent attachées à sa charge — le château du Haut-Barr, résidence de repli des princes-évêques de Strasbourg, en est un exemple alsacien."
+        ]
+      },
+      {
+        id: "typo-forme",
+        titre: "Selon la forme",
+        paragraphes: [
+          "La forme d'un château retrace assez fidèlement son époque de construction. La motte castrale, la plus ancienne, associe une butte de terre artificielle à une tour de bois et une basse-cour palissadée. Le château à enceinte privilégie une ou plusieurs murailles concentriques comme principale ligne de défense, tandis que le château à donjon fait reposer l'essentiel de sa résistance sur une tour maîtresse isolée, capable de tenir seule après la chute des défenses extérieures.",
+          "Le château à tours multiplie les ouvrages de flanquement le long de ses courtines pour supprimer les angles morts, une évolution qui culmine avec le château philippien du XIIIe siècle, à l'enceinte régulière cantonnée de tours cylindriques identiques. Le château bastionné, enfin, abandonne tours et courtines verticales au profit de bastions triangulaires bas et épais, conçus pour résister à l'artillerie et pour la contre-battre — une forme qui n'appartient plus vraiment au château médiéval mais à la fortification moderne."
+        ]
+      },
+      {
+        id: "typo-epoque",
+        titre: "Selon l'époque",
+        paragraphes: [
+          "Chaque grande période architecturale imprime sa marque sur le château. Le château féodal, aux Xe-XIIe siècles, reste massif et sommairement défensif, encore proche de ses origines en terre et en bois. Le château gothique, du XIIe au XVe siècle, perfectionne les dispositifs défensifs — tours rondes, mâchicoulis, enceintes concentriques — tout en développant un vocabulaire décoratif propre (arcs brisés, voûtes sur croisée d'ogives) qui gagne aussi les intérieurs seigneuriaux.",
+          "Le château Renaissance, au XVIe siècle, subordonne la défense à l'agrément : symétrie, grandes fenêtres, jardins réguliers. Le château classique, au XVIIe siècle, pousse plus loin cette logique dans une architecture d'ordonnance stricte, dont Versailles reste le modèle absolu. Deux styles plus tardifs relisent ensuite l'histoire du château : le néoclassique, aux XVIIIe et XIXe siècles, retrouve la rigueur des ordres antiques, tandis que le néogothique, au XIXe siècle, réinvente un Moyen Âge idéalisé — c'est le cas des grandes restaurations de Viollet-le-Duc à Pierrefonds et à Carcassonne."
+        ]
+      },
+      {
+        id: "typo-situation",
+        titre: "Selon la situation",
+        paragraphes: [
+          "L'implantation d'un château répond d'abord à la topographie du terrain disponible. Le château de plaine, dépourvu de défense naturelle, doit compenser par des fossés et des enceintes plus développés ; le château de hauteur, à l'inverse, tire parti du relief pour dominer les environs et compliquer l'accès de tout assaillant. Le château sur éperon occupe un promontoire rocheux protégé sur plusieurs côtés par des pentes abruptes, ne laissant qu'un accès étroit à fortifier — Château-Gaillard en offre un exemple emblématique.",
+          "Le château de vallée surveille un axe de circulation ou un cours d'eau depuis une position plus modeste, tandis que le château insulaire, bâti sur une île ou un îlot, comme le château d'If au large de Marseille, se passe presque entièrement de fortifications terrestres au profit de l'obstacle naturel que constitue l'eau. Le château côtier, enfin, surveille un littoral, un mouillage ou l'embouchure d'un fleuve, jouant un rôle de défense avancée contre les incursions venues de la mer."
+        ]
+      }
+    ]
+  },
+  {
+    id: "pouvoir",
+    partie: "X. Le château et le pouvoir",
+    chapitres: [
+      {
+        id: "pouv-royal",
+        titre: "Pouvoir royal",
+        paragraphes: [
+          "Le château est l'un des instruments privilégiés par lesquels la monarchie française affirme et étend son autorité. Les châteaux royaux, multipliés à mesure que le domaine royal s'agrandit, servent à la fois de résidences itinérantes — la cour se déplaçant fréquemment d'un château à l'autre jusqu'à la fixation à Versailles — et de points d'appui pour l'administration du royaume : perception des impôts, rendu de la justice royale, casernement de troupes.",
+          "Le long des frontières, les châteaux royaux prennent une fonction plus directement militaire, verrouillant les points de passage et les axes d'invasion : les places fortes de Vauban, au XVIIe siècle, portent à son terme cette logique de contrôle territorial systématique, avec un réseau continu de fortifications pensé à l'échelle du royaume tout entier plutôt que fief par fief."
+        ]
+      },
+      {
+        id: "pouv-seigneurial",
+        titre: "Pouvoir seigneurial",
+        paragraphes: [
+          "Le château est indissociable du système féodal qui structure la société médiévale : il est le siège d'où le seigneur exerce son autorité sur ses vassaux, liés à lui par un serment de fidélité — l'hommage — qui les oblige en retour à l'aide militaire et au conseil. Cette vassalité s'organise en pyramide, du simple chevalier tenant un fief modeste jusqu'au roi, théoriquement suzerain de l'ensemble du royaume, chaque échelon devant hommage à celui qui le précède.",
+          "Au sein de sa seigneurie, le seigneur exerce la justice, avec des degrés de compétence variables selon son rang, et la fiscalité, en percevant cens, banalités et taxes diverses sur les habitants de son ressort. Ce pouvoir, en théorie délégué par le roi, tend en pratique à devenir héréditaire et quasi autonome durant les périodes de faiblesse du pouvoir central, en particulier aux Xe et XIe siècles."
+        ]
+      },
+      {
+        id: "pouv-religieux",
+        titre: "Pouvoir religieux",
+        paragraphes: [
+          "L'Église médiévale dispose elle aussi de pouvoirs temporels considérables, qui trouvent leur traduction architecturale dans des châteaux épiscopaux : un évêque, seigneur d'un vaste territoire attaché à son siège, peut faire bâtir ou remanier un château pour y exercer son autorité et s'y replier en cas de menace, comme au Haut-Barr, résidence de repli des princes-évêques de Strasbourg.",
+          "Les grandes abbayes, propriétaires de domaines étendus et parfois exposées aux raids ou aux pillages, se dotent également de fortifications religieuses : enceintes, tours de guet, parfois de véritables abbayes fortifiées où le monastère se confond presque avec une place forte. Cette fusion du pouvoir spirituel et du pouvoir temporel, caractéristique de la société médiévale, s'estompe progressivement avec l'affirmation de l'autorité royale à partir du XIIIe siècle."
+        ]
+      },
+      {
+        id: "pouv-militaire",
+        titre: "Pouvoir militaire",
+        paragraphes: [
+          "Au-delà de sa dimension résidentielle ou administrative, le château reste avant tout, à ses origines, un outil militaire. Il abrite une garnison permanente, chargée de la défense de l'édifice comme de la surveillance du territoire environnant, et peut être mobilisée pour des opérations plus larges en cas de conflit. Le long des frontières du royaume, les châteaux prennent le statut de places fortes : leur défense, leur ravitaillement et leur commandement font l'objet d'une attention particulière du pouvoir central, qui y maintient des garnisons plus nombreuses et des fortifications régulièrement modernisées.",
+          "Cette fonction militaire décline progressivement à partir du XVIe siècle, avec la généralisation de l'artillerie et la spécialisation croissante des places fortes frontalières, qui finissent par se détacher complètement du château résidentiel — donnant naissance, avec les ouvrages de Vauban, à une architecture militaire à part entière."
+        ]
+      }
+    ]
   }
 ];
