@@ -309,5 +309,27 @@ window.CASTELLUM_ENCYCLOPEDIA = [
         ]
       }
     ]
+  },
+  {
+    id: "territoire",
+    partie: "VIII. Le territoire du château",
+    chapitres: [
+      {
+        id: "terr-seigneurie",
+        titre: "La seigneurie",
+        paragraphes: [
+          "Un château n'existe jamais isolé : il est le siège d'une seigneurie, territoire sur lequel son détenteur exerce autorité et perçoit des droits. Ce territoire englobe typiquement un ou plusieurs villages, dont les habitants doivent au seigneur diverses redevances, ainsi que des terres cultivées, directement exploitées pour son compte (la réserve) ou concédées à des tenanciers moyennant des droits en nature ou en argent.",
+          "Le seigneur perçoit ainsi des revenus multiples : cens et rentes sur les terres tenues par ses paysans, banalités pour l'usage obligatoire de son moulin, de son four ou de son pressoir, péages sur les routes et les ponts de son ressort, amendes perçues au titre de la justice qu'il rend. Cette justice, précisément, constitue l'un des attributs majeurs du pouvoir seigneurial : réunie dans la grande salle du château, elle tranche les litiges entre habitants de la seigneurie et sanctionne les infractions à son autorité, avec des degrés de compétence — haute, moyenne et basse justice — qui varient selon le rang et les privilèges du seigneur."
+        ]
+      },
+      {
+        id: "terr-relations",
+        titre: "Relations spatiales",
+        paragraphes: [
+          "L'implantation d'un château répond rarement au hasard : sa position dans le paysage traduit les besoins qu'il doit satisfaire. La relation château / village est la plus fréquente : le château domine ou jouxte l'agglomération dont il assure la protection et dont il perçoit les revenus, les deux entités formant un ensemble économique et social indissociable. La proximité château / église, quant à elle, associe pouvoir temporel et autorité spirituelle, le seigneur assistant aux offices et contrôlant parfois la nomination du curé de la paroisse.",
+          "Le choix du site répond aussi à des impératifs stratégiques et économiques. La relation château / rivière permet de contrôler un gué ou un pont, tout en assurant l'approvisionnement en eau et, souvent, en alimentant les douves ; la relation château / route place l'édifice au croisement d'axes de circulation majeurs, pour y lever des péages et surveiller les déplacements. À plus grande échelle, la relation château / frontière fait du château un poste avancé de défense d'un royaume ou d'une principauté contre un voisin rival, tandis que la relation château / port, plus rare, protège un mouillage ou une embouchure et permet de contrôler le commerce maritime ou fluvial."
+        ]
+      }
+    ]
   }
 ];
