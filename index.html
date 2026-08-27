@@ -367,9 +367,38 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <div style="padding:6px 16px 24px;display:flex;flex-direction:column;gap:12px">
 <div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent)">{{ encyclopediaChapter.partie }}</div>
 <h3 style="margin:0;font-size:20px;letter-spacing:-.01em;text-wrap:pretty">{{ encyclopediaChapter.titre }}</h3>
+
+<sc-if value="{{ encyclopediaChapterIsDiagram }}" hint-placeholder-val="{{ false }}">
+<p style="margin:0 0 4px;font-size:12px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 62%,transparent)">Touchez un élément du schéma : les pièces majeures ouvrent un article, les termes de vocabulaire renvoient au glossaire.</p>
+<div style="display:grid;grid-template-columns:42px 1fr 42px;align-items:center;gap:4px;margin:6px auto 0;max-width:300px">
+<div></div>
+<button onClick="{{ openChemin }}" style="cursor:pointer;padding:7px 4px;font:600 9.5px var(--font-heading);letter-spacing:.07em;text-transform:uppercase;color:var(--color-accent);background:var(--color-surface);border:1px solid var(--color-accent);border-radius:6px">Chemin de ronde</button>
+<div></div>
+
+<button onClick="{{ openTour }}" style="cursor:pointer;justify-self:center;width:40px;height:40px;border-radius:50%;font:600 8.5px var(--font-heading);color:var(--color-accent);background:var(--color-surface);border:2px solid var(--color-accent)">Tour</button>
+<div style="position:relative;min-height:120px;border:1px solid var(--color-accent);border-radius:6px;background:var(--color-bg);display:flex;align-items:center;justify-content:center;padding:18px 10px">
+<button onClick="{{ openCourtine }}" style="position:absolute;top:-11px;left:8px;cursor:pointer;font:500 8.5px var(--font-heading);letter-spacing:.04em;color:var(--color-accent);background:var(--color-surface);border:1px solid var(--color-accent);border-radius:9px;padding:3px 8px">Courtine</button>
+<span style="position:absolute;top:9px;right:10px;font:500 8px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 42%,transparent)">Cour</span>
+<button onClick="{{ openCour }}" style="position:absolute;bottom:8px;right:10px;cursor:pointer;font-size:8.5px;color:color-mix(in srgb,var(--color-text) 62%,transparent);background:transparent;border:0;text-decoration:underline;padding:0">en savoir plus</button>
+<button onClick="{{ openDonjon }}" style="cursor:pointer;padding:11px 16px;border-radius:6px;border:1px solid var(--color-accent);background:var(--color-surface);color:var(--color-text);font:500 12.5px var(--font-heading)">Donjon</button>
+</div>
+<button onClick="{{ openTour }}" style="cursor:pointer;justify-self:center;width:40px;height:40px;border-radius:50%;font:600 8.5px var(--font-heading);color:var(--color-accent);background:var(--color-surface);border:2px solid var(--color-accent)">Tour</button>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:0;margin:2px auto 0;max-width:220px">
+<div style="width:2px;height:9px;background:var(--color-divider)"></div>
+<button onClick="{{ openHerse }}" style="cursor:pointer;width:100%;padding:8px;font:500 12px var(--font-heading);color:var(--color-accent);background:var(--color-surface);border:1px solid var(--color-divider);border-radius:6px">Herse</button>
+<div style="width:2px;height:9px;background:var(--color-divider)"></div>
+<button onClick="{{ openPontLevis }}" style="cursor:pointer;width:100%;padding:8px;font:500 12px var(--font-heading);color:var(--color-accent);background:var(--color-surface);border:1px solid var(--color-divider);border-radius:6px">Pont-levis</button>
+<div style="width:2px;height:9px;background:var(--color-divider)"></div>
+<button onClick="{{ openDouves }}" style="cursor:pointer;width:100%;padding:8px;font:500 12px var(--font-heading);color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-divider);border-radius:6px">Douves</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ encyclopediaChapterIsText }}" hint-placeholder-val="{{ true }}">
 <sc-for list="{{ encyclopediaChapter.paragraphes }}" as="para" hint-placeholder-count="2">
 <p style="margin:0;font-size:13.5px;line-height:1.65;text-wrap:pretty">{{ para }}</p>
 </sc-for>
+</sc-if>
 </div>
 </sc-if>
 </div>
@@ -1162,6 +1191,19 @@ class Component extends DCLogic {
       encyclopediaChapter: encyclopediaChapter,
       encyclopediaShowingChapter: !!encyclopediaChapter,
       encyclopediaShowingToc: !encyclopediaChapter,
+      encyclopediaChapterIsDiagram: !!encyclopediaChapter && encyclopediaChapter.type === "diagram",
+      encyclopediaChapterIsText: !!encyclopediaChapter && encyclopediaChapter.type !== "diagram",
+      /* Schéma « Anatomie d'un château » : les pièces majeures ouvrent leur
+         propre article (autre chapitre de l'encyclopédie), les termes de
+         vocabulaire renvoient directement au glossaire, recherche pré-remplie. */
+      openDonjon: () => this.setState({ encyclopediaChapterId: "anat-donjon" }),
+      openDouves: () => this.setState({ encyclopediaChapterId: "anat-douves" }),
+      openTour: () => this.setState({ encyclopediaChapterId: "anat-tour" }),
+      openCour: () => this.setState({ encyclopediaChapterId: "anat-cour" }),
+      openCourtine: () => this.setState({ encyclopediaOpen: false, encyclopediaChapterId: null, glossaryOpen: true, glossaryQuery: "courtine" }),
+      openChemin: () => this.setState({ encyclopediaOpen: false, encyclopediaChapterId: null, glossaryOpen: true, glossaryQuery: "chemin de ronde" }),
+      openHerse: () => this.setState({ encyclopediaOpen: false, encyclopediaChapterId: null, glossaryOpen: true, glossaryQuery: "herse" }),
+      openPontLevis: () => this.setState({ encyclopediaOpen: false, encyclopediaChapterId: null, glossaryOpen: true, glossaryQuery: "pont-levis" }),
       backEncyclopedia: () => {
         if (s.encyclopediaChapterId) this.setState({ encyclopediaChapterId: null });
         else this.setState({ encyclopediaOpen: false });

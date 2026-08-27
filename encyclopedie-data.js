@@ -1,5 +1,8 @@
 /* Encyclopédie — contenu de synthèse historique, écrit pour Castellor.
-   Deux parties, chacune une liste de chapitres { id, titre, paragraphes }.
+   Trois parties, chacune une liste de chapitres { id, titre, paragraphes }.
+   Un chapitre peut porter type: "diagram" (partie III) : il n'a pas de
+   paragraphes, son contenu est l'illustration interactive rendue par
+   Castellor.dc.html.
    Ce n'est pas une base de faits vérifiés fiche par fiche comme
    chateaux-data.js : c'est un texte de synthèse généraliste, à corriger si
    une inexactitude est repérée. */
@@ -100,6 +103,48 @@ window.CASTELLUM_ENCYCLOPEDIA = [
         paragraphes: [
           "Le XIXe siècle réinvente le Moyen Âge. Le mouvement romantique, en plaçant l'époque médiévale au cœur de son imaginaire, suscite un regain d'intérêt pour les châteaux forts, souvent à l'abandon depuis des décennies. De grandes campagnes de restauration sont lancées : celles conduites par Eugène Viollet-le-Duc à Pierrefonds et à Carcassonne comptent parmi les plus célèbres. Plus que de simples consolidations, elles proposent une restitution, parfois très libre, d'un Moyen Âge idéalisé, dans un style néogothique qui doit autant à l'archéologie qu'à l'imagination de l'architecte.",
           "D'autres chantiers, menés par d'autres architectes dans le même esprit — comme la reconstruction du Haut-Kœnigsbourg pour Guillaume II au début du XXe siècle — prolongent ce mouvement bien au-delà de la seule œuvre de Viollet-le-Duc, contestée par certains dès l'époque pour ses libertés interprétatives. Cette vague de restaurations a néanmoins sauvé de la ruine de nombreux édifices et fait durablement du château un symbole historique, une image de la France médiévale que le tourisme du XXe siècle diffusera à son tour très largement."
+        ]
+      }
+    ]
+  },
+  {
+    id: "anatomie",
+    partie: "III. Anatomie d'un château",
+    chapitres: [
+      {
+        id: "anat-diagram",
+        titre: "Vue d'ensemble (illustration)",
+        type: "diagram"
+      },
+      {
+        id: "anat-donjon",
+        titre: "Le donjon",
+        paragraphes: [
+          "Le donjon est la tour maîtresse du château fort : la plus haute, la plus épaisse, et souvent la dernière ligne de défense en cas de prise de l'enceinte extérieure. Il abrite généralement les appartements du seigneur, une salle d'apparat, une chapelle et des réserves permettant de soutenir un siège prolongé. Son plan varie selon les époques et les régions : carré ou rectangulaire aux XIe et XIIe siècles, il devient majoritairement cylindrique à partir du XIIIe siècle sous l'influence du modèle philippien, qui élimine les angles morts propices à l'escalade et au sapement.",
+          "Au-delà de sa fonction défensive, le donjon est avant tout un symbole : sa hauteur, visible de loin, affiche la puissance et le rang de son propriétaire sur l'ensemble du territoire environnant. Le donjon de Coucy, aujourd'hui détruit, comptait parmi les plus hauts d'Europe avec ses 54 mètres."
+        ]
+      },
+      {
+        id: "anat-douves",
+        titre: "Les douves",
+        paragraphes: [
+          "Les douves forment un fossé creusé autour d'une fortification, sec ou rempli d'eau selon la configuration du terrain et la présence d'un cours d'eau à proximité. Leur premier rôle est de tenir l'assaillant et ses machines de siège à distance des murs, en l'obligeant à franchir un obstacle à découvert, sous le tir des défenseurs postés sur le chemin de ronde.",
+          "Une douve en eau complique en outre le sapement — le creusement de galeries sous les fondations pour les faire s'effondrer — en noyant toute tentative de tunnel. Elle est franchie par un pont-levis ou un pont fixe, seul point de passage volontairement laissé pour l'accès au château."
+        ]
+      },
+      {
+        id: "anat-tour",
+        titre: "La tour",
+        paragraphes: [
+          "Placées aux angles ou le long des courtines, les tours flanquent l'enceinte et permettent de battre ses abords d'un tir croisé, supprimant les angles morts qu'un mur rectiligne laisserait aux assaillants. Leur plan évolue avec les progrès de l'architecture militaire : carrées ou rectangulaires jusqu'au XIIe siècle, elles deviennent majoritairement rondes ou semi-circulaires par la suite, une forme qui résiste mieux aux tirs et facilite la défense.",
+          "Une tour peut aussi remplir un rôle de guet, de résidence secondaire, ou de dernier réduit défensif indépendant de l'enceinte principale."
+        ]
+      },
+      {
+        id: "anat-cour",
+        titre: "La cour",
+        paragraphes: [
+          "La cour est l'espace intérieur découvert, ceint par l'enceinte et les bâtiments du château. Elle organise la vie quotidienne de la garnison et de la maisonnée : puits ou citerne, écuries, communs, ateliers et parfois chapelle s'y répartissent autour du donjon ou du logis seigneurial. En temps de siège, elle sert aussi de dernier espace de regroupement des défenseurs et, dans les châteaux les plus vastes, de refuge pour les populations et le bétail des environs."
         ]
       }
     ]
