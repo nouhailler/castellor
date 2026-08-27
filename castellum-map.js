@@ -51,6 +51,13 @@
       this._built = true;
       this.style.display = 'block';
       this.style.position = 'relative';
+      /* Sans z-index explicite ici, cet élément ne crée pas de contexte
+         d'empilement : les panneaux internes de Leaflet (.leaflet-pane
+         z-index:400, .leaflet-top/.leaflet-bottom z-index:1000…) se
+         comparent alors directement aux frères de <castellum-map> — dont la
+         carte de sélection affichée sous la carte — et gagnent malgré un
+         ordre DOM antérieur. Ce z-index les contient. */
+      this.style.zIndex = '0';
       this.style.width = '100%';
       this.style.height = '100%';
       this.style.background = '#101220';
