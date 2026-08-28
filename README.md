@@ -12,8 +12,36 @@ lisible sans réseau.
 
 ---
 
+## Captures d'écran
+
+<table>
+<tr>
+<td align="center" width="50%">
+<img src="uploads/capture-carte.png" alt="Carte de Castellor centrée par défaut sur l'Île-de-France, avec le sélecteur de département et le bouton France entière" width="260"><br>
+<sub>Carte — vue par défaut sur l'Île-de-France</sub>
+</td>
+<td align="center" width="50%">
+<img src="uploads/capture-liste.png" alt="Liste des châteaux avec le tiroir de filtres ouvert (époque, type, état, accès)" width="260"><br>
+<sub>Liste et filtres</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="50%">
+<img src="uploads/capture-fiche.png" alt="Fiche détaillée du château d'Angers avec sa photo, ses événements historiques et son statut patrimonial" width="260"><br>
+<sub>Fiche d'un château (Angers)</sub>
+</td>
+<td align="center" width="50%">
+<img src="uploads/capture-encyclopedie.png" alt="Sommaire de l'Encyclopédie, listant ses parties sur l'histoire et l'anatomie des châteaux" width="260"><br>
+<sub>Encyclopédie</sub>
+</td>
+</tr>
+</table>
+
+---
+
 ## Sommaire
 
+- [Captures d'écran](#captures-décran)
 - [Ce que fait l'application](#ce-que-fait-lapplication)
 - [Lancer et déployer](#lancer-et-déployer)
 - [Les trois onglets](#les-trois-onglets)
