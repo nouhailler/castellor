@@ -15,6 +15,21 @@ window.CASTELLUM_FILTERS = {
   acces: ["Ouvert au public", "Visite partielle", "Privé, non visitable", "Extérieurs uniquement"]
 };
 
+/* Collections personnelles — cinq listes fixes que l'utilisateur remplit
+   lui-même depuis la fiche d'un château (bouton à bascule, un par
+   collection) : ce ne sont pas des filtres calculés sur `t` ou `sc`, mais de
+   simples classements manuels, comme des favoris. L'appartenance de chaque
+   château est stockée dans `castellum-collections` (localStorage), par id de
+   collection puis liste d'`id` de châteaux — voir Castellor.dc.html,
+   toggleCollection(). */
+window.CASTELLUM_COLLECTIONS = [
+  { id: "aime", emoji: "❤️", nom: "Mes châteaux" },
+  { id: "visites", emoji: "📍", nom: "Châteaux visités" },
+  { id: "a-visiter", emoji: "⭐", nom: "À visiter" },
+  { id: "medievaux", emoji: "🏰", nom: "Mes châteaux médiévaux" },
+  { id: "renaissance", emoji: "👑", nom: "Châteaux Renaissance" }
+];
+
 /* Titres Wikipédia fr — servent à récupérer la photo de chaque fiche
    (vignette basse résolution mise en cache, version haute résolution en ligne). */
 window.CASTELLUM_WIKI = {

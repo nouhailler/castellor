@@ -8,7 +8,7 @@
    Le satellite reste volontairement en ligne seulement : mettre en cache de
    l'imagerie haute résolution remplirait l'appareil sans bénéfice réel. */
 
-const VERSION = "v20";
+const VERSION = "v27";
 const SHELL   = "castellor-shell-" + VERSION;
 const TILES   = "castellor-tuiles-" + VERSION;
 const PHOTOS  = "castellor-photos-" + VERSION;
@@ -26,6 +26,8 @@ const COQUILLE = [
   "chateaux-data.js",
   "glossaire-data.js",
   "encyclopedie-data.js",
+  "circuits-data.js",
+  "relations-data.js",
   "vendor/react.production.min.js",
   "vendor/react-dom.production.min.js",
   "vendor/leaflet.js",

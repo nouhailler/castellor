@@ -16,6 +16,8 @@
 <script src="chateaux-data.js"></script>
 <script src="glossaire-data.js"></script>
 <script src="encyclopedie-data.js"></script>
+<script src="circuits-data.js"></script>
+<script src="relations-data.js"></script>
 <script src="castellum-map.js"></script>
 <style>
 body{margin:0;background:#0f1119;color:var(--color-text);font-family:var(--font-body)}
@@ -65,6 +67,12 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 </div>
 <sc-if value="{{ offlineBanner }}" hint-placeholder-val="{{ false }}">
 <div style="max-width:250px;background:rgba(22,24,38,.86);border:1px solid var(--color-divider);border-left:2px solid var(--color-accent);border-radius:7px;padding:6px 9px;font-size:10.5px;line-height:1.45;color:color-mix(in srgb,var(--color-text) 72%,transparent);backdrop-filter:blur(6px)">{{ offlineNote }}</div>
+</sc-if>
+<sc-if value="{{ mapCircuitActive }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:250px;display:flex;align-items:center;gap:8px;background:rgba(22,24,38,.86);border:1px solid var(--color-accent);border-radius:7px;padding:6px 9px;backdrop-filter:blur(6px)">
+<span style="flex:1;min-width:0;font-size:10.5px;line-height:1.35;color:var(--color-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Circuit : {{ mapCircuitNom }}</span>
+<button onClick="{{ exitMapCircuit }}" style="cursor:pointer;flex:none;font:500 10px var(--font-heading);color:var(--color-accent);background:transparent;border:0;padding:0">Quitter</button>
+</div>
 </sc-if>
 </div>
 <div style="margin-left:auto;display:flex;flex-direction:column;gap:6px;pointer-events:auto">
@@ -288,6 +296,14 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <div style="margin-top:8px;font-size:11px;color:color-mix(in srgb,var(--color-text) 58%,transparent)">{{ updateStatusLabel }}</div>
 </sc-if>
 </div>
+<div>
+<div style="font:500 13px var(--font-heading);margin-bottom:7px">Relations entre châteaux</div>
+<div style="font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 62%,transparent);margin-bottom:9px">Comment afficher ce qui relie un château aux autres.</div>
+<div style="display:flex;gap:6px">
+<button onClick="{{ setRelationsGraph }}" style="flex:1;cursor:pointer;text-align:center;font:500 12px var(--font-heading);padding:9px 8px;border-radius:var(--radius-md);background:{{ relGraphBg }};color:{{ relGraphFg }};border:1px solid {{ relGraphBd }}">Graphe visuel</button>
+<button onClick="{{ setRelationsList }}" style="flex:1;cursor:pointer;text-align:center;font:500 12px var(--font-heading);padding:9px 8px;border-radius:var(--radius-md);background:{{ relListBg }};color:{{ relListFg }};border:1px solid {{ relListBd }}">Navigation par listes</button>
+</div>
+</div>
 </div>
 </div>
 </sc-if>
@@ -344,6 +360,20 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <div style="padding:6px 16px 24px;display:flex;flex-direction:column;gap:12px">
 <div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent)">{{ encyclopediaChapter.partie }}</div>
 <h3 style="margin:0;font-size:20px;letter-spacing:-.01em;text-wrap:pretty">{{ encyclopediaChapter.titre }}</h3>
+
+<sc-if value="{{ encyclopediaHasIllustration }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="position:relative;height:150px;border-radius:var(--radius-md);overflow:hidden;background-color:#1b1d2b;background-image:{{ encyclopediaIllustrationBg }};background-size:cover;background-position:center">
+<a href="{{ encyclopediaIllustrationCreditUrl }}" target="_blank" rel="noopener" style="position:absolute;right:8px;bottom:6px;font-size:9px;color:rgba(255,255,255,.8);text-decoration:none;text-shadow:0 1px 2px rgba(0,0,0,.7)">{{ encyclopediaIllustrationCredit }}</a>
+</div>
+<sc-if value="{{ encyclopediaIllustrationIsChateau }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ openIllustrationChateau }}" style="cursor:pointer;margin-top:5px;background:transparent;border:0;padding:0;font-size:11px;color:var(--color-accent)">Voir la fiche : {{ encyclopediaIllustrationName }} →</button>
+</sc-if>
+<sc-if value="{{ encyclopediaIllustrationIsWiki }}" hint-placeholder-val="{{ false }}">
+<a href="{{ encyclopediaIllustrationArticleUrl }}" target="_blank" rel="noopener" style="display:inline-block;margin-top:5px;font-size:11px;color:var(--color-accent);text-decoration:none">Wikipédia : {{ encyclopediaIllustrationWikiTitle }} →</a>
+</sc-if>
+</div>
+</sc-if>
 
 <sc-if value="{{ encyclopediaChapterIsDiagram }}" hint-placeholder-val="{{ false }}">
 <p style="margin:0 0 4px;font-size:12px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 62%,transparent)">Touchez un élément du schéma : les pièces majeures ouvrent un article, les termes de vocabulaire renvoient au glossaire.</p>
@@ -411,6 +441,212 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <p style="margin:0;font-size:13.5px;line-height:1.65;text-wrap:pretty">{{ para }}</p>
 </sc-for>
 </sc-if>
+
+<sc-if value="{{ encyclopediaHasPrev }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ goPrevChapter }}" style="cursor:pointer;text-align:left;background:var(--color-surface);border:0;border-radius:var(--radius-md);padding:10px 12px;margin-top:4px">
+<div style="font:500 9.5px var(--font-heading);letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 50%,transparent);margin-bottom:2px">◀ Chapitre précédent</div>
+<div style="font-size:12.5px;font-family:var(--font-heading);text-wrap:pretty">{{ encyclopediaPrevTitle }}</div>
+</button>
+</sc-if>
+<sc-if value="{{ encyclopediaHasNext }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ goNextChapter }}" style="cursor:pointer;text-align:left;background:var(--color-surface);border:0;border-radius:var(--radius-md);padding:10px 12px">
+<div style="font:500 9.5px var(--font-heading);letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 50%,transparent);margin-bottom:2px">Chapitre suivant ▶</div>
+<div style="font-size:12.5px;font-family:var(--font-heading);text-wrap:pretty">{{ encyclopediaNextTitle }}</div>
+</button>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ circuitsOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:25;background:var(--color-bg);overflow-y:auto;animation:castellum-in .2s ease both">
+<div style="display:flex;align-items:center;gap:10px;padding:14px 16px 4px">
+<div style="font:500 16px var(--font-heading);margin-right:auto">Circuits de châteaux</div>
+<button onClick="{{ backCircuits }}" style="cursor:pointer;font:500 11px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.8);border:1px solid var(--color-divider);border-radius:7px;padding:6px 10px">Retour</button>
+</div>
+
+<sc-if value="{{ circuitsShowingList }}" hint-placeholder-val="{{ true }}">
+<div style="padding:6px 16px 20px;display:flex;flex-direction:column;gap:10px">
+<p style="margin:0 0 4px;font-size:12px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 62%,transparent)">Des parcours prêts à l'emploi reliant plusieurs fiches de l'application. D'autres viendront à mesure que la base de châteaux s'étoffe.</p>
+<sc-for list="{{ circuitsList }}" as="ct" hint-placeholder-count="3">
+<button onClick="{{ ct.open }}" style="cursor:pointer;text-align:left;background:var(--color-surface);border:0;padding:13px 14px;border-radius:var(--radius-md);display:flex;flex-direction:column;gap:6px">
+<div style="font:500 14px var(--font-heading);color:var(--color-text)">{{ ct.nom }}</div>
+<div style="font-size:12px;line-height:1.45;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ ct.description }}</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:2px">
+<span class="tag tag-neutral" style="font-size:10px">{{ ct.countLabel }}</span>
+<span class="tag tag-neutral" style="font-size:10px">{{ ct.kmLabel }}</span>
+<span class="tag tag-neutral" style="font-size:10px">{{ ct.dureeLabel }}</span>
+</div>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ circuitsShowingDetail }}" hint-placeholder-val="{{ false }}">
+<div style="padding:6px 16px 24px;display:flex;flex-direction:column;gap:14px">
+<div>
+<h3 style="margin:0 0 5px;font-size:20px;letter-spacing:-.01em;text-wrap:pretty">{{ circuitNom }}</h3>
+<p style="margin:0;font-size:12.5px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 68%,transparent)">{{ circuitDescription }}</p>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--color-divider);border-radius:var(--radius-md);overflow:hidden">
+<div style="background:var(--color-bg);padding:10px 9px;text-align:center"><div style="font:500 9px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Châteaux</div><div style="font-size:14px;font-family:var(--font-heading)">{{ circuitCount }}</div></div>
+<div style="background:var(--color-bg);padding:10px 9px;text-align:center"><div style="font:500 9px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Distance</div><div style="font-size:14px;font-family:var(--font-heading)">{{ circuitKm }}</div></div>
+<div style="background:var(--color-bg);padding:10px 9px;text-align:center"><div style="font:500 9px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Route</div><div style="font-size:14px;font-family:var(--font-heading)">{{ circuitDuree }}</div></div>
+</div>
+<div style="font-size:10.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 45%,transparent)">Distance et durée de route estimées depuis les coordonnées (vol d'oiseau majoré, vitesse moyenne) — pas un calcul d'itinéraire réel, et hors temps de visite.</div>
+
+<div>
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Ordre des visites</div>
+<div style="display:flex;flex-direction:column;gap:7px">
+<sc-for list="{{ circuitStops }}" as="st" hint-placeholder-count="4">
+<div onClick="{{ st.open }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px;border-radius:var(--radius-md);background:var(--color-surface)">
+<span style="flex:none;width:22px;height:22px;border-radius:50%;background:color-mix(in srgb, var(--color-accent) 22%, transparent);color:var(--color-accent);display:flex;align-items:center;justify-content:center;font:600 11px var(--font-heading)">{{ st.ordre }}</span>
+<div style="min-width:0;flex:1">
+<div style="font:500 13px var(--font-heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ st.n }}</div>
+<div style="font-size:11px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ st.sub }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex;gap:8px">
+<button class="btn btn-primary" onClick="{{ showCircuitOnMap }}" style="flex:1">Voir sur la carte</button>
+<button class="btn btn-secondary" onClick="{{ exportCircuitGpx }}" style="flex:1">Exporter en GPX</button>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ collectionsOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:25;background:var(--color-bg);overflow-y:auto;animation:castellum-in .2s ease both">
+<div style="display:flex;align-items:center;gap:10px;padding:14px 16px 4px">
+<div style="font:500 16px var(--font-heading);margin-right:auto">Collections personnelles</div>
+<button onClick="{{ backCollections }}" style="cursor:pointer;font:500 11px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.8);border:1px solid var(--color-divider);border-radius:7px;padding:6px 10px">Retour</button>
+</div>
+
+<sc-if value="{{ collectionsShowingList }}" hint-placeholder-val="{{ true }}">
+<div style="padding:6px 16px 20px;display:flex;flex-direction:column;gap:10px">
+<p style="margin:0 0 4px;font-size:12px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 62%,transparent)">Classez les châteaux à votre façon depuis leur fiche — un château peut appartenir à plusieurs collections à la fois.</p>
+<sc-for list="{{ collectionsList }}" as="cl" hint-placeholder-count="5">
+<button onClick="{{ cl.open }}" style="cursor:pointer;text-align:left;background:var(--color-surface);border:0;padding:13px 14px;border-radius:var(--radius-md);display:flex;align-items:center;gap:12px">
+<span style="flex:none;font-size:22px;line-height:1">{{ cl.emoji }}</span>
+<div style="min-width:0;flex:1">
+<div style="font:500 14px var(--font-heading);color:var(--color-text)">{{ cl.nom }}</div>
+<div style="font-size:11.5px;color:color-mix(in srgb,var(--color-text) 58%,transparent);margin-top:2px">{{ cl.countLabel }}</div>
+</div>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ collectionsShowingDetail }}" hint-placeholder-val="{{ false }}">
+<div style="padding:6px 16px 24px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:10px">
+<span style="font-size:26px;line-height:1">{{ collectionEmoji }}</span>
+<h3 style="margin:0;font-size:20px;letter-spacing:-.01em;text-wrap:pretty">{{ collectionNom }}</h3>
+</div>
+
+<sc-if value="{{ collectionHasItems }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--color-divider);border-radius:var(--radius-md);overflow:hidden">
+<div style="background:var(--color-bg);padding:10px 9px;text-align:center"><div style="font:500 9px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Châteaux</div><div style="font-size:14px;font-family:var(--font-heading)">{{ collectionCount }}</div></div>
+<div style="background:var(--color-bg);padding:10px 9px;text-align:center"><div style="font:500 9px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Départements</div><div style="font-size:14px;font-family:var(--font-heading)">{{ collectionDeps }}</div></div>
+<div style="background:var(--color-bg);padding:10px 9px;text-align:center"><div style="font:500 9px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Régions</div><div style="font-size:14px;font-family:var(--font-heading)">{{ collectionRegs }}</div></div>
+</div>
+<div style="margin-top:8px;font-size:11.5px;color:color-mix(in srgb,var(--color-text) 60%,transparent)">{{ collectionMedievalLabel }}</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ collectionRows }}" as="c" hint-placeholder-count="4">
+<div onClick="{{ c.open }}" style="display:flex;gap:11px;cursor:pointer;padding:9px;border-radius:var(--radius-md);background:var(--color-surface);box-shadow:var(--shadow-sm)">
+<div style="flex:none;width:76px;height:58px;border-radius:var(--radius-md);background-color:#1b1d2b;background-image:{{ c.bg }};background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px #3f424d"></div>
+<div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:3px;justify-content:center">
+<div style="font:500 13.5px var(--font-heading);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.n }}</div>
+<div style="font-size:11px;color:color-mix(in srgb,var(--color-text) 55%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.sub }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ collectionEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="padding:34px 4px;text-align:center;font-size:12.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Aucun château dans cette collection pour l'instant.<br>Ajoutez-en depuis la fiche d'un château.</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ relationsOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:25;background:var(--color-bg);overflow-y:auto;animation:castellum-in .2s ease both">
+<div style="display:flex;align-items:center;gap:10px;padding:14px 16px 4px">
+<div style="font:500 16px var(--font-heading);margin-right:auto">Relations entre châteaux</div>
+<button onClick="{{ backRelations }}" style="cursor:pointer;font:500 11px var(--font-heading);color:var(--color-text);background:rgba(22,24,38,.8);border:1px solid var(--color-divider);border-radius:7px;padding:6px 10px">Retour</button>
+</div>
+
+<sc-if value="{{ relationsShowingPicker }}" hint-placeholder-val="{{ true }}">
+<div style="padding:6px 16px 20px;display:flex;flex-direction:column;gap:10px">
+<p style="margin:0 0 4px;font-size:12px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 62%,transparent)">Choisissez un château pour explorer ce qui le relie à d'autres — même architecte, même famille, même style, même région ou même époque. Un instantané des 75 fiches actuelles, pas un état de l'art historique complet : il s'enrichira avec la base.</p>
+<sc-for list="{{ relationsPicker }}" as="p" hint-placeholder-count="6">
+<button onClick="{{ p.open }}" style="cursor:pointer;text-align:left;background:var(--color-surface);border:0;padding:11px 13px;border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:8px">
+<span style="font:500 13px var(--font-heading)">{{ p.n }}</span>
+<span class="tag tag-neutral" style="font-size:10px">{{ p.count }}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ relationsShowingGraph }}" hint-placeholder-val="{{ false }}">
+<div style="padding:6px 16px 24px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:8px">
+<sc-if value="{{ graphCanGoBack }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ graphBack }}" title="Précédent" aria-label="Précédent" style="cursor:pointer;flex:none;font:500 13px var(--font-heading);color:var(--color-text);background:var(--color-surface);border:0;border-radius:7px;padding:6px 10px">←</button>
+</sc-if>
+<h3 onClick="{{ openCenterFiche }}" style="cursor:pointer;margin:0;font-size:18px;letter-spacing:-.01em;text-wrap:pretty;flex:1;min-width:0;text-decoration:underline;text-decoration-color:var(--color-divider);text-underline-offset:3px">{{ graphCenterName }}</h3>
+<button onClick="{{ changeGraphCenter }}" style="cursor:pointer;flex:none;font:500 11px var(--font-heading);color:var(--color-accent);background:transparent;border:0;padding:0">Changer</button>
+</div>
+<div style="font-size:10.5px;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-top:-8px">Toucher le nom du château pour ouvrir sa fiche.</div>
+
+<sc-if value="{{ graphHasRelations }}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{ relationsGraphMode }}" hint-placeholder-val="{{ true }}">
+<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:8px 16px;background:var(--color-surface)">
+<div style="position:relative;width:{{ graphWidth }}px;height:{{ graphHeight }}px">
+<sc-for list="{{ graphEdges }}" as="e" hint-placeholder-count="4">
+<div style="position:absolute;left:{{ e.left }}px;top:{{ e.top }}px;width:{{ e.length }}px;height:1.5px;background:{{ e.color }};transform-origin:0 50%;transform:rotate({{ e.angle }}deg)"></div>
+</sc-for>
+<div style="position:absolute;left:{{ graphCenter.left }}px;top:{{ graphCenter.top }}px;width:{{ graphCenter.size }}px;height:{{ graphCenter.size }}px;border-radius:50%;background:var(--color-accent);display:flex;align-items:center;justify-content:center;text-align:center;padding:3px;box-sizing:border-box;font:600 9px/1.1 var(--font-heading);color:#14161f">{{ graphCenter.label }}</div>
+<sc-for list="{{ graphRelNodes }}" as="r" hint-placeholder-count="3">
+<div title="{{ r.title }}" style="position:absolute;left:{{ r.left }}px;top:{{ r.top }}px;width:{{ r.size }}px;height:{{ r.size }}px;border-radius:50%;background:var(--color-bg);border:1.5px solid var(--color-accent);display:flex;align-items:center;justify-content:center;text-align:center;padding:3px;box-sizing:border-box;font:500 8px/1.1 var(--font-heading);color:var(--color-accent)">{{ r.label }}</div>
+</sc-for>
+<sc-for list="{{ graphChildNodes }}" as="c" hint-placeholder-count="6">
+<div onClick="{{ c.open }}" title="{{ c.title }}" style="cursor:pointer;position:absolute;left:{{ c.left }}px;top:{{ c.top }}px;width:{{ c.size }}px;height:{{ c.size }}px;border-radius:50%;background:var(--color-bg);border:1px solid rgba(233,233,237,.35);display:flex;align-items:center;justify-content:center;text-align:center;padding:3px;box-sizing:border-box;font:400 7.5px/1.1 var(--font-body);color:var(--color-text)">{{ c.label }}</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font:500 10px var(--font-heading);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent)">Détail des relations</div>
+<sc-for list="{{ graphDetailGroups }}" as="g" hint-placeholder-count="3">
+<div>
+<div style="font-size:11.5px;color:color-mix(in srgb,var(--color-text) 60%,transparent);margin-bottom:5px">{{ g.title }}</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+<button onClick="{{ it.open }}" style="cursor:pointer;font:400 11.5px var(--font-body);padding:5px 10px;border-radius:6px;background:var(--color-surface);color:var(--color-text);border:1px solid var(--color-divider)">{{ it.n }}</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ graphNoRelations }}" hint-placeholder-val="{{ false }}">
+<div style="padding:34px 4px;text-align:center;font-size:12.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Aucune relation connue pour ce château dans la base actuelle.<br>Elle s'enrichira à mesure que d'autres fiches seront ajoutées.</div>
+</sc-if>
 </div>
 </sc-if>
 </div>
@@ -449,6 +685,16 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 </sc-if>
 <div style="font-size:12px;color:color-mix(in srgb,var(--color-text) 55%,transparent);line-height:1.5">{{ d.variantes }}</div>
 </div>
+
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<sc-for list="{{ detailCollections }}" as="cc" hint-placeholder-count="5">
+<button onClick="{{ cc.toggle }}" title="{{ cc.nom }}" aria-label="{{ cc.nom }}" style="cursor:pointer;font-size:15px;line-height:1;padding:7px 10px;border-radius:8px;background:{{ cc.bg }};border:1px solid {{ cc.bd }}">{{ cc.emoji }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ detailHasRelations }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ openDetailRelations }}" style="cursor:pointer;align-self:flex-start;font:500 11.5px var(--font-heading);color:var(--color-accent);background:color-mix(in srgb, var(--color-accent) 14%, transparent);border:1px solid var(--color-accent);border-radius:7px;padding:7px 11px">🔗 Voir ses relations ({{ detailRelationsCount }})</button>
+</sc-if>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--color-divider);border-radius:var(--radius-md);overflow:hidden">
 <div style="background:var(--color-bg);padding:10px 11px"><div style="font:500 9.5px var(--font-heading);letter-spacing:.09em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent);margin-bottom:3px">Période</div><div style="font-size:12.5px">{{ d.per }}</div></div>
@@ -570,6 +816,11 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <div>Édition du nom, de la description et des événements d'une fiche, enregistrée sur l'appareil.</div>
 <div>Installable sur Android : manifeste, service worker, cache des tuiles et des photos consultées.</div>
 <div>Auteur et licence affichés sous chaque photo, en lien vers son fichier Commons.</div>
+<div>Circuits de châteaux : 3 parcours prêts à l'emploi (Loire, forteresses cathares, autour de Paris), tracé et zoom dédié sur la carte, export GPX.</div>
+<div>Collections personnelles : 5 listes à bascule depuis la fiche d'un château (❤️ 📍 ⭐ 🏰 👑), statistiques par collection (châteaux, départements, régions, part de médiéval), enregistrées sur l'appareil.</div>
+<div>Relations entre châteaux : graphe de parenté (architecte, famille, style, région, époque) centré sur un château, cliquable de proche en proche — calculé depuis les champs réels de chateaux-data.js, pas inventé. Affichage graphe/listes au choix dans Paramètres, réglage retenu sur l'appareil.</div>
+<div>Encyclopédie : navigation chapitre précédent / suivant en bas de chaque article (tous types confondus), pour enchaîner la lecture sans revenir au sommaire.</div>
+<div>Encyclopédie : les 81 chapitres textuels sont illustrés (le schéma interactif de la partie III n'en a pas besoin) — 36 réutilisent la photo d'un château déjà en base, 45 résolvent un article Wikipédia fr vérifié à la main (même mécanisme de résolution et de crédit, cache séparé).</div>
 </div>
 </div>
 <div>
@@ -578,6 +829,10 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <div>Jeu de démonstration de 75 fiches saisies à la main ; l'import Wikidata + POP viendra remplir les 500.</div>
 <div>Photos de Wikimedia Commons, résolues à l'exécution : 75 licences libres vérifiées, dont 69 exigent l'attribution.</div>
 <div>Plan et cadastre sont annoncés mais pas encore affichés — visionneuse à concevoir.</div>
+<div>Distance et durée des circuits sont estimées depuis les coordonnées (vol d'oiseau majoré de 30 %, 55 km/h), faute de moteur d'itinéraire — pas mesurées sur un vrai trajet routier.</div>
+<div>Les 5 collections sont des classements manuels : rien n'auto-remplit « Mes châteaux médiévaux » ou « Renaissance » à partir des siècles d'une fiche — l'utilisateur choisit lui-même.</div>
+<div>Relations : les liens « architecte » viennent d'une liste relevée à la main (relations-data.js), pas d'une extraction automatique du texte libre — un essai de rapprochement par mot-clé sur les événements a produit un faux positif. La dimension « conflits » n'est donc volontairement pas implémentée.</div>
+<div>Encyclopédie : les 45 articles Wikipédia génériques ont été choisis et vérifiés à la main (existence réelle, image présente) — pas d'extraction automatique. Trois d'entre eux servaient une image SVG ou TIFF que le mécanisme de résolution ne savait pas redimensionner : corrigé à la source (regex élargie) plutôt que contourné. Le seul cas resté sans solution propre — « Pont-levis », en GIF non miniaturé par Wikipédia — a été remplacé par un château déjà en base (Sedan) sur les 2 chapitres concernés.</div>
 </div>
 </div>
 <div>
@@ -585,8 +840,12 @@ a{color:var(--color-accent)}a:hover{color:var(--color-accent-400)}
 <div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 65%,transparent)">
 <div>Import Wikidata + POP pour passer de 75 à ~500 fiches.</div>
 <div>Visionneuse photo plein écran avec bascule BR / HD explicite.</div>
-<div>Écran d'itinéraire : « les 8 châteaux sur ma route ».</div>
+<div>Écran d'itinéraire : « les 8 châteaux sur ma route », à partir de la position — distinct des circuits, qui restent des parcours fixes.</div>
 <div>Visionneuse de plans et de cadastres, aujourd'hui seulement référencés.</div>
+<div>Plus de circuits, à mesure que la base de châteaux s'étoffe.</div>
+<div>Collections : indicateur visuel sur la carte et la liste (aujourd'hui visible seulement depuis la fiche).</div>
+<div>Relations : enrichir relations-data.js à mesure que la base grossit ; envisager une dimension « conflits » à partir d'un champ structuré dédié plutôt que du texte libre.</div>
+<div>Encyclopédie : élargir les illustrations aux chapitres de concept (nécessiterait une vraie recherche d'images libres par sujet, pas seulement la réutilisation des photos de châteaux déjà en base).</div>
 </div>
 </div>
 </div>
@@ -598,6 +857,13 @@ const F = () => (window.CASTELLUM_FILTERS || { epoque: [], type: [], etat: [], a
 const DATA = () => (window.CASTELLUM || []);
 const GLOSSARY = () => (window.CASTELLUM_GLOSSARY || []);
 const ENCYCLOPEDIA = () => (window.CASTELLUM_ENCYCLOPEDIA || []);
+const CIRCUITS = () => (window.CASTELLUM_CIRCUITS || []);
+const COLLECTIONS = () => (window.CASTELLUM_COLLECTIONS || []);
+const ARCHITECTS = () => (window.CASTELLUM_ARCHITECTS || []);
+/* Médiéval au sens large retenu pour les statistiques de collection : les
+   deux tranches d'époque les plus anciennes du filtre existant (Xe – XVe
+   s.), soit un château dont au moins un siècle recensé est ≤ 15. */
+const isMedieval = (c) => (c.sc || []).some((x) => x <= 15);
 const ROMAN = { 10: "Xe", 11: "XIe", 12: "XIIe", 13: "XIIIe", 14: "XIVe", 15: "XVe", 16: "XVIe", 17: "XVIIe", 18: "XVIIIe", 19: "XIXe", 20: "XXe" };
 const DIV = "rgba(233,233,237,.16)";
 const ACC = "#9184d9";
@@ -611,6 +877,19 @@ const depCode = (c) => {
 };
 /* v3 : le cache porte désormais les crédits, pas seulement les URL. */
 const PHOTO_KEY = "castellor-photos-v3";
+/* Illustrations de l'Encyclopédie qui ne correspondent à aucun château des
+   75 fiches (vocabulaire, méthode, mythes…) : même mécanisme de résolution
+   que les photos de château (_loadPhotoSet ci-dessous), mais un cache séparé
+   pour ne jamais mélanger les deux familles d'id. */
+const ENCYCLOPEDIA_PHOTO_KEY = "castellor-encyclopedia-photos-v1";
+/* Circuits : ni moteur d'itinéraire ni clé d'API — distance et durée sont
+   estimées depuis les coordonnées des châteaux, pas mesurées sur un vrai
+   trajet routier. Vol d'oiseau entre étapes consécutives, majoré de 30 %
+   pour approcher une distance routière, à une vitesse moyenne de 55 km/h
+   pour des petites routes et départementales. Affiché comme une estimation,
+   hors temps de visite — voir circuitStats() dans renderVals(). */
+const ROUTE_DETOUR = 1.3;
+const ROUTE_SPEED_KMH = 55;
 /* Dernière version publiée dans CHANGELOG.md — à faire avancer avec lui,
    pas à la volée à chaque changement non publié. */
 const APP_VERSION = "0.2.1";
@@ -641,6 +920,186 @@ function dist(a, b) {
   const h = Math.sin(dLat / 2) ** 2 + Math.cos(a[0] * Math.PI / 180) * Math.cos(b[0] * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
 }
+function formatDuration(hours) {
+  const totalMin = Math.round(hours * 60);
+  const hh = Math.floor(totalMin / 60), mm = totalMin % 60;
+  if (hh <= 0) return mm + " min";
+  return hh + " h" + (mm ? " " + (mm < 10 ? "0" : "") + mm : "");
+}
+/* GPX 1.1 minimal : un waypoint par château (pour un import en points dans
+   Google My Maps, un GPS Garmin, OsmAnd…) et une route ordonnée <rte> pour
+   les outils qui respectent l'ordre de visite. Pas de calcul d'itinéraire
+   routier réel : les coordonnées sont celles des châteaux, reliées en ligne
+   droite par les outils qui affichent la route. */
+function circuitGpx(ct, chateaux) {
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (ch) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }[ch]
+  ));
+  const wpts = chateaux.map((c, i) => (
+    '  <wpt lat="' + c.lat + '" lon="' + c.lng + '">\n' +
+    "    <name>" + esc((i + 1) + ". " + c.n) + "</name>\n" +
+    "    <desc>" + esc(c.com + " · " + c.dep) + "</desc>\n" +
+    "  </wpt>"
+  )).join("\n");
+  const rtepts = chateaux.map((c) => (
+    '      <rtept lat="' + c.lat + '" lon="' + c.lng + '"><name>' + esc(c.n) + "</name></rtept>"
+  )).join("\n");
+  return '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<gpx version="1.1" creator="Castellor" xmlns="http://www.topografix.com/GPX/1/1">\n' +
+    "  <metadata><name>" + esc(ct.nom) + "</name></metadata>\n" +
+    wpts + "\n" +
+    "  <rte>\n    <name>" + esc(ct.nom) + "</name>\n" + rtepts + "\n  </rte>\n" +
+    "</gpx>\n";
+}
+function downloadGpx(filename, content) {
+  const blob = new Blob([content], { type: "application/gpx+xml" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* Moteur des relations entre châteaux (page "Relations entre châteaux").
+   Cinq dimensions : quatre calculées sans risque à partir de champs
+   structurés (prop, st, reg, sc), une — l'architecte — reprise du fichier
+   relations-data.js relevé à la main (voir ce fichier pour le pourquoi).
+   Les conflits ne sont volontairement pas une dimension : un rapprochement
+   par mot-clé dans les événements produit des faux positifs — voir
+   relations-data.js. Les libellés d'appartenance purement administratifs
+   du champ `prop` (commune, département, Couronne, État, "propriétaire
+   privé"...) sont écartés : ce ne sont pas des liens de famille. */
+const FAMILY_EXCLUDE = /^(Commune|Département|État français|Couronne de France|Propriétaire)/;
+const GENERIC_TITLE_PREFIX = /^(Ch[âa]teau(-fort)?( royal| fort)?|Cit[ée]( royale)?|Forteresse( royale)?|Citadelle|Palais( des| de)?|Motte castrale|Fort|Manoir|Maison forte)\s+(de |du |des |d['’]|le |la |les )?/i;
+
+function relationGroups(chateauId) {
+  const c = DATA().find((x) => x.id === chateauId);
+  if (!c) return [];
+  const groups = [];
+
+  ARCHITECTS().forEach((a) => {
+    if (a.chateauIds.length > 1 && a.chateauIds.includes(chateauId)) {
+      groups.push({ kind: "architecte", label: a.nom, chateauIds: a.chateauIds.filter((id) => id !== chateauId) });
+    }
+  });
+
+  (c.prop || []).forEach((p) => {
+    if (FAMILY_EXCLUDE.test(p)) return;
+    const others = DATA().filter((x) => x.id !== chateauId && (x.prop || []).includes(p)).map((x) => x.id);
+    if (others.length) groups.push({ kind: "famille", label: p, chateauIds: others });
+  });
+
+  (c.st || []).forEach((s) => {
+    const others = DATA().filter((x) => x.id !== chateauId && (x.st || []).includes(s)).map((x) => x.id);
+    if (others.length) groups.push({ kind: "style", label: s, chateauIds: others });
+  });
+
+  if (c.reg) {
+    const others = DATA().filter((x) => x.id !== chateauId && x.reg === c.reg).map((x) => x.id);
+    if (others.length) groups.push({ kind: "région", label: c.reg, chateauIds: others });
+  }
+
+  F().epoque.forEach((e) => {
+    if ((c.sc || []).some((s) => s >= e.min && s <= e.max)) {
+      const others = DATA().filter((x) => x.id !== chateauId && (x.sc || []).some((s) => s >= e.min && s <= e.max)).map((x) => x.id);
+      if (others.length) groups.push({ kind: "époque", label: e.label, chateauIds: others });
+    }
+  });
+
+  return groups;
+}
+
+const GRAPH_KIND_LABEL = { architecte: "Architecte", famille: "Famille / propriétaire", style: "Style", "région": "Région", "époque": "Époque" };
+const GRAPH_GROUP_CAP = 5;
+const GRAPH_CHILD_CAP = 4;
+
+function shortenLabel(s, max) {
+  if (!s) return "";
+  return s.length > max ? s.slice(0, max - 1).trimEnd() + "…" : s;
+}
+function shortenTitle(n) {
+  return shortenLabel(n.replace(GENERIC_TITLE_PREFIX, ""), 16);
+}
+
+/* Disposition d'un graphe en arbre à trois rangées — château central,
+   relations, châteaux liés — calculée à la main (positions x/y) : un arbre à
+   profondeur fixe n'a pas besoin d'un moteur de layout de graphe à force,
+   une simple répartition en colonnes suffit. Les groupes les plus sélectifs
+   (le moins de châteaux) passent en premier et les plus larges (souvent
+   l'époque, presque toujours vraie) sont coupés au-delà de GRAPH_GROUP_CAP
+   plutôt que de noyer le graphe.
+
+   Rendu en <div> positionnés (transform: rotate() pour les traits), pas en
+   SVG : un essai avec <svg>/<circle>/<line> a montré que le moteur de rendu
+   du canvas n'interpole pas les doubles accolades dans les attributs des
+   éléments SVG — la syntaxe d'interpolation elle-même atterrissait telle
+   quelle dans l'attribut x1, non résolue. Les éléments HTML, eux,
+   interpolent correctement y compris dans `style`, ce que le reste de
+   l'application utilise déjà partout ailleurs. (Ne pas répéter cette
+   syntaxe d'interpolation ici même en commentaire : le pré-scan du canvas
+   semble la repérer jusque dans le texte des commentaires JS.) */
+function edgeBox(x1, y1, x2, y2, color) {
+  const length = Math.hypot(x2 - x1, y2 - y1);
+  const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+  return { left: x1, top: y1, length, angle, color };
+}
+
+function buildRelationGraph(centerId) {
+  const center = DATA().find((c) => c.id === centerId);
+  if (!center) return null;
+  const groups = relationGroups(centerId).slice().sort((a, b) => a.chateauIds.length - b.chateauIds.length).slice(0, GRAPH_GROUP_CAP);
+
+  const CHILD_W = 78, GAP = 10, GROUP_GAP = 22, MIN_COL = 92;
+  const centerY = 30, relY = 122, childY = 226;
+  const R_CENTER = 30, R_REL = 23, R_CHILD = 21;
+
+  let x = 0;
+  const relPoints = [];
+  const childPoints = [];
+  const edgePoints = [];
+
+  groups.forEach((g) => {
+    const shown = g.chateauIds.slice(0, GRAPH_CHILD_CAP);
+    const extra = g.chateauIds.length - shown.length;
+    const rowW = shown.length * CHILD_W + Math.max(0, shown.length - 1) * GAP;
+    const colW = Math.max(MIN_COL, rowW);
+    const relX = x + colW / 2;
+    relPoints.push({
+      x: relX, y: relY, r: R_REL,
+      label: shortenLabel(g.label, 20) + (extra > 0 ? " +" + extra : ""),
+      title: GRAPH_KIND_LABEL[g.kind] + " : " + g.label
+    });
+    edgePoints.push({ toRel: true, x1: 0, y1: centerY + R_CENTER, x2: relX, y2: relY - R_REL, color: "rgba(233,233,237,.28)" });
+    let cx = relX - rowW / 2 + CHILD_W / 2;
+    shown.forEach((id) => {
+      const cc = DATA().find((y) => y.id === id);
+      if (!cc) return;
+      childPoints.push({ x: cx, y: childY, r: R_CHILD, id: cc.id, label: shortenTitle(cc.n), title: cc.n });
+      edgePoints.push({ toRel: false, x1: relX, y1: relY + R_REL, x2: cx, y2: childY - R_CHILD, color: "rgba(233,233,237,.28)" });
+      cx += CHILD_W + GAP;
+    });
+    x += colW + GROUP_GAP;
+  });
+
+  const width = Math.max(x - GROUP_GAP, 160);
+  const centerX = width / 2;
+  edgePoints.forEach((e) => { if (e.toRel) e.x1 = centerX; });
+
+  const toNode = (p) => ({ left: p.x - p.r, top: p.y - p.r, size: p.r * 2, label: p.label, title: p.title, id: p.id });
+
+  return {
+    width, height: childY + R_CHILD + 24,
+    centerId: center.id, centerTitle: center.n,
+    centerNode: { left: centerX - R_CENTER, top: centerY - R_CENTER, size: R_CENTER * 2, label: shortenTitle(center.n) },
+    relNodes: relPoints.map(toNode),
+    childNodes: childPoints.map(toNode),
+    edges: edgePoints.map((e) => edgeBox(e.x1, e.y1, e.x2, e.y2, e.color)),
+    groupCount: groups.length
+  };
+}
 
 class Component extends DCLogic {
   state = {
@@ -649,23 +1108,28 @@ class Component extends DCLogic {
     online: typeof navigator === "undefined" || !("onLine" in navigator) ? true : navigator.onLine,
     satellite: false,
     editing: false, draft: null, newEvent: "", drafts: {}, userPos: null, sortByDist: false,
-    copied: false, ready: false, photos: {}, swActif: false,
+    copied: false, ready: false, photos: {}, encyclopediaPhotos: {}, swActif: false,
     menuOpen: false, paramsOpen: false, updateStatus: "idle", lastUpdate: null,
     glossaryOpen: false, glossaryQuery: "",
     encyclopediaOpen: false, encyclopediaChapterId: null,
+    circuitsOpen: false, circuitId: null, mapCircuitId: null,
+    collections: {}, collectionsOpen: false, collectionId: null,
+    relationsOpen: false, graphCenterId: null, graphHistory: [], relationsViewMode: "graph",
     mapDept: "idf", deptPickerOpen: false, deptQuery: "",
     siegeTactic: null, siegeMachine: null, siegeResult: null
   };
 
-  _loadPhotos() {
-    const W = window.CASTELLUM_WIKI || {};
+  /* Résolution générique d'un ensemble de photos depuis Wikipédia fr, par id
+     → titre d'article. Partagée par les 75 châteaux (CASTELLUM_WIKI, state
+     "photos") et par les illustrations génériques de l'Encyclopédie
+     (CASTELLUM_ENCYCLOPEDIA_WIKI, state "encyclopediaPhotos") : même API,
+     mêmes règles d'attribution, deux caches distincts pour ne jamais
+     mélanger un id de château et un id de chapitre. */
+  _loadPhotoSet(wikiMap, stateKey, storageKey) {
     let cache = {};
-    try { cache = JSON.parse(localStorage.getItem(PHOTO_KEY) || "{}"); } catch (e) { cache = {}; }
-    /* La v2 ne mémorisait que les URL, sans les crédits que les licences
-       exigent : son cache est inexploitable et n'a pas à occuper de place. */
-    try { localStorage.removeItem("castellor-photos-v2"); } catch (e) { /* ignore */ }
-    if (Object.keys(cache).length) this.setState({ photos: cache });
-    const ids = Object.keys(W).filter((id) => !cache[id]);
+    try { cache = JSON.parse(localStorage.getItem(storageKey) || "{}"); } catch (e) { cache = {}; }
+    if (Object.keys(cache).length) this.setState({ [stateKey]: cache });
+    const ids = Object.keys(wikiMap).filter((id) => !cache[id]);
     let i = 0;
 
     const strip = (h) => String(h || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -697,13 +1161,16 @@ class Component extends DCLogic {
     const next = () => {
       if (i >= ids.length) return;
       const id = ids[i++];
-      fetch("https://fr.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(W[id]))
+      fetch("https://fr.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(wikiMap[id]))
         .then((r) => (r.ok ? r.json() : null))
         .then((j) => {
           const t = j && j.thumbnail && j.thumbnail.source;
           /* upload.wikimedia.org est inaccessible : on passe par Special:FilePath,
-             qui sert le même fichier redimensionné depuis le wiki. */
-          const m = t && t.match(/\/([^\/]+\.(?:jpg|jpeg|png|webp))\/\d+px-/i);
+             qui sert le même fichier redimensionné depuis le wiki. svg/gif/tif
+             couvrent les logos, gravures et scans que l'Encyclopédie utilise
+             en plus des jpg/png déjà servis pour les châteaux — Special:FilePath
+             sait tous les redimensionner de la même façon via ?width=. */
+          const m = t && t.match(/\/([^\/]+\.(?:jpg|jpeg|png|webp|gif|svg|tif|tiff))\/[\w.-]*\d+px-/i);
           if (!m) { next(); return; }
           const host = t.indexOf("/wikipedia/commons/") > -1 ? "https://commons.wikimedia.org" : "https://fr.wikipedia.org";
           const enc = m[1];
@@ -711,13 +1178,14 @@ class Component extends DCLogic {
           const rec = {
             thumb: base + "?width=400",
             hd: base + "?width=1280",
-            page: host + "/wiki/File:" + enc
+            page: host + "/wiki/File:" + enc,
+            article: "https://fr.wikipedia.org/wiki/" + encodeURIComponent(wikiMap[id])
           };
           withCredits(id, host, decodeURIComponent(enc), rec, () => {
             this.setState((s) => {
-              const p = Object.assign({}, s.photos, { [id]: rec });
-              try { localStorage.setItem(PHOTO_KEY, JSON.stringify(p)); } catch (e) { /* ignore */ }
-              return { photos: p };
+              const p = Object.assign({}, s[stateKey], { [id]: rec });
+              try { localStorage.setItem(storageKey, JSON.stringify(p)); } catch (e) { /* ignore */ }
+              return { [stateKey]: p };
             });
             next();
           });
@@ -725,6 +1193,26 @@ class Component extends DCLogic {
         .catch(() => next());
     };
     for (let k = 0; k < 4; k++) next();
+  }
+
+  _loadPhotos() {
+    /* La v2 ne mémorisait que les URL, sans les crédits que les licences
+       exigent : son cache est inexploitable et n'a pas à occuper de place. */
+    try { localStorage.removeItem("castellor-photos-v2"); } catch (e) { /* ignore */ }
+    this._loadPhotoSet(window.CASTELLUM_WIKI || {}, "photos", PHOTO_KEY);
+  }
+
+  /* Illustrations génériques de l'Encyclopédie : construit la table id de
+     chapitre → titre d'article à la volée depuis encyclopedie-data.js
+     (`illustrationWiki`), pour n'avoir qu'un seul endroit — le chapitre
+     lui-même — à tenir à jour plutôt qu'une table séparée à garder en
+     synchronisation. */
+  _loadEncyclopediaPhotos() {
+    const map = {};
+    ENCYCLOPEDIA().forEach((p) => {
+      p.chapitres.forEach((c) => { if (c.illustrationWiki) map[c.id] = c.illustrationWiki; });
+    });
+    this._loadPhotoSet(map, "encyclopediaPhotos", ENCYCLOPEDIA_PHOTO_KEY);
   }
 
   photoBg(id, hd) {
@@ -743,6 +1231,14 @@ class Component extends DCLogic {
     try {
       const saved = localStorage.getItem("castellum-drafts");
       if (saved) this.setState({ drafts: JSON.parse(saved) });
+    } catch (e) { /* stockage indisponible */ }
+    try {
+      const savedColl = localStorage.getItem("castellum-collections");
+      if (savedColl) this.setState({ collections: JSON.parse(savedColl) });
+    } catch (e) { /* stockage indisponible */ }
+    try {
+      const savedView = localStorage.getItem("castellum-relations-view");
+      if (savedView === "graph" || savedView === "list") this.setState({ relationsViewMode: savedView });
     } catch (e) { /* stockage indisponible */ }
     if (!DATA().length) {
       const t = setInterval(() => { if (DATA().length) { clearInterval(t); this.forceUpdate(); } }, 80);
@@ -800,6 +1296,7 @@ class Component extends DCLogic {
       this._updateInterval = setInterval(() => { if (this._reg) this._reg.update().catch(() => {}); }, 45 * 60 * 1000);
     }
     this._loadPhotos();
+    this._loadEncyclopediaPhotos();
     this._hook();
   }
 
@@ -833,10 +1330,29 @@ class Component extends DCLogic {
       el.onOpen = (id) => this.setState({ selectedId: id, detailId: id, tab: "carte", editing: false, draft: null });
     }
     this._map = el;
-    el.setData(this.visible().map((c) => Object.assign({ photo: this.photoThumb(c.id) }, c)));
+    const s = this.state;
+    /* Mode circuit : tant qu'un parcours est actif (mapCircuitId), la carte
+       n'affiche que ses châteaux, reliés par setRoute(), au lieu du filtre
+       courant — fitAll() cadre alors naturellement dessus, puisqu'il cadre
+       sur les données posées par setData(). On ne recadre qu'à l'entrée ou à
+       la sortie du mode circuit, pas à chaque rendu (sinon impossible de
+       déplacer la carte à la main une fois dessus). */
+    const circuit = s.mapCircuitId ? CIRCUITS().find((ct) => ct.id === s.mapCircuitId) : null;
+    const circuitCastles = circuit
+      ? circuit.chateauIds.map((id) => DATA().find((c) => c.id === id)).filter(Boolean).map((c) => this.record(c))
+      : null;
+    if (circuitCastles) {
+      el.setData(circuitCastles.map((c) => Object.assign({ photo: this.photoThumb(c.id) }, c)));
+      el.setRoute(circuitCastles.map((c) => ({ lat: c.lat, lng: c.lng })));
+    } else {
+      el.setData(this.visible().map((c) => Object.assign({ photo: this.photoThumb(c.id) }, c)));
+      el.setRoute([]);
+    }
     /* Premier rattachement de la carte : cadrer sur le filtre par défaut
-       (Île-de-France) plutôt que sur la vue France entière codée en dur. */
-    if (firstBind) el.fitAll();
+       (Île-de-France) plutôt que sur la vue France entière codée en dur.
+       Idem à l'entrée ou à la sortie du mode circuit. */
+    if (firstBind || this._lastMapCircuitId !== s.mapCircuitId) el.fitAll();
+    this._lastMapCircuitId = s.mapCircuitId;
     el.setSelected(this.state.selectedId);
     el.setSatellite(this.state.satellite);
     el.setOffline(!this.state.online);
@@ -885,6 +1401,39 @@ class Component extends DCLogic {
   saveDrafts(drafts) {
     this.setState({ drafts });
     try { localStorage.setItem("castellum-drafts", JSON.stringify(drafts)); } catch (e) { /* ignore */ }
+  }
+
+  /* Bascule un château dans une collection : ajoute son id s'il n'y est pas,
+     le retire sinon. Un château peut appartenir à plusieurs collections à la
+     fois — ce sont des classements manuels indépendants, pas des catégories
+     exclusives. */
+  toggleCollection(collId, chateauId) {
+    this.setState((s) => {
+      const cur = s.collections[collId] || [];
+      const next = cur.includes(chateauId) ? cur.filter((id) => id !== chateauId) : cur.concat([chateauId]);
+      const collections = Object.assign({}, s.collections, { [collId]: next });
+      try { localStorage.setItem("castellum-collections", JSON.stringify(collections)); } catch (e) { /* ignore */ }
+      return { collections };
+    });
+  }
+
+  /* Navigue le graphe de relations vers un nouveau château central, en
+     empilant l'ancien centre dans l'historique (bouton "←") — sauf au tout
+     premier centrage, où il n'y a encore rien à empiler. */
+  navigateGraphTo(id) {
+    this.setState((s) => ({
+      graphHistory: s.graphCenterId ? s.graphHistory.concat([s.graphCenterId]) : s.graphHistory,
+      graphCenterId: id
+    }));
+  }
+
+  graphBack() {
+    this.setState((s) => {
+      if (!s.graphHistory.length) return null;
+      const h = s.graphHistory.slice();
+      const prev = h.pop();
+      return { graphHistory: h, graphCenterId: prev };
+    });
   }
 
   checkForUpdate() {
@@ -994,7 +1543,7 @@ class Component extends DCLogic {
           { label: "Liste des châteaux", on: () => this.setState({ tab: "liste", menuOpen: false, detailId: null, editing: false }) },
           { label: "Filtres", on: () => this.setState({ menuOpen: false, sheetOpen: true }) },
           { label: "Autour de moi", on: () => { this.setState({ menuOpen: false }); this.renderVals().locate(); } },
-          { label: "Glossaire", on: () => this.setState({ menuOpen: false, glossaryOpen: true, paramsOpen: false, encyclopediaOpen: false }) }
+          { label: "Glossaire", on: () => this.setState({ menuOpen: false, glossaryOpen: true, paramsOpen: false, encyclopediaOpen: false, circuitsOpen: false, collectionsOpen: false, relationsOpen: false }) }
         ]
       },
       {
@@ -1006,13 +1555,16 @@ class Component extends DCLogic {
       {
         label: "Découvrir",
         items: [
-          { label: "Encyclopédie", on: () => this.setState({ menuOpen: false, encyclopediaOpen: true, encyclopediaChapterId: null, paramsOpen: false, glossaryOpen: false }) }
+          { label: "Encyclopédie", on: () => this.setState({ menuOpen: false, encyclopediaOpen: true, encyclopediaChapterId: null, paramsOpen: false, glossaryOpen: false, circuitsOpen: false, collectionsOpen: false, relationsOpen: false }) },
+          { label: "Circuits de châteaux", on: () => this.setState({ menuOpen: false, circuitsOpen: true, circuitId: null, paramsOpen: false, glossaryOpen: false, encyclopediaOpen: false, collectionsOpen: false, relationsOpen: false }) },
+          { label: "Collections personnelles", on: () => this.setState({ menuOpen: false, collectionsOpen: true, collectionId: null, paramsOpen: false, glossaryOpen: false, encyclopediaOpen: false, circuitsOpen: false, relationsOpen: false }) },
+          { label: "Relations entre châteaux", on: () => this.setState({ menuOpen: false, relationsOpen: true, graphCenterId: null, graphHistory: [], paramsOpen: false, glossaryOpen: false, encyclopediaOpen: false, circuitsOpen: false, collectionsOpen: false }) }
         ]
       },
       {
         label: "Application",
         items: [
-          { label: "Paramètres", on: () => this.setState({ menuOpen: false, paramsOpen: true, glossaryOpen: false, encyclopediaOpen: false }) }
+          { label: "Paramètres", on: () => this.setState({ menuOpen: false, paramsOpen: true, glossaryOpen: false, encyclopediaOpen: false, circuitsOpen: false, collectionsOpen: false, relationsOpen: false }) }
         ]
       }
     ];
@@ -1038,6 +1590,48 @@ class Component extends DCLogic {
       }
       return null;
     })();
+
+    /* Chapitre précédent / suivant, tous types confondus (texte, schéma,
+       simulation de siège) : juste de quoi enchaîner la lecture sans revenir
+       au sommaire à chaque fois. La liste à plat suit l'ordre naturel des
+       parties et de leurs chapitres dans encyclopedie-data.js. */
+    const encyclopediaFlat = ENCYCLOPEDIA().reduce((acc, p) => acc.concat(p.chapitres.map((c) => c.id)), []);
+    const encyclopediaIndex = s.encyclopediaChapterId ? encyclopediaFlat.indexOf(s.encyclopediaChapterId) : -1;
+    const encyclopediaPrevId = encyclopediaIndex > 0 ? encyclopediaFlat[encyclopediaIndex - 1] : null;
+    const encyclopediaNextId = encyclopediaIndex > -1 && encyclopediaIndex < encyclopediaFlat.length - 1 ? encyclopediaFlat[encyclopediaIndex + 1] : null;
+    const encyclopediaChapterById = (id) => {
+      for (const p of ENCYCLOPEDIA()) {
+        const c = p.chapitres.find((x) => x.id === id);
+        if (c) return c;
+      }
+      return null;
+    };
+    const encyclopediaPrevChapter = encyclopediaPrevId ? encyclopediaChapterById(encyclopediaPrevId) : null;
+    const encyclopediaNextChapter = encyclopediaNextId ? encyclopediaChapterById(encyclopediaNextId) : null;
+    const goEncyclopediaChapter = (id) => () => {
+      this.setState({ encyclopediaChapterId: id, siegeTactic: null, siegeMachine: null, siegeResult: null });
+    };
+
+    /* Illustration d'un chapitre, deux sources possibles :
+       1. `illustration` — un château des 75 fiches cité nommément dans le
+          chapitre : on réutilise sa photo déjà résolue (s.photos), sans
+          appel réseau supplémentaire.
+       2. `illustrationWiki` — pour les chapitres de vocabulaire ou de
+          méthode qui ne citent aucun château (meurtrière, trébuchet,
+          dendrochronologie…) : un article Wikipédia fr choisi et vérifié à
+          la main (il possède réellement une image), résolu par le même
+          mécanisme que les photos de château (_loadEncyclopediaPhotos(),
+          s.encyclopediaPhotos) — jamais par extraction automatique.
+       Un chapitre sans l'un ni l'autre champ n'affiche aucune image plutôt
+       qu'une illustration non pertinente ou inventée. */
+    const illustrationChateau = encyclopediaChapter && encyclopediaChapter.illustration
+      ? DATA().find((c) => c.id === encyclopediaChapter.illustration)
+      : null;
+    const illustrationPhoto = illustrationChateau ? s.photos[illustrationChateau.id] : null;
+    const illustrationWikiTitle = encyclopediaChapter && !illustrationChateau ? encyclopediaChapter.illustrationWiki : null;
+    const illustrationWikiPhoto = illustrationWikiTitle && encyclopediaChapter
+      ? s.encyclopediaPhotos[encyclopediaChapter.id]
+      : null;
 
     /* Simulateur de siège (partie VI, chapitre type "siege") : une
        simulation pédagogique, pas un calcul historique — le hasard y tient
@@ -1074,6 +1668,131 @@ class Component extends DCLogic {
       });
     };
     const sr = s.siegeResult;
+
+    /* Circuits : résout les `chateauIds` d'un circuit en fiches réelles (avec
+       la contribution locale superposée, comme partout ailleurs) et calcule
+       distance/durée à partir de leurs coordonnées. Un id qui ne correspond
+       à aucune fiche est simplement ignoré (filter(Boolean)) plutôt que de
+       casser l'écran — utile tant que la base ne couvre pas tous les
+       châteaux d'un circuit. */
+    const circuitChateaux = (ct) => (ct.chateauIds || [])
+      .map((id) => DATA().find((c) => c.id === id))
+      .filter(Boolean)
+      .map((c) => this.record(c));
+    const circuitStats = (list) => {
+      let straight = 0;
+      for (let i = 1; i < list.length; i++) straight += dist([list[i - 1].lat, list[i - 1].lng], [list[i].lat, list[i].lng]);
+      const km = straight * ROUTE_DETOUR;
+      return { km, hours: km / ROUTE_SPEED_KMH };
+    };
+    const circuitsList = CIRCUITS().map((ct) => {
+      const chateaux = circuitChateaux(ct);
+      const stat = circuitStats(chateaux);
+      return {
+        id: ct.id, nom: ct.nom, description: ct.description,
+        countLabel: chateaux.length + (chateaux.length > 1 ? " châteaux" : " château"),
+        kmLabel: "≈ " + Math.round(stat.km) + " km",
+        dureeLabel: "≈ " + formatDuration(stat.hours),
+        open: () => this.setState({ circuitId: ct.id })
+      };
+    });
+    const circuit = s.circuitId ? CIRCUITS().find((ct) => ct.id === s.circuitId) : null;
+    const circuitCastles = circuit ? circuitChateaux(circuit) : [];
+    const circuitStat = circuit ? circuitStats(circuitCastles) : null;
+    const circuitStops = circuitCastles.map((c, i) => ({
+      ordre: i + 1,
+      n: c.n, sub: c.com + " · " + c.dep,
+      open: () => this.setState({ circuitsOpen: false, circuitId: null, detailId: c.id, selectedId: c.id, editing: false, draft: null })
+    }));
+    const mapCircuit = s.mapCircuitId ? CIRCUITS().find((ct) => ct.id === s.mapCircuitId) : null;
+
+    /* Collections personnelles : appartenance résolue à la volée depuis
+       s.collections (par id de château), jamais stockée sur la fiche
+       elle-même — un château retiré du jeu de données sortirait simplement
+       de toutes ses collections plutôt que de laisser un id orphelin. */
+    const collectionChateaux = (collId) => (s.collections[collId] || [])
+      .map((id) => DATA().find((c) => c.id === id))
+      .filter(Boolean)
+      .map((c) => this.record(c));
+    const collectionStats = (list) => ({
+      total: list.length,
+      deps: new Set(list.map((c) => depCode(c)).filter(Boolean)).size,
+      regs: new Set(list.map((c) => c.reg).filter(Boolean)).size,
+      medieval: list.filter(isMedieval).length
+    });
+    const collectionsList = COLLECTIONS().map((cd) => {
+      const n = (s.collections[cd.id] || []).length;
+      return {
+        id: cd.id, emoji: cd.emoji, nom: cd.nom,
+        countLabel: n + (n > 1 ? " châteaux" : " château"),
+        open: () => this.setState({ collectionId: cd.id })
+      };
+    });
+    const activeCollection = s.collectionId ? COLLECTIONS().find((cd) => cd.id === s.collectionId) : null;
+    const activeCollectionChateaux = activeCollection ? collectionChateaux(activeCollection.id) : [];
+    const activeCollectionStat = activeCollection ? collectionStats(activeCollectionChateaux) : null;
+    const collectionRows = activeCollectionChateaux.map((c) => ({
+      n: c.n, sub: c.com + " · " + c.dep,
+      bg: this.photoBg(c.id, false),
+      open: () => this.setState({ collectionsOpen: false, collectionId: null, detailId: c.id, selectedId: c.id, editing: false, draft: null })
+    }));
+    const detailCollections = d0 ? COLLECTIONS().map((cd) => {
+      const inColl = (s.collections[cd.id] || []).includes(d0.id);
+      const st = this.chipStyle(inColl);
+      return { id: cd.id, emoji: cd.emoji, nom: cd.nom, bg: st.bg, bd: st.bd, toggle: () => this.toggleCollection(cd.id, d0.id) };
+    }) : [];
+    const detailRelationGroups = d0 ? relationGroups(d0.id) : [];
+    const detailRelationIds = new Set([].concat(...detailRelationGroups.map((g) => g.chateauIds)));
+    const detailRelationDistinctiveIds = new Set([].concat(...detailRelationGroups.filter((g) => g.kind !== "époque").map((g) => g.chateauIds)));
+
+    /* Page Relations entre châteaux : sélection d'un château central (le
+       sélecteur ne liste que ceux qui ont au moins une relation, sur les
+       dimensions sûres — voir relationGroups() plus haut), puis un graphe en
+       arbre centré dessus. Cliquer un château lié y navigue à son tour,
+       empilant l'historique pour le bouton "←". */
+    /* Ouvrir la vraie fiche depuis le graphe (pas seulement s'y recentrer). */
+    const openChateauFromGraph = (id) => () => this.setState({
+      relationsOpen: false, graphCenterId: null, graphHistory: [],
+      detailId: id, selectedId: id, editing: false, draft: null
+    });
+    /* Affichage des relations : graphe visuel ou navigation par listes
+       (réglage dans Paramètres, persisté sur l'appareil). Le graphe reste le
+       défaut ; la liste réutilise "Détail des relations", déjà complète et
+       déjà là comme repli — le réglage se contente de masquer le graphe. */
+    const relViewSt = (active) => this.chipStyle(active);
+    const setRelationsView = (mode) => {
+      this.setState({ relationsViewMode: mode });
+      try { localStorage.setItem("castellum-relations-view", mode); } catch (e) { /* ignore */ }
+    };
+    /* Classement du sélecteur : sur les relations distinctives (architecte,
+       famille, style, région) plutôt que sur l'époque, qui à elle seule
+       relierait presque tout le jeu de données à tout le reste et rendrait
+       le nombre de liens affiché trompeur. L'époque reste néanmoins une
+       dimension du graphe lui-même une fois un château choisi — elle sert
+       de repli pour les quelques fiches qui n'ont aucune autre relation. */
+    const relationsPicker = DATA()
+      .map((c) => {
+        const groups = relationGroups(c.id);
+        const distinctive = groups.filter((g) => g.kind !== "époque");
+        const distinctiveCount = new Set([].concat(...distinctive.map((g) => g.chateauIds))).size;
+        const totalCount = new Set([].concat(...groups.map((g) => g.chateauIds))).size;
+        return { id: c.id, n: c.n, rank: distinctiveCount, count: distinctiveCount || totalCount };
+      })
+      .filter((c) => c.count > 0)
+      .sort((a, b) => b.rank - a.rank || a.n.localeCompare(b.n, "fr", { sensitivity: "base" }))
+      .map((c) => Object.assign(c, {
+        count: c.count + (c.count > 1 ? " liens" : " lien"),
+        open: () => this.navigateGraphTo(c.id)
+      }));
+    const graph = s.graphCenterId ? buildRelationGraph(s.graphCenterId) : null;
+    const graphFullGroups = s.graphCenterId ? relationGroups(s.graphCenterId) : [];
+    const graphDetailGroups = graphFullGroups.map((g) => ({
+      title: GRAPH_KIND_LABEL[g.kind] + " : " + g.label,
+      items: g.chateauIds.map((id) => {
+        const cc = DATA().find((x) => x.id === id);
+        return { n: cc ? cc.n : id, open: () => this.navigateGraphTo(id) };
+      })
+    }));
 
     const updateStatusLabel = {
       checking: "Vérification en cours…",
@@ -1302,6 +2021,28 @@ class Component extends DCLogic {
         else this.setState(Object.assign({ encyclopediaOpen: false }, siegeReset));
       },
 
+      encyclopediaHasPrev: !!encyclopediaPrevChapter,
+      encyclopediaPrevTitle: encyclopediaPrevChapter ? encyclopediaPrevChapter.titre : "",
+      goPrevChapter: encyclopediaPrevId ? goEncyclopediaChapter(encyclopediaPrevId) : () => {},
+      encyclopediaHasNext: !!encyclopediaNextChapter,
+      encyclopediaNextTitle: encyclopediaNextChapter ? encyclopediaNextChapter.titre : "",
+      goNextChapter: encyclopediaNextId ? goEncyclopediaChapter(encyclopediaNextId) : () => {},
+
+      encyclopediaHasIllustration: !!illustrationPhoto || !!illustrationWikiPhoto,
+      encyclopediaIllustrationBg: illustrationChateau
+        ? this.photoBg(illustrationChateau.id, true)
+        : (illustrationWikiPhoto ? "url('" + (online ? illustrationWikiPhoto.hd : illustrationWikiPhoto.thumb) + "')" : "none"),
+      encyclopediaIllustrationName: illustrationChateau ? illustrationChateau.n : "",
+      encyclopediaIllustrationCredit: creditLine(illustrationPhoto || illustrationWikiPhoto),
+      encyclopediaIllustrationCreditUrl: (illustrationPhoto && illustrationPhoto.page) || (illustrationWikiPhoto && illustrationWikiPhoto.page) || "",
+      encyclopediaIllustrationIsChateau: !!illustrationChateau,
+      encyclopediaIllustrationIsWiki: !illustrationChateau && !!illustrationWikiPhoto,
+      encyclopediaIllustrationWikiTitle: illustrationWikiTitle || "",
+      encyclopediaIllustrationArticleUrl: (illustrationWikiPhoto && illustrationWikiPhoto.article) || "",
+      openIllustrationChateau: illustrationChateau
+        ? () => this.setState({ encyclopediaOpen: false, encyclopediaChapterId: null, detailId: illustrationChateau.id, selectedId: illustrationChateau.id, editing: false, draft: null })
+        : () => {},
+
       encyclopediaChapterIsSiege: !!siegeChapter,
       siegeTacticOptions: siegeTacticOptions,
       siegeMachineOptions: siegeMachineOptions,
@@ -1319,6 +2060,87 @@ class Component extends DCLogic {
         ? "Tactique : " + sr.tacticNom + (sr.machineNom ? " avec " + sr.machineNom : "") + " · Durée : " + sr.dureeLabel + " · Chances estimées : " + sr.chancePct + " %"
         : "",
       siegeResultDefense: sr ? sr.defense : "",
+
+      circuitsOpen: s.circuitsOpen,
+      circuitsList: circuitsList,
+      circuitsShowingList: !circuit,
+      circuitsShowingDetail: !!circuit,
+      backCircuits: () => {
+        if (s.circuitId) this.setState({ circuitId: null });
+        else this.setState({ circuitsOpen: false });
+      },
+      circuitNom: circuit ? circuit.nom : "",
+      circuitDescription: circuit ? circuit.description : "",
+      circuitCount: circuitCastles.length,
+      circuitKm: circuitStat ? "≈ " + Math.round(circuitStat.km) + " km" : "",
+      circuitDuree: circuitStat ? "≈ " + formatDuration(circuitStat.hours) : "",
+      circuitStops: circuitStops,
+      showCircuitOnMap: () => this.setState({ tab: "carte", circuitsOpen: false, mapCircuitId: circuit ? circuit.id : s.mapCircuitId }),
+      exportCircuitGpx: () => {
+        if (!circuit || !circuitCastles.length) return;
+        downloadGpx("castellor-" + circuit.id + ".gpx", circuitGpx(circuit, circuitCastles));
+      },
+
+      mapCircuitActive: !!mapCircuit,
+      mapCircuitNom: mapCircuit ? mapCircuit.nom : "",
+      exitMapCircuit: () => this.setState({ mapCircuitId: null }),
+
+      collectionsOpen: s.collectionsOpen,
+      collectionsList: collectionsList,
+      collectionsShowingList: !activeCollection,
+      collectionsShowingDetail: !!activeCollection,
+      backCollections: () => {
+        if (s.collectionId) this.setState({ collectionId: null });
+        else this.setState({ collectionsOpen: false });
+      },
+      collectionEmoji: activeCollection ? activeCollection.emoji : "",
+      collectionNom: activeCollection ? activeCollection.nom : "",
+      collectionHasItems: activeCollectionChateaux.length > 0,
+      collectionEmpty: !!activeCollection && activeCollectionChateaux.length === 0,
+      collectionCount: activeCollectionStat ? activeCollectionStat.total : 0,
+      collectionDeps: activeCollectionStat ? activeCollectionStat.deps : 0,
+      collectionRegs: activeCollectionStat ? activeCollectionStat.regs : 0,
+      collectionMedievalLabel: activeCollectionStat
+        ? "Dont " + activeCollectionStat.medieval + (activeCollectionStat.medieval > 1 ? " châteaux médiévaux" : " château médiéval") + " (Xe – XVe s.)"
+        : "",
+      collectionRows: collectionRows,
+      detailCollections: detailCollections,
+
+      detailHasRelations: detailRelationIds.size > 0,
+      detailRelationsCount: detailRelationDistinctiveIds.size || detailRelationIds.size,
+      openDetailRelations: () => this.setState({ detailId: null, relationsOpen: true, graphCenterId: d0 ? d0.id : null, graphHistory: [] }),
+
+      relationsOpen: s.relationsOpen,
+      relationsPicker: relationsPicker,
+      relationsShowingPicker: !s.graphCenterId,
+      relationsShowingGraph: !!s.graphCenterId,
+      relationsGraphMode: s.relationsViewMode !== "list",
+      setRelationsGraph: () => setRelationsView("graph"),
+      setRelationsList: () => setRelationsView("list"),
+      relGraphBg: relViewSt(s.relationsViewMode !== "list").bg,
+      relGraphFg: relViewSt(s.relationsViewMode !== "list").fg,
+      relGraphBd: relViewSt(s.relationsViewMode !== "list").bd,
+      relListBg: relViewSt(s.relationsViewMode === "list").bg,
+      relListFg: relViewSt(s.relationsViewMode === "list").fg,
+      relListBd: relViewSt(s.relationsViewMode === "list").bd,
+      backRelations: () => {
+        if (s.graphCenterId) this.setState({ graphCenterId: null, graphHistory: [] });
+        else this.setState({ relationsOpen: false });
+      },
+      changeGraphCenter: () => this.setState({ graphCenterId: null, graphHistory: [] }),
+      graphCanGoBack: s.graphHistory.length > 0,
+      graphBack: () => this.graphBack(),
+      graphCenterName: graph ? graph.centerTitle : "",
+      openCenterFiche: graph ? openChateauFromGraph(graph.centerId) : () => {},
+      graphHasRelations: !!graph && graph.groupCount > 0,
+      graphNoRelations: !!s.graphCenterId && (!graph || graph.groupCount === 0),
+      graphWidth: graph ? graph.width : 0,
+      graphHeight: graph ? graph.height : 0,
+      graphCenter: graph ? graph.centerNode : { left: 0, top: 0, size: 0, label: "" },
+      graphRelNodes: graph ? graph.relNodes : [],
+      graphChildNodes: graph ? graph.childNodes.map((n) => Object.assign({}, n, { open: () => this.navigateGraphTo(n.id) })) : [],
+      graphEdges: graph ? graph.edges : [],
+      graphDetailGroups: graphDetailGroups,
 
       mapWrapRef: (this.mapWrapRef = this.mapWrapRef || React.createRef())
     };

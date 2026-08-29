@@ -46,6 +46,7 @@ lisible sans réseau.
 - [Lancer et déployer](#lancer-et-déployer)
 - [Les trois onglets](#les-trois-onglets)
 - [Fonctionnalités](#fonctionnalités)
+- [Encyclopédie](#encyclopédie)
 - [Données](#données)
 - [Stockage local](#stockage-local)
 - [Permissions](#permissions)
@@ -227,6 +228,54 @@ contributions locales**, qui supprime toutes les contributions d'un coup —
 > Les autres champs de la fiche (propriétaires, statut patrimonial, accès,
 > liens, coordonnées…) ne sont pas éditables dans cette version.
 
+## Encyclopédie
+
+Accessible depuis le menu (section **Découvrir**), l'Encyclopédie est un
+contenu de référence sur les châteaux forts et leur histoire, entièrement
+local : le texte est livré avec l'application dans `encyclopedie-data.js`,
+sans aucun appel réseau. Elle fonctionne donc à l'identique en ligne et hors
+connexion, et son sommaire tient lui aussi dans le cache de l'application (voir
+[Réseau et mode hors connexion](#réseau-et-mode-hors-connexion)).
+
+Elle compte **15 parties**, chacune divisée en plusieurs chapitres :
+
+| Partie | Sujet |
+| --- | --- |
+| I | Comprendre le château |
+| II | Histoire des châteaux de France |
+| III | Anatomie d'un château |
+| IV | Les systèmes défensifs |
+| V | La vie dans le château |
+| VI | La guerre et le siège |
+| VII | Les techniques de construction |
+| VIII | Le territoire du château |
+| IX | Typologie des châteaux |
+| X | Le château et le pouvoir |
+| XI | Châteaux célèbres |
+| XII | Patrimoine et restauration |
+| XIII | Archéologie castrale |
+| XIV | Châteaux disparus |
+| XV | Mythes et idées reçues |
+
+La plupart des chapitres sont du texte simple (deux paragraphes). Deux
+chapitres sortent de ce format :
+
+- **Vue d'ensemble (illustration)**, dans la partie III : un schéma
+  interactif du château où chaque élément touché (donjon, tour, courtine,
+  cour, herse, pont-levis, douves) ouvre soit son propre article, soit
+  l'entrée correspondante du **Glossaire**.
+- **Simulation : mener un siège**, dans la partie VI : un mini-jeu
+  pédagogique où l'utilisateur choisit une tactique et, en option, une
+  machine de siège, puis lance un siège dont l'issue comporte une part de
+  hasard.
+
+Le sommaire liste les 15 parties et leurs chapitres ; le bouton **Retour**
+ramène du chapitre au sommaire, puis du sommaire à l'écran précédent.
+
+> Contenu de synthèse généraliste, écrit pour l'application — pas une base de
+> faits vérifiés fiche par fiche comme `chateaux-data.js` : à corriger si une
+> inexactitude est repérée (voir l'en-tête d'`encyclopedie-data.js`).
+
 ## Données
 
 Les 75 fiches sont un **jeu de démonstration saisi à la main**, dans
@@ -355,6 +404,8 @@ sw.js                Service worker : coquille, tuiles, photos, métadonnées
 netlify.toml         Déploiement, en-têtes de cache et CSP
 castellum-map.js     <castellum-map>, la carte Leaflet
 chateaux-data.js     Les 75 fiches, les filtres, les titres Wikipédia
+glossaire-data.js    Les entrées du Glossaire
+encyclopedie-data.js Les 15 parties de l'Encyclopédie
 support.js           Runtime Claude Design — GÉNÉRÉ, ne pas modifier
 vendor/              React, Leaflet, Inter, Nocturne — servis depuis le domaine
 icons/               Icônes PWA — GÉNÉRÉES par tools/make-icons.py

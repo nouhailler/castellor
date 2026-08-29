@@ -6,7 +6,13 @@
    photo et le nom ; cliquer sur l'info-bulle appelle onOpen(id) pour ouvrir
    la fiche directement, sans passer par la sélection sur la carte. Cliquer
    un point rapproche aussi la vue (CLICK_ZOOM) si la carte est trop dézoomée
-   pour distinguer les points voisins. */
+   pour distinguer les points voisins.
+   setRoute(list) — list de { lat, lng } dans l'ordre de visite — trace un
+   trait pointillé entre les points et pose un badge numéroté au-dessus de
+   chacun, sans intercepter les clics (les marqueurs posés par setData()
+   restent seuls cliquables). setRoute([]) l'efface. N'affecte pas fitAll(),
+   qui cadre toujours sur setData(list) : pour zoomer sur un parcours, lui
+   passer la liste filtrée du parcours. */
 (function () {
   const OSM = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   const SAT = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
@@ -32,6 +38,10 @@
     .castellum-tt .castellum-tt-photo{width:100%;height:84px;background-color:#1b1d2b;background-size:cover;background-position:center}
     .castellum-tt .castellum-tt-name{padding:6px 8px 7px;font:500 11.5px/1.25 var(--font-heading,sans-serif);
       color:#e9e9ed;letter-spacing:-.01em}
+    .castellum-route-badge{background:transparent;border:0}
+    .castellum-route-badge .crb{display:flex;align-items:center;justify-content:center;width:18px;height:18px;
+      border-radius:50%;background:${ACCENT};color:#14161f;font:700 10px/1 var(--font-heading,sans-serif);
+      box-shadow:0 0 0 2px rgba(16,18,32,.85)}
   `;
 
   class CastellumMap extends HTMLElement {
@@ -44,6 +54,7 @@
       this.onSelect = null;
       this.onOpen = null;
       this._markers = new Map();
+      this.route = [];
     }
 
     connectedCallback() {
@@ -87,6 +98,7 @@
       this.osm.addTo(this.map);
       this._paneStyle();
       this._layer = L.layerGroup().addTo(this.map);
+      this._routeLayer = L.layerGroup().addTo(this.map);
       this._userLayer = L.layerGroup().addTo(this.map);
       const a = this._el.querySelector('.leaflet-control-attribution');
       if (a) a.style.cssText = 'background:rgba(22,24,38,.72);color:#8d92a6;font-size:9px;padding:1px 5px';
@@ -101,6 +113,7 @@
       }
       this._ready = true;
       this.render();
+      this._renderRoute();
       setTimeout(() => this.map.invalidateSize(), 120);
       window.addEventListener('resize', () => this.map && this.map.invalidateSize());
     }
@@ -157,6 +170,34 @@
       L.circle(this.userPos, {
         radius: 18000, color: '#e9e9ed', weight: 1, opacity: .35, fillColor: '#e9e9ed', fillOpacity: .06
       }).addTo(this._userLayer);
+    }
+
+    setRoute(points) {
+      this.route = points || [];
+      if (this._ready) this._renderRoute();
+    }
+
+    _renderRoute() {
+      const L = window.L;
+      this._routeLayer.clearLayers();
+      if (!this.route.length) return;
+      if (this.route.length > 1) {
+        L.polyline(this.route.map((p) => [p.lat, p.lng]), {
+          color: ACCENT, weight: 2.5, opacity: .75, dashArray: '2 8'
+        }).addTo(this._routeLayer);
+      }
+      /* interactive:false : le badge ne doit jamais voler le clic ou le
+         survol au marqueur du château posé par render() en dessous. */
+      this.route.forEach((p, i) => {
+        L.marker([p.lat, p.lng], {
+          icon: L.divIcon({
+            className: 'castellum-route-badge',
+            html: '<span class="crb">' + (i + 1) + '</span>',
+            iconSize: [18, 18], iconAnchor: [9, 27]
+          }),
+          interactive: false
+        }).addTo(this._routeLayer);
+      });
     }
 
     flyTo(lat, lng, zoom) {

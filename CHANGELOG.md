@@ -44,6 +44,29 @@ reconstitué à partir du code. Le dépôt est publié sur
   public ; l'un d'eux (château du Haut-Barr) n'a pas d'auteur déclaré sur
   Commons, sans que ce soit un problème de licence puisque l'attribution n'y
   est pas exigée.
+- **Encyclopédie, quatre nouvelles parties** (`encyclopedie-data.js`), portant
+  le total de 11 à **15 parties** :
+  - **XII. Patrimoine et restauration** (8 chapitres) : classement et
+    inscription, restauration, restaurations controversées, reconstruction,
+    conservation et entretien, archéologie castrale, châteaux en ruine,
+    propriétaires privés.
+  - **XIII. Archéologie castrale** (10 chapitres) : fouilles, archéologie du
+    bâti, stratigraphie, relevés, archéologie aérienne, LIDAR, prospections,
+    datation, archives, et un chapitre de synthèse sur la reconstitution de
+    l'évolution d'un château à partir de ces méthodes.
+  - **XIV. Châteaux disparus** (7 chapitres) : méthode d'étude d'un château
+    disparu, causes de disparition, puis cinq cas documentés — la Bastille,
+    le palais des Tuileries, le château de Madrid, le donjon de Coucy, les
+    châteaux de bois et de terre disparus.
+  - **XV. Mythes et idées reçues** (9 chapitres) : meurtrières, obscurité
+    médiévale, donjon assimilé à une prison, douves toujours en eau, château
+    fort uniquement militaire, pont-levis levé chaque soir, huile bouillante,
+    poids de l'armure, forme des tours — chaque idée reçue nuancée en prose,
+    sans repère visuel supplémentaire.
+
+  Même registre que les 11 parties existantes : contenu de synthèse
+  généraliste, pas une base de faits vérifiés fiche par fiche, à corriger si
+  une inexactitude est repérée.
 
 ### Corrigé
 
@@ -59,6 +82,13 @@ reconstitué à partir du code. Le dépôt est publié sur
   photos et de licences (35 → 50 → 75), le nombre de fiches sans « Château »
   en tête de nom (six → neuf → douze), le nombre de fiches `plan: true`
   (27 → 35 → 44) et le nombre de liens officiels renseignés (stable à 13).
+- README : nouvelle section **Encyclopédie**, jusque-là absente malgré la
+  fonctionnalité existante — les 15 parties, les deux chapitres non textuels
+  (schéma interactif de la partie III, simulation de siège de la partie VI)
+  et le fonctionnement entièrement hors ligne du contenu (aucun appel
+  réseau, à la différence des photos). `glossaire-data.js` et
+  `encyclopedie-data.js` ajoutés à la table **Structure du projet**, où ils
+  manquaient.
 
 ---
 
